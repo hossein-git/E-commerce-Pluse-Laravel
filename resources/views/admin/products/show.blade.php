@@ -1,0 +1,251 @@
+@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty')
+@section('content')
+   <div class="hr dotted"></div>
+   <div>
+      <div id="user-profile-1" class="user-profile row">
+         <div class="col-xs-12 col-sm-3 center">
+            <div>
+               <span class="profile-picture">
+                  <a href="{{ ($product->cover) }}" target="_blank">
+                     <img id="avatar"
+                          class="editable img-responsive editable-click editable-empty"
+                          alt="Alex's Avatar" src="{{ ($product->thumbnail) }}"></a>
+               </span>
+               <div class="space-4"></div>
+               <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+                  <div class="inline position-relative">
+                     <a href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                        <i class="ace-icon fa fa-circle light-green"></i>
+                        &nbsp;
+                        <span class="white">{{ $product->product_name }}</span>
+                     </a>
+                  </div>
+               </div>
+            </div>
+
+            <div class="space-6"></div>
+
+            <div class="profile-contact-info">
+               <div class="profile-contact-links align-left ">
+                  <a href="{{route('product.edit',$product->product_id)}}" data-id="{{ $product->product_id }}"
+                     class="btn btn-link edit_me">
+                     <i class="ace-icon fa fa-plus-circle bigger-120 warning"></i>
+                     Edit product
+                  </a>
+               </div>
+               <!-- DISPLAY RATING -->
+               @for( $i = 0 ; $i < round($product->averageRating) ; $i++)
+                  <span class="fa fa-stack" style="color: gold">
+                     <i class="fa fa-star fa-stack-2x "></i>
+                     <i class="fa fa-star-o fa-stack-2x "></i>
+                  </span>
+               @endfor
+               @for( $i = 5 ; $i > round($product->averageRating) ; $i--)
+                  <span class="fa fa-stack yellow">
+                     <i class="fa fa-star-o fa-stack-2x"></i>
+                  </span>
+            @endfor
+            <!-- /DISPLAY RATING -->
+               <div class="space-6">
+
+               </div>
+
+            </div>
+
+            <div class="hr hr12 dotted"></div>
+            <div class="clearfix">
+               @foreach($product->photos as $photo)
+                  <a href="{{$photo->src}}" target="_blank">
+                     <img id="avatar"
+                          class="editable img-responsive editable-click editable-empty"
+                          alt="{{ $photo->photo_name }}"
+                          src="{{ $photo->thumbnail }}">
+                  </a>
+               @endforeach
+            </div>
+            <div class="clearfix">
+               <div class="grid2">
+                  <span class="bigger-175 blue">25</span>
+                  <br>
+                  Followers
+               </div>
+
+               <div class="grid2">
+                  <span class="bigger-175 blue">12</span>
+                  <br>
+                  Following
+               </div>
+            </div>
+
+            <div class="hr hr16 dotted"></div>
+         </div>
+
+         <div class="col-xs-12 col-sm-9">
+            <div class="center">
+               <span class="btn btn-app btn-sm btn-light no-hover">
+                  <span class="line-height-1 bigger-170 blue"> {{ $product->quantity }} </span>
+                  <br>
+                  <span class="line-height-1 smaller-90"> Quantity </span>
+               </span>
+
+               <span class="btn btn-app btn-sm btn-yellow no-hover">
+                  <span class="line-height-1 bigger-170"> {{ $product->weight }} </span>
+
+                  <br>
+                  <span class="line-height-1 smaller-90"> Weight </span>
+               </span>
+
+               <span class="btn btn-app btn-sm btn-pink no-hover">
+                  <span class="line-height-1 bigger-170"> {{ $product->photos()->count() }} </span>
+                  <br>
+                  <span class="line-height-1 smaller-90"> Photos </span>
+               </span>
+
+               <span class="btn btn-app btn-sm btn-grey no-hover">
+                  <span class="line-height-1 bigger-170"> {{ $product->comments->count() }} </span>
+
+                  <br>
+                  <span class="line-height-1 smaller-90"> Reviews </span>
+               </span>
+               <span class="btn btn-app btn-sm btn-success no-hover">
+                  <span class="line-height-1 bigger-170"> {{ $product->categories->count() }} </span>
+
+                  <br>
+                  <span class="line-height-1 smaller-90"> Categories </span>
+               </span>
+
+               <span class="btn btn-app btn-sm btn-primary no-hover">
+                  <span class="line-height-1 bigger-170"> ???? </span>
+
+                  <br>
+                  <span class="line-height-1 smaller-90"> Contacts </span>
+               </span>
+            </div>
+
+            <div class="space-12"></div>
+
+            <div class="profile-user-info profile-user-info-striped">
+               <div class="profile-info-row">
+                  <div class="profile-info-name">Product Name</div>
+
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="username">{{ $product->product_name }}</span>
+                  </div>
+               </div>
+
+               <div class="profile-info-row">
+                  <div class="profile-info-name"> SKU</div>
+
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="country">{{ $product->sku }}</span>
+                  </div>
+               </div>
+
+               <div class="profile-info-row">
+                  <div class="profile-info-name"> Buy Price</div>
+
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="age">{{ $product->buy_price }}</span>
+                  </div>
+               </div>
+
+               <div class="profile-info-row">
+                  <div class="profile-info-name">Sell Price</div>
+
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="age">{{ $product->sale_price }}</span>
+                  </div>
+               </div>
+
+
+               <div class="profile-info-row">
+                  <div class="profile-info-name">Discount</div>
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="age">
+                        @if($product->is_off)
+                           <span class='label label-warning smaller-80'>HAS-OFF</span>
+                        @else
+                           <span class="label label-info smaller-80">NOT OFF</span>
+                        @endif</span>
+                  </div>
+               </div>
+
+               <div class="profile-info-row">
+                  <div class="profile-info-name">Off Price</div>
+
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="age">{{ $product->off_price }}</span>
+                  </div>
+               </div>
+
+               <div class="profile-info-row">
+                  <div class="profile-info-name">Colors</div>
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="about">
+                         @foreach($product->colors as $color)
+                           <span class="badge"
+                                 style="background: {{ $color->color_code }}">{{ $color->color_name }}</span>
+                        @endforeach
+                     </span>
+                  </div>
+               </div>
+
+               <div class="profile-info-row">
+                  <div class="profile-info-name">Categories</div>
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="about">
+                        @foreach($product->categories as $category)
+                           <span class='label label-default'>{{ $category->category_name }}</span>
+                        @endforeach
+                     </span>
+                  </div>
+               </div>
+               <div class="profile-info-row">
+                  <div class="profile-info-name"> Created Date</div>
+
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="signup">{{ $product->created_at }}</span>
+                  </div>
+               </div>
+               <div class="profile-info-row">
+                  <div class="profile-info-name"> Updated Date</div>
+
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="signup">{{ $product->updated_at }}</span>
+                  </div>
+               </div>
+            </div>
+            <h2>Comments</h2>
+            <h6>red color not approved yet </h6>
+            <div class="col-sm-6">
+               @forelse($comments as $comment)
+                  <div class="well well-lg" style="background-color: {{ $comment->approved == 1 ? '#79ffb2': '#ffaf93'}}">
+                     <h4 class="">
+                        @if($comment->commenter_id =! null)
+                           <span class="tag blue"><b>{{ $comment->guest_name }}</b></span>
+                           <small><a href="mailTo:{{ $comment->guest_email }}">{{ $comment->guest_email }}</a></small>
+                        @else
+                           {{ $comment->commenter() }}
+                        @endif
+                     </h4>
+                     {{$comment->comment}}
+                  </div>
+               @empty
+                  no comments yet
+               @endforelse
+               {{ $comments->links() }}
+            </div>
+         </div>
+      </div>
+   </div>
+   <script>
+       <!-- LOAD THE EDIT PAGE-->
+       jQuery(".edit_me").bind('click', function () {
+           var route = $(this).attr('href');
+           var id = $(this).data('id');
+           window.history.replaceState("", "", "product/" + id + "/edit");
+           $("#content-load").load(route);
+           return false;
+       });
+   </script>
+@endsection

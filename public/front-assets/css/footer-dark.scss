@@ -1,0 +1,155 @@
+$default_color:                      #5fd179;
+$default_color2:                     #333333;
+
+$footer_bg_color:                    #333;
+$footer_text_color:                  #fff;
+$footer_border:                      #4b4b4b;
+
+$services_block_title:               #fff;
+$services_block_text_color_hover:    #fff;
+$services_block_title_hover:         $default_color;
+$services_block_text_color_hover_mobile: $default_color;
+
+$social_icon_round_border:           #767676;
+$social_icon_round_border_hover:     #fff;
+$social_icon_round_border_active:    #fff;
+$social_icon_round_text_hover:       #fff;
+$social_icon_round_text_active:      #fff;
+
+$footer_mobile_collapse_title_color: #fff;
+$footer_mobile_collapse_border:      #4b4b4b;
+
+$list_info_center_link_hover:       #fff;
+$list_info_center_border:           #888888;
+
+$list_info_link_hover:              #fff;
+
+$footer_menu_text:                  #fff;
+
+
+
+$btninversion_colortext:            #fff;
+$btninversion_colorbg:              $default_color;
+$btninversion_colorbg_hover:        #fff;
+$btninversion_colortext_hover:      $default_color2;
+$btninversion_colorbg_hover:        #fff;
+
+
+.btn.btn-inversion{
+    background: $btninversion_colorbg;
+    color: $btninversion_colortext;
+    border-color: $btninversion_colorbg;
+}
+.btn.btn-inversion:hover{
+    background: $btninversion_colorbg_hover !important;
+    color: $btninversion_colortext_hover !important;
+    border-color: $btninversion_colorbg_hover !important;
+}
+
+@mixin opacity ($opacity) {
+    -moz-opacity: $opacity;
+    -khtml-opacity: $opacity;
+    -webkit-opacity: $opacity;
+    opacity: $opacity;
+}
+
+
+footer{
+    background: $footer_bg_color;
+    color:  $footer_text_color;
+    .footer-content-col{
+    .container:not(:first-child):before{
+             background:$footer_border;
+        }
+    }
+
+    .services-block{
+            .title{
+                color: $services_block_title;
+            }
+    }
+    .services-block:hover{
+        color: $services_block_text_color_hover;
+        .title{
+             color: $services_block_title_hover;
+        }
+         @media (max-width: 789px) {
+           color: $services_block_text_color_hover_mobile;
+        }
+    }
+
+    .mobile-collapse_title {
+        color: $footer_mobile_collapse_title_color;
+    }
+    @media (max-width: 789px) {
+        .mobile-collapse {
+            border-top: 1px solid $footer_mobile_collapse_border;
+            border-bottom: 1px solid $footer_mobile_collapse_border;
+        }
+    }
+    .social-icon-round{
+        li{
+            border:1px solid $social_icon_round_border;
+        }
+        li:hover{
+            border:1px solid $social_icon_round_border_hover;
+            a{
+                border:1px solid $social_icon_round_border_hover;
+                color: $social_icon_round_text_hover;
+            }
+        }
+        li.active{
+            border-color:$social_icon_round_border_active;
+            a{
+                 border-color:$social_icon_round_border_active;
+                color: $social_icon_round_text_active;
+            }
+        }
+    }
+    .footer-menu{
+        ul{
+            li{
+                color: $footer_menu_text;
+                a{
+                    color: $footer_menu_text;
+                }
+            }
+        }
+    }
+    .list-info-center{
+        li{
+            a:hover{
+                color: $list_info_center_link_hover;
+            }
+        }
+        li:after{
+            background: $list_info_center_border;
+        }
+    }
+    .list-info{
+        ul{
+             li{
+                 a:hover{
+                    color: $list_info_link_hover;
+                }
+             }
+        }
+    }
+    .payment-list{
+        ul{
+            li{
+                img{
+                    @include opacity(0.7);
+                }
+                a:hover{
+                    img{
+                        @include opacity(1);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
