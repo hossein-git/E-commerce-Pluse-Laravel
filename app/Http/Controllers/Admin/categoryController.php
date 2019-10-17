@@ -62,39 +62,6 @@ class categoryController extends Controller
         return redirect()->route('category.create')->with(['success' => 'new category has been created']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -104,6 +71,9 @@ class categoryController extends Controller
      */
     public function destroy($id)
     {
+        if (!ctype_digit($id)){
+            return response()->json(['error' => 'id is not valid']);
+        }
         $category = $this->category->findOrFail($id);
         $category->products()->detach();
         $category->delete();

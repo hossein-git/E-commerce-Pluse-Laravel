@@ -16,7 +16,7 @@
                               <li>
                                  <b><a class="cat-main" data-id="{{$key}}"
                                        onmouseover="nav_over(this)"
-                                       href="{{ route('front.lists',['lists' => 'categories','slug' => "$category->category_slug"]) }}">
+                                       href="{{ route('front.lists',['list' => 'categories','slug' => "$category->category_slug"]) }}">
                                        {{ $category->category_name }}
                                     </a></b>
                               </li>
@@ -24,7 +24,7 @@
                                  @if( $category->children->count())
                                     @foreach($category->children as $child)
                                        <li><b>
-                                             <a href="{{ route('front.lists',['lists' => 'categories','slug' => "$child->category_slug"]) }}">
+                                             <a href="{{ route('front.lists',['list' => 'categories','slug' => "$child->category_slug"]) }}">
                                                 {{ $child->category_name }}</a>
                                           </b>
                                        </li>

@@ -42,7 +42,7 @@ class orderController extends Controller
     public function show($id)
     {
         if (ctype_digit($id)){
-            $detailsOrder = $this->order->findOrFail($id)->detailsOrder()->get();
+            $detailsOrder = $this->order->findOrFail($id)->detailsOrder;
             return view('admin.orders.show',compact('detailsOrder'));
         }
     }

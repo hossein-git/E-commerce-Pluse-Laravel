@@ -34,6 +34,7 @@ class CreateColorProductsTable extends Migration
 //            $table->dropForeign('color_id');
 //            $table->dropForeign('product_id');
 //        });
-        Schema::dropIfExists('color_products');
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('color_product');
     }
 }

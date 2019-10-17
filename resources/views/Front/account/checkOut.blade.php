@@ -22,7 +22,7 @@
                </a>
             </li>
             <li style="margin-left: -2rem">
-               <a href="#Review" data-toggle="tab" >
+               <a href="#Review" data-toggle="tab">
                   <div class="numeral-box">
                      <span class="numeral">2</span>
                   </div>
@@ -89,13 +89,13 @@
                         <div class="form-group">
                            <label for="inputStreet" class=" control-label">Street: <span>*</span></label>
                            <div class="">
-                              <input type="text" name="street" class="form-control" id="inputStreet" >
+                              <input type="text" name="street" class="form-control" id="inputStreet">
                            </div>
                         </div>
                         <div class="form-group">
                            <label for="inputCity" class=" control-label">Avenue: <span>*</span></label>
                            <div class="">
-                              <input type="text" name="avenue" class="form-control" id="inputAvenue" >
+                              <input type="text" name="avenue" class="form-control" id="inputAvenue">
                            </div>
                         </div>
                         <div class="form-group">
@@ -112,19 +112,25 @@
                         </div>
                      </div>
                   </div>
+
+                  <input type="hidden" name="user_id" value="{{ auth()->user() ? auth()->user()->user_id : null }}">
                   <button class="btn icon-btn-right" href="#">NEXT<span class="icon icon-chevron_right"></span></button>
                </form>
             </div>
             <div class="tab-pane checkout-tab-content" id="Review">
-               <form action="">
-                  <div class="form-group">
-                     <label for="giftCode" class=" control-label">Gift Code: <span>*</span></label>
+               @auth()
+                  <form action="">
                      <div class="form-group">
-                     <input type="text" name="giftCode" class="form-control" id="giftCode">
-                        <button class="btn">Check</button>
+                        <label for="giftCode" class=" control-label">Gift Code: <span>*</span></label>
+                        <div class="form-group">
+                           <input type="text" name="giftCode" class="form-control" id="giftCode">
+                           <button class="btn">Check</button>
+                        </div>
                      </div>
-                  </div>
-               </form>
+                  </form>
+               @else()
+                  <center><h2>for using gift card, please <a href="{{ route('login') }}">login</a></h2></center>
+               @endauth
             </div>
             <div class="tab-pane" id="payment">
                payment
@@ -142,55 +148,44 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                     <td>SUBTOTAL:</td>
-                     <td>$45</td>
-                  </tr>
-                  <tr>
-                     <td>SHIPPING(FLAT RATE - FIXED):</td>
-                     <td>$15</td>
-                  </tr>
+                  {{--                  <tr>--}}
+                  {{--                     <td>SUBTOTAL:</td>--}}
+                  {{--                     <td>{{ number_format(Cart::total()) }}</td>--}}
+                  {{--                  </tr>--}}
+                  {{--                  <tr>--}}
+                  {{--                     <td>SHIPPING(FLAT RATE - FIXED):</td>--}}
+                  {{--                     <td>$15</td>--}}
+                  {{--                  </tr>--}}
                   <tr>
                      <td>ORDER TOTAL:</td>
-                     <td><strong class="color-base">$457</strong></td>
+                     <td><strong class="color-base">{{ (Cart::subTotal()) }}</strong></td>
                   </tr>
                   </tbody>
                </table>
             </div>
          </div>
          <div class="checkout-box">
-            <h3>2 ITEM IN CART</h3>
+            <h3>{{ Cart::count() }} ITEM IN CART</h3>
             <div class="checkout-box-03">
-               <div class="item">
-                  <div class="img">
-                     <a href="#"><img src="images/product/product-80x100-1.jpg" alt=""></a>
+               @forelse(Cart::content() as $cart)
+                  <div class="item">
+                     <div class="img">
+                        <a href="{{ route('front.show',$cart->id) }}"><img src="{{ $cart->options->src }}" alt=""></a>
+                     </div>
+                     <div class="description">
+                        <a href="{{ route('front.show',$cart->id) }}" class="title">{{ $cart->name }}</a>
+                        <p>
+                           {{ $cart->options->color }}, {{ $cart->options->size }}
+                        </p>
+                        <div class="price">{{ $cart->price }}</div>
+                        <p>
+                           QTY:{{ $cart->qty }}
+                        </p>
+                     </div>
                   </div>
-                  <div class="description">
-                     <a href="#" class="title">Daisy Street 3/4 Sleeve Pane</a>
-                     <p>
-                        Black, Xl
-                     </p>
-                     <div class="price">$45</div>
-                     <p>
-                        QTY:1
-                     </p>
-                  </div>
-               </div>
-               <div class="item">
-                  <div class="img">
-                     <a href="#"><img src="images/product/product-80x100-2.jpg" alt=""></a>
-                  </div>
-                  <div class="description">
-                     <a href="#" class="title">Daisy Street 3/4 Sleeve Pane</a>
-                     <p>
-                        Black, Xl
-                     </p>
-                     <div class="price">$45</div>
-                     <p>
-                        QTY:1
-                     </p>
-                  </div>
-               </div>
+               @empty
+                  <b>Your cart is empty</b>
+               @endforelse
             </div>
          </div>
       </div>

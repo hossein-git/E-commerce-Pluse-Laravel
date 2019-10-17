@@ -24,9 +24,8 @@ class orderRequest extends FormRequest
     public function rules()
     {
         return [
-              'costumer_id' => ['nullable', 'numeric']
+              'user_id' => ['nullable', 'numeric']
             , 'employee_id' => ['nullable', 'numeric']
-            , 'addr_id'     => ['nullable', 'numeric']
             , 'gift_id'     => ['nullable', 'numeric']
             , 'order_status'=> ['nullable', 'numeric']
             , 'track_code'  => ['string']

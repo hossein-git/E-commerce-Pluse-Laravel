@@ -8,7 +8,7 @@
       </div>
    </div>
    <form id="order_form"
-         action="{{ (\Request::route()->getName()) == 'front.productsList' ? route('front.productsList') : route('front.lists',['lists' => \Request::route('list'), 'slug' => \Request::route('slug') ])}}"
+         action="{{ (\Request::route()->getName()) == 'front.productsList' ? route('front.productsList') : route('front.lists',[ 'list' => \Request::route('list'), 'slug' => \Request::route('slug') ])}}"
          method="post">
       <div class="collapse-block open">
          <h3 class="collapse-block_title ">Sorting</h3>
@@ -67,10 +67,9 @@
       <div class="collapse-block_content">
          <ul class="list-simple">
             @forelse($categories as $category)
-               <li><a href="{{ route('front.lists',[
-                  'lists' => 'categories',
-                  'slug' => "$category->category_slug",
-               ]) }}">{{ $category->category_name }}</a></li>
+               <li>
+                  <a href="{{ route('front.lists',['list' => 'categories','slug' => "$category->category_slug", ]) }}">{{ $category->category_name }}</a>
+               </li>
             @empty
                <li>NOTHING YET</li>
             @endforelse

@@ -27,8 +27,7 @@ class CreateAddressesTable extends Migration
             $table->string('phone_number');
             $table->smallInteger('number');
             $table->string('postal_code');
-            $table->unsignedInteger('addressable_id');
-            $table->string('addressable_type');
+            $table->morphs('addressable');
             $table->timestamps();
         });
     }

@@ -54,7 +54,6 @@
 </style>
 @endsection
 @section('content')
-
    <div class="">
       <div class="row">
          <!-- IMAGE -->
@@ -62,8 +61,8 @@
             <div class="product-col-image">
                <div class="product-main-image">
                   <div class="product-main-image-item">
-                     <img class="zoom-product" src='{{ ($product->cover) }}'
-                          data-zoom-image="{{ ($product->cover) }}" alt=""/>
+                     <img class="zoom-product" id="p_src" src='{{ ($product->cover) }}'
+                          data-zoom-image="{{ ($product->cover) }}" alt="product image"/>
                   </div>
                </div>
                <div class="product-images-carousel-vertical">
@@ -125,13 +124,13 @@
                      </div>
                   </div>
                </div>
-               <h1 class="title">{{ $product->product_name }}</h1>
+               <h1 class="title" id="p_name">{{ $product->product_name }}</h1>
                <div class="price">
                   @if($product->is_off == 1)
                      <span class="old-price">{{ number_format($product->sale_rice) }}</span>
-                     <span class="new-price">{{ $product->price }}</span>
+                     <span class="new-price" id="p_price">{{ $product->price }}</span>
                   @else
-                     <span class="price">{{ $product->price }}</span>
+                     <span class="price" id="p_price">{{ $product->price }}</span>
                   @endif
                </div>
                <!-- RATING -->
@@ -159,13 +158,16 @@
                            COLOR<span class="color-required">*</span>
                         </div>
                         <ul class="options-swatch-color">
-                           @foreach($product->colors()->get(['color_code']) as $color)
-                              <li><a href="#">
-                                    <span class="swatch-label color-orange"
-                                          style="background: {{ $color->color_code }}"></span>
+                           @foreach($product->colors()->get(['color_code','color_name']) as $color)
+                              <li class="">
+                                 <a href="#" class="p_color" data-id="{{ $color->color_name }}">
+                                    <span class="swatch-label color-orange active"
+                                          style="background: {{ $color->color_code }}">
+                                    </span>
                                  </a>
                               </li>
                            @endforeach
+                           <span class="tab swatch-label color-orange"></span>
                         </ul>
                      </div>
                   </div>
@@ -174,29 +176,32 @@
                   <div class="col-sm-6">
                      <div class="wrapper">
                         <div class="title-options">SIZE<span class="color-required">*</span></div>
-                        <ul class="tags-list">
-                           <li><a href="#">XS</a></li>
-                           <li class="active"><a href="#">S</a></li>
-                           <li><a href="#">M</a></li>
-                           <li><a href="#">L</a></li>
+                        <ul class="tags-list _size">
+                           <li><a href="#" size="XS">XS</a></li>
+                           <li><a href="#" size="S">S</a></li>
+                           <li><a href="#" size="M">M</a></li>
+                           <li><a href="#" size="L">L</a></li>
                         </ul>
                      </div>
                   </div>.
                   <!-- /SIZE -->
                </div>
-
+               <b id="p_error" style="display: none;color: red;">ddd</b>
                <div class="wrapper">
                   <div class="pull-left"><label class="qty-label">QTY</label></div>
                   <div class="pull-left">
                      <div class="style-2 input-counter">
                         <span class="minus-btn"></span>
-                        <input type="text" value="1" size="5"/>
+                        <input type="text" value="1" size="10" id="p_qty"/>
                         <span class="plus-btn"></span>
                      </div>
-                        <a href="#" class="btn btn-lg btn-addtocart">
-                           <span class="icon icon-shopping_basket"></span>SHOP
-                           NOW!</a>
+                     <a href="#" id="add_to_cart" class="btn btn-lg btn-addtocart" style="">
+                        <span class="icon icon-shopping_basket"></span>SHOP
+                        NOW!
+                     </a>
                   </div>
+
+
                      <ul class="product_inside_info_link">
                         <li class="text-right">
                            <a href="#">
@@ -396,9 +401,9 @@
                               <span class="icon icon-shopping_basket"></span>ADD TO CART
                            </a>
                            <a href="#" class="quick-view btn" data-toggle="modal" data-target="#ModalquickView">
-											<span>
-											<span class="icon icon-visibility"></span>QUICK VIEW
-											</span>
+                              <span>
+                                 <span class="icon icon-visibility"></span>QUICK VIEW
+                              </span>
                            </a>
                            <ul class="product_inside_info_link">
                               <li class="text-right">
@@ -428,6 +433,12 @@
       </div>
    </div>
 
+<input type="hidden" id="p_color">
+<input type="hidden" id="p_size">
+<input type="hidden" id="p_slug" value="{{ $product->product_slug }}">
+<input type="hidden" id="p_id" value="{{ $product->product_id }}">
+<input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}">
+<input type="hidden" id="_url" value="{{ route('cart.store')}}">
 @endsection
 @section('extra_js')
    <script src="{{ asset('front-assets/external/isotope/isotope.pkgd.min.js') }}"></script>

@@ -1,38 +1,39 @@
 <nav class="panel-menu mm-right">
    <ul>
+      <li><a href="{{ route('home') }}">Home</a></li>
       <li>
-         <a href="index.html">LAYOUT</a>
+         <a href="{{ route('front.productsList') }}">Products</a>
          <ul>
-            <li><a href="index.html">Home page 1</a></li>
-            <li><a href="index-02.html">Home page 2</a></li>
-
+            @forelse($categories as $category)
+            <li><a href="{{ route('front.lists',['list' => 'categories','slug' => "$category->category_slug", ]) }}">{{ $category->category_name }}</a></li>
+               @empty
+                  <li>NOTHING YET</li>
+            @endforelse
          </ul>
       </li>
       <li>
-         <a href="listing-left-column.html">LISTING</a>
-         <ul>
-            <li><a href="listing-left-column.html">Left Column</a></li>
-            <li><a href="listing-left-right-column.html">Left and Right Column</a></li>
-         </ul>
-      </li>
-      <li>
-         <a href="product.html">PRODUCT</a>
+         <a href="product.html">SPECIAL OFFERS</a>
          <ul>
             <li><a href="product.html">Image Size - Small</a></li>
          </ul>
       </li>
       <li>
-         <a href="blog_listing.html">BLOG</a>
+         <a href="product.html">MOST SOLD</a>
          <ul>
-            <li><a href="blog_listing.html">Listing</a></li>
+            <li><a href="product.html">Image Size - Small</a></li>
          </ul>
       </li>
       <li>
-         <a href="gallery_masonry_col_3.html">GALLERY</a>
+         <a href="product.html">BRANDS</a>
          <ul>
-            <li><a href="gallery_grid_col_2.html">Grid col 2</a></li>
+            @forelse($brands as $brand)
+            <li><a href="{{ route('front.lists', ['list' => 'brands' , 'slug' => $brand->brand_slug ]) }}">{{ $brand->brand_name }}</a></li>
+            @empty
+               <b>NO DATA</b>
+            @endforelse
          </ul>
       </li>
+      <li><a href="#">QUESTIONS</a></li>
       <li>
          <a href="about.html">PAGES</a>
          <ul>

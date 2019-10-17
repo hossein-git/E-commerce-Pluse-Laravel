@@ -6,7 +6,7 @@
    <meta name="_token" content="{{ csrf_token()}}"/>
 @endsection
 @section('content')
-   {{--   {{ dd(\Request::route('slug')) }}--}}
+{{--      {{ dd(\Request::route('list')) }}--}}
    <div class="row">
       <!-- left col -->
    @include('Front.listing._leftMenu')
@@ -28,6 +28,7 @@
 @endsection
 @section('extra_js')
    <script src="{{asset('front-assets/external/nouislider/nouislider.min.js')}}"></script>
+{{--   for pagination :--}}
    <script type="text/javascript">
        $(window).on('hashchange', function () {
            if (window.location.hash) {
@@ -69,6 +70,7 @@
            });
        }
    </script>
+{{--   FOR SORT--}}
    <script type="text/javascript">
        $(document).ready(function () {
 
@@ -83,7 +85,7 @@
                });
                $.ajax({
                    //if we r in products page go to related route
-                   url: "{{ (\Request::route()->getName()) == 'front.productsList' ? route('front.productsList') :   route('front.lists',['lists' => \Request::route('list'), 'slug' => \Request::route('slug') ])}}",
+                   url: "{{ (\Request::route()->getName()) == 'front.productsList' ? route('front.productsList') :   route('front.lists',['list' => \Request::route('list'), 'slug' => \Request::route('slug') ])}}",
                    method: "post",
                    data: form_data,
                    contentType: false,

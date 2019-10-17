@@ -20,8 +20,7 @@ class  CreatePhotosTable extends Migration
 //            $table->string('thumbnail',255);
             $table->integer('photo_size');
             $table->string('photo_type');
-            $table->unsignedBigInteger('photoable_id');
-            $table->string('photoable_type');
+            $table->morphs('photoable');
             $table->timestamps();
         });
     }

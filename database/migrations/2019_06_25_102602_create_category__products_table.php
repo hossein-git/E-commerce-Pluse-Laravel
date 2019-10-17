@@ -16,6 +16,7 @@ class CreateCategoryProductsTable extends Migration
         Schema::create('category_product', function (Blueprint $table) {
             $table->unsignedBigInteger('category_id')->index();
             $table->foreign('category_id')->references('product_id')->on('products');
+
             $table->unsignedBigInteger('product_id')->index();
             $table->foreign('product_id')->references('category_id')->on('categories');
         });
@@ -28,11 +29,8 @@ class CreateCategoryProductsTable extends Migration
      */
     public function down()
     {
-//        Schema::table('category_product', function(Blueprint $table)
-//        {
-//            $table->dropForeign('category_id');
-//            $table->dropForeign('product_id');
-//        });
-        Schema::dropIfExists('category__products');
+
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('category_product');
     }
 }

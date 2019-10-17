@@ -130,7 +130,7 @@
                @endforeach
             </td>
             {{--            <td class="smaller-80">{{ $product->made_in }}</td>--}}
-            <td>{{ str_limit($product->description,50,'...')  }}</td>
+            <td>{{ Str::limit($product->description,50,'...')  }}</td>
             <td>
                <img src="{{ asset($product->thumbnail) }}" alt="cover photo" width="80" height="100">
             </td>

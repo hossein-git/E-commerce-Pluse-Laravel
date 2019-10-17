@@ -6,6 +6,7 @@
    <meta name="keywords" content="@yield('keywords')">
    <meta name="description" content="@yield('description')">
    <meta name="author" content="{{ env('APP_NAME') }}">
+   <meta name="_token" content="{{ csrf_token()}}"/>
 {{--   <link rel="shortcut icon" href="favicon.ico">--}}
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -57,6 +58,8 @@
 
 <script src="{{asset('front-assets/external/jquery/jquery-2.1.4.min.js')}}"></script>
 <script src="{{asset('front-assets/external/bootstrap/bootstrap.min.js')}}"></script>
+<script src="{{asset('front-assets/js/add_to_cart.js')}}"></script>
+
 <script src="{{asset('front-assets/external/countdown/jquery.plugin.min.js')}}"></script>
 <script src="{{asset('front-assets/external/countdown/jquery.countdown.min.js')}}"></script>
 <script src="{{asset('front-assets/external/slick/slick.min.js')}}"></script>
@@ -68,6 +71,9 @@
 <script src="{{asset('front-assets/external/panelmenu/panelmenu.js')}}"></script>
 <script src="{{asset('front-assets/js/quick-view.js')}}"></script>
 <script src="{{asset('front-assets/js/main.js')}}"></script>
+<script>
+
+</script>
 <!-- EXTRA JS -->
 @yield('extra_js')
 <!-- /EXTRA JS -->

@@ -17,13 +17,14 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('order_id');
 
-            $table->unsignedBigInteger('costumer_id')->nullable();
-            $table->foreign('costumer_id')->references('user_id')->on('users')->onDelete('set null');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('set null');
 
             $table->unsignedInteger('employee_id')->nullable();
 //            $table->unsignedInteger('payment_id');
-            $table->unsignedBigInteger('addr_id');
-            $table->foreign('addr_id')->references('addr_id')->on('addresses')->onDelete('cascade');
+
+//            $table->unsignedBigInteger('addr_id');
+//            $table->foreign('addr_id')->references('addr_id')->on('addresses')->onDelete('cascade');
 
             $table->unsignedBigInteger('gift_id')->nullable();
             $table->foreign('gift_id')->references('gift_id')->on('gift_cards')->onDelete('set null');

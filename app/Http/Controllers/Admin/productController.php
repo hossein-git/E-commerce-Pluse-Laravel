@@ -65,18 +65,18 @@ class productController extends Controller
     //Route : $this->product/index/restore name:$this->product.restore
     public function restore($id)
     {
-       if (ctype_digit($id)){
-           $product = $this->product::withTrashed()->findOrFail($id)->restore();
-           if ($product) {
-               return response()->json(['success' => $this->product]);
-           }
-       }
+        if (ctype_digit($id)) {
+            $product = $this->product::withTrashed()->findOrFail($id)->restore();
+            if ($product) {
+                return response()->json(['success' => $this->product]);
+            }
+        }
     }
 
-     /* Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /* Show the form for creating a new resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
     public function create()
     {
         $colors = Color::select('color_id', 'color_name')->get();
@@ -123,32 +123,7 @@ class productController extends Controller
         $product->categories()->saveMany($categories);
         //SAVE PHOTOS
         if ($images = $request->file('photos')) {
-            $all_images = [];
-            foreach ($images as $key => $image) {
-                $image_title = $image->getClientOriginalName();
-                $image_type = $image->getClientOriginalExtension();
-                $image_name = $key . ',' . date('Y_m_d_H,i,s') . '.' . $image_type;
-                //create thumbnail
-                Image::make($image)->resize(100, 120)->save(env('THUMBNAIL_PATH') . 'T' . $image_name);
-                if ($image_title == $input['cover']) {
-                    $product->cover = $image_name;
-                    $product->save();
-                }
-                $image_size = $image->getClientSize();
-                $image->move(env('IMAGE_PATH'), $image_name);
-                array_push($all_images, [
-                    'photo_title' => $image_title,
-                    'src' => $image_name,
-                    'photo_size' => $image_size,
-                    'photo_type' => $image_type,
-                    'photoable_id' => $product->product_id,
-                    'photoable_type' => Product::class,
-                    "created_at" => Carbon::now(),
-                    "updated_at" => Carbon::now(),
-                ]);
-            }
-            //using query builder to avoid fucking server with lots of query
-            DB::table('photos')->insert($all_images);
+            $this->saveImage($images, $input, $product);
         }
 
         if (env('APP_AJAX') == true) {
@@ -165,9 +140,12 @@ class productController extends Controller
      */
     public function show($id)
     {
+        if (!ctype_digit($id)){
+            return response()->json(['error' => 'id is not valid']);
+        }
         $product = $this->product->findOrFail($id);
         $comments = $product->comments()->paginate(4);
-        return view('admin.products.show',compact('product','comments'));
+        return view('admin.products.show', compact('product', 'comments'));
     }
 
     /**
@@ -178,6 +156,9 @@ class productController extends Controller
      */
     public function edit($id)
     {
+        if (!ctype_digit($id)){
+            return response()->json(['error' => 'id is not valid']);
+        }
         $product = $this->product->findOrFail($id);
         $p_categories = $product->categories->pluck('category_id')->toArray();
         $colors = Color::select('color_id', 'color_name')->get();
@@ -198,6 +179,9 @@ class productController extends Controller
      */
     public function update(productRequest $request, $id)
     {
+        if (!ctype_digit($id)){
+            return response()->json(['error' => 'id is not valid']);
+        }
         $path = public_path(env('THUMBNAIL_PATH'));
         if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
@@ -231,32 +215,7 @@ class productController extends Controller
 
         //IF NEW PHOTO HAS ADDED BELOW SCRIPT WILL RUN
         if ($images = $request->file('photos')) {
-            $all_images = [];
-            foreach ($images as $key => $image) {
-                $image_title = $image->getClientOriginalName();
-                $image_type = $image->getClientOriginalExtension();
-                $image_name = $key . ',' . date('Y_m_d_H,i,s') . '.' . $image_type;
-                if ($image_title == $input['cover']) {
-                    $product->cover = $image_name;
-                }
-                //IF IMAGE HAS ALREADY UPDATED,THIS SCRIPT WILL BE AVOIDED
-                //create thumbnail
-                Image::make($image)->resize(267, 341)->save(env('THUMBNAIL_PATH') . 'T' . $image_name);
-                $image_size = $image->getClientSize();
-                $image->move(env('IMAGE_PATH'), $image_name);
-                array_push($all_images, [
-                    'photo_title' => $image_title,
-                    'src' => $image_name,
-                    'photo_size' => $image_size,
-                    'photo_type' => $image_type,
-                    'photoable_id' => $product->product_id,
-                    'photoable_type' => Product::class,
-                    "created_at" => Carbon::now(),
-                    "updated_at" => Carbon::now(),
-                ]);
-            }
-            //using query builder to avoid fucking server with lots of query
-            DB::table('photos')->insert($all_images);
+            $this->saveImage($images, $input, $product);
         }
         $product->save();
         if (env('APP_AJAX') == true) {
@@ -274,10 +233,13 @@ class productController extends Controller
      */
     public function destroy($id)
     {
+        if (!ctype_digit($id)){
+            return response()->json(['error' => 'id is not valid']);
+        }
         $product = $this->product->withTrashed()->findOrFail($id);
-        if ($product->trashed() == false){
+        if ($product->trashed() == false) {
             $product->delete();
-        }else{
+        } else {
             $product->categories()->detach();
             $product->colors()->detach();
             // if product has photo then delete em
@@ -286,7 +248,7 @@ class productController extends Controller
                 foreach ($product->photos as $photo) {
                     $photo_path = public_path(env("IMAGE_PATH") . $photo->addr);
                     $thumbnail_path = public_path(env("THUMBNAIL_PATH") . $photo->addr);
-                    array_push($photo_ids,$photo->photo_id);
+                    array_push($photo_ids, $photo->photo_id);
                     if (File::exists($photo_path)) {
                         unlink($photo_path);
                     }
@@ -302,5 +264,41 @@ class productController extends Controller
             return response()->json(['success' => $product]);
         }
         return response()->json(['error' => 'error']);
+    }
+
+    /**
+     * save images
+     * @param array $images
+     * @param array $input
+     * @param object $product
+     */
+    private function saveImage($images, $input, $product)
+    {
+        $all_images = [];
+        foreach ($images as $key => $image) {
+            $image_title = $image->getClientOriginalName();
+            $image_type = $image->getClientOriginalExtension();
+            $image_name = $key . ',' . date('Y_m_d_H,i,s') . '.' . $image_type;
+            //create thumbnail
+            Image::make($image)->resize(100, 120)->save(env('THUMBNAIL_PATH') . 'T' . $image_name);
+            if ($image_title == $input['cover']) {
+                $product->cover = $image_name;
+                $product->save();
+            }
+            $image_size = $image->getClientSize();
+            $image->move(env('IMAGE_PATH'), $image_name);
+            array_push($all_images, [
+                'photo_title' => $image_title,
+                'src' => $image_name,
+                'photo_size' => $image_size,
+                'photo_type' => $image_type,
+                'photoable_id' => $product->product_id,
+                'photoable_type' => Product::class,
+                "created_at" => Carbon::now(),
+                "updated_at" => Carbon::now(),
+            ]);
+        }
+        //using query builder to avoid fucking server with lots of query
+        DB::table('photos')->insert($all_images);
     }
 }

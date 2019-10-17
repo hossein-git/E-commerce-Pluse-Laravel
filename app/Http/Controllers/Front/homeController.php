@@ -21,40 +21,10 @@ class homeController extends Controller
         $this->product = new Product();
     }
 
-    //use for lists
-    private function inputs($request)
-    {
-        $this->validate($request, [
-            'sort' => 'string',
-            'dcs' => 'string',
-            'paginate' => 'numeric',
-            'priceMin' => 'nullable|numeric',
-            'priceMax' => 'nullable|numeric',
-        ]);
-        //if we access to this with get request those var we need set them here
-        if (!$request->priceMin) {
-            $request->priceMin = 0;
-        }
-        if (!$request->priceMax) {
-            $request->priceMax = 99999999;
-        }
-        if (!$request->sort) {
-            $request->sort = 'product_id';
-        }
-        if (!$request->dcs) {
-            $request->dcs = 'desc';
-        }
-        if (!$request->paginate) {
-            $request->paginate = 6;
-        }
-        return $request;
-
-    }
-
     //home page method
     public function home(Request $request)
     {
-        $products = $this->product->select(['product_slug', 'product_name', 'description', 'status',
+        $products = $this->product->select(['product_id','product_slug', 'product_name', 'description', 'status',
                 'data_available', 'is_off', 'off_price', 'cover', 'sale_price', 'created_at']
         )->paginate(4);
         $brands = brand::select(['brand_slug', 'brand_name', 'brand_image'])->get();
@@ -122,6 +92,36 @@ class homeController extends Controller
             return response()->json(['html' => $view]);
         }
         return view('Front.listing.list', compact('products'));
+
+    }
+
+    //use for lists
+    private function inputs($request)
+    {
+        $this->validate($request, [
+            'sort' => 'string',
+            'dcs' => 'string',
+            'paginate' => 'numeric',
+            'priceMin' => 'nullable|numeric',
+            'priceMax' => 'nullable|numeric',
+        ]);
+        //if we access to this with get request those var we need set them here
+        if (!$request->priceMin) {
+            $request->priceMin = 0;
+        }
+        if (!$request->priceMax) {
+            $request->priceMax = 99999999;
+        }
+        if (!$request->sort) {
+            $request->sort = 'product_id';
+        }
+        if (!$request->dcs) {
+            $request->dcs = 'desc';
+        }
+        if (!$request->paginate) {
+            $request->paginate = 6;
+        }
+        return $request;
 
     }
 }

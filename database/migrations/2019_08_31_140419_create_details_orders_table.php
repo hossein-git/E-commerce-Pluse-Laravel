@@ -41,6 +41,7 @@ class CreateDetailsOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('details_oreders');
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('details_orders');
     }
 }

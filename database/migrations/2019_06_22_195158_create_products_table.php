@@ -16,7 +16,8 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('product_id');
             $table->unsignedBigInteger('brand_id');
-            $table->foreign('brand_id')->references('brand_id')->on('brands')->onDelete('cascade');
+            $table->foreign('brand_id')->references('brand_id')
+                ->on('brands')->onUpdate('cascade')->onDelete('cascade');
 
             $table->string('product_name');
             $table->string('product_slug')->unique();
@@ -46,6 +47,7 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('products');
     }
 }

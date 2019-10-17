@@ -31,9 +31,9 @@ class CreateCategoriesTable extends Migration
     {
         Schema::dropIfExists('categories');
         // To drop columns
-        Schema::table('table', function (Blueprint $table) {
-            $table->dropNestedSet();
-        });
+//        Schema::table('table', function (Blueprint $table) {
+//            $table->dropNestedSet();
+//        });
 
     }
 }

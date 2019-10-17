@@ -14,14 +14,16 @@ class checkOutController extends Controller
     {
         $this->order = new Order;
     }
-
+    
     public function index()
     {
-        return view('front.account.checkout');
+        return view('Front.account.checkout');
     }
+
 
     public function store(Request $request)
     {
+        $input = $request->except('_token');
 
     }
 }

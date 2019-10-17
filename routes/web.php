@@ -16,8 +16,8 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
-    $id = (array_rand([1, 2, 3, 4, 5, 6, 7, 8, 9], 1));
-    (\App\Models\Address::findOrFail($id)->addr_id);
+    Cart::update('3f98937baeb19acd123af99c4336f550',1);
+    dd(Cart::content());
 
 })->name('test');
 
@@ -49,11 +49,15 @@ Route::post('/checkout', 'Front\checkOutController@store')->name('front.checkout
 
 /*---------------LISTS------------------*/
 Route::match(['get','post'],'/products', 'Front\homeController@productsList')->name('front.productsList');
-
 Route::match(['get','post'],'/products/{list}/{slug}','Front\homeController@list')->where([
     'list' => '[A-za-z]+',
 //    'slug' => '[A-Za-z0-9]+'
 ])->name('front.lists');
+
+/*---------------CART------------------*/
+Route::resource('/cart','Front\cartController')->except(['create','edit','update']);
+Route::post('/cart/edit','Front\cartController@update')->name('cart.update');
+Route::get('/carts/clear','Front\cartController@clear')->name('cart.clear');
 
 
 
@@ -78,21 +82,21 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('photo', 'Admin\PhotoController');
 
     /*---------------CATEGORIES ROUTE------------------*/
-    Route::resource('category', 'Admin\categoryController');
+    Route::resource('category', 'Admin\categoryController')->except(['show','edit','update']);
 
     /*---------------BRAND ROUT------------------*/
-    Route::resource('brand', 'Admin\brandController');
+    Route::resource('brand', 'Admin\brandController')->except(['show']);
 
     /*---------------GIFT CARD------------------*/
-    Route::resource('giftCard', 'Admin\giftCardController');
+    Route::resource('giftCard', 'Admin\giftCardController')->except(['show']);
 
     /*---------------****ORDERS****------------------*/
     Route::get('orders', 'Admin\orderController@index')->name('order.index');
     Route::get('not-sent-orders', 'Admin\orderController@notSent')->name('order.not_sent');
     Route::get('orders/{id}', 'Admin\orderController@show')->name('order.show');
-    Route::get('orders/status/{id}/{status}', 'Admin\orderController@status')->name('order.status');
     Route::delete('orders/{id}', 'Admin\orderController@destroy')->name('order.destroy');
     Route::post('orders/{id}', 'Admin\orderController@detailDestroy')->name('order.detail.destroy');
+    Route::get('orders/status/{id}/{status}', 'Admin\orderController@status')->name('order.status');
 //    Route::post('orders','Admin\orderController@sent')->name('order.sent');
 
     /*---------------****COMMENTS****------------------*/

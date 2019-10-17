@@ -5,13 +5,12 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 use Laravelista\Comments\Commentable;
-use Laravelista\Comments\Commenter;
-use Yoeunes\Rateable\Traits\Rateable;
 
 class Product extends Model
 {
-    use SoftDeletes , Commentable , Rateable;
+    use SoftDeletes , Commentable , \willvincent\Rateable\Rateable;
 
     protected $primaryKey = 'product_id';
 
@@ -52,11 +51,11 @@ class Product extends Model
     {
         return $this->morphMany(Photo::class,'products','photoable_type','photoable_id');
     }
-    //get price amount of money format
-//    public function getBuyPriceAttribute()
-//    {
-//        return number_format($this->attributes['buy_price']);
-//    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class,'product_tags','product_id','tag_id');
+    }
 
     //get created at in diffForHumans format
     public function getCreatedAtAttribute($date)
@@ -67,7 +66,7 @@ class Product extends Model
 
     public function setProductSlugAttribute($value)
     {
-        return $this->attributes['product_slug'] = str_slug($value);
+        return $this->attributes['product_slug'] = Str::slug($value);
     }
 
     //get cover path

@@ -47,10 +47,10 @@
                </a>
             </td>
             <td class="center">
-               @if($order->costumer_id == null)
+               @if($order->user_id == null)
                <span class="label label-default">GUEST</span>
                   @else
-                  {{ $order->costumer_id }}
+                  {{ $order->user_id }}
                @endif
             </td>
             <td class="center">{{ $order->client_name }}</td>
@@ -67,7 +67,7 @@
                @endif
             </td>
             <td>
-               {{ str_limit($order->details,50) }}</td>
+               {{ Str::limit($order->details,50) }}</td>
             <td>{{ $order->created_at }}
             </td>
             <td class="center">
