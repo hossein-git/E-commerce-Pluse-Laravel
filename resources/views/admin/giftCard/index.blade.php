@@ -1,4 +1,9 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty' )
+@extends('layout.admin.index' )
+@section('title')
+   Gift Cards List
+@stop
+@section('extra_css')
+@stop
 @section('content')
    @include('layout.errors.notifications')
    <table id="simple-table" class="table  table-bordered table-hover">
@@ -67,47 +72,19 @@
 
    {{ $gifts->links() }}
 
-<script>
-    $(document).ready(function () {
-        $(".delete_me").click(function (e) {
-            e.preventDefault();
-            var obj = $(this); // first store $(this) in obj
-            var id = $(this).data("id");
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: "/admin/giftCard/" + id,
-                method: "DELETE",
-                dataType: "Json",
-                data: {"id": id},
-                success: function ($results) {
-                    alert('Gift Card Has Been successfully Deleted');
-                    $(obj).closest("tr").remove(); //delete row
-                    console.log($results);
-                },
-                error: function (xhr) {
-                    alert('error, gift Card not deleted');
-                    console.log(xhr.responseText);
-                }
-            });
-        });
-        <!-- LOAD THE EDIT PAGE-->
-        jQuery(".edit_me").bind('click', function () {
-            var route = $(this).attr('href');
-            var id = $(this).data('id');
-            window.history.replaceState("", "", "giftCard/"+id+"/edit");
-            $("#content-load").load(route);
-            return false;
-        });
-    });
-</script>
-
-
-
-
-
-
 @endsection
+@section('extra_js')
+   <script>
+       $(document).ready(function () {
+           deleteAjax("/admin/giftCard/","delete_me","Gift Card");
+           <!-- LOAD THE EDIT PAGE-->
+           jQuery(".edit_me").bind('click', function () {
+               var route = $(this).attr('href');
+               var pjax = new Pjax({
+                   selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
+               });
+               pjax.loadUrl(route);
+           });
+       });
+   </script>
+@stop

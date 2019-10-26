@@ -16,7 +16,8 @@
         "laravel/framework": "^6.0",
         "laravel/tinker": "^1.0",
         "laravelista/comments": "^3.0",
-        "willvincent/laravel-rateable": "^2.0"
+        "willvincent/laravel-rateable": "^2.0",
+      "ext-http": "*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

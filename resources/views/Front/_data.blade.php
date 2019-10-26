@@ -7,7 +7,7 @@
       <div class="product small">
          <div class="product_inside" style="margin-bottom: -2.3rem">
             <div class="image-box">
-               <a class="promo-box zoom-in design-default"
+               <a class="promo-box zoom-in design-default load_page"
                   href="{{ route('front.show',$product->product_slug) }}">
                   <img src="{{ $product->thumbnail }}" alt="">
                   @if($product->is_off == 1)
@@ -20,8 +20,7 @@
                      <div class="label-sale">coming soon!</div>
                   @endif
                </a>
-               <a href="{{ route('front.show',$product->product_slug) }}" data-toggle="modal"
-                  {{--                                    data-target="#ModalquickView"--}}
+               <a href="{{ route('front.show',$product->product_slug) }}" class="load_page"
                   class="quick-view">
                   {{-- <span>
                       <span class="icon icon-visibility"></span>QUICK VIEW
@@ -37,7 +36,7 @@
             </div>
             <h2 class="title">
                <a class="bolder"
-                  href="{{ route('front.show',$product->product_slug) }}">{{ $product->product_name }} </a>
+                  href="{{ route('front.show',$product->product_slug) }}" class="load_page">{{ $product->product_name }} </a>
             </h2>
             <div class="price">
                @if($product->is_off == 1)

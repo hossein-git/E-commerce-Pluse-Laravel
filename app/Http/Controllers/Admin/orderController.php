@@ -106,9 +106,9 @@ class orderController extends Controller
         if (ctype_digit($id)){
             $order = $this->order->findOrFail($id);
             if ($status == 'sent'){
-                $s = $order->update(['order_status' => 1]);
-            }elseif($status == 'delivered'){
                 $s = $order->update(['order_status' => 2]);
+            }elseif($status == 'delivered'){
+                $s = $order->update(['order_status' => 3]);
             }
             if ($s){
                 return response()->json(['success' => $order]);

@@ -6,7 +6,7 @@
    <meta name="keywords" content="@yield('keywords')">
    <meta name="description" content="@yield('description')">
    <meta name="author" content="{{ env('APP_NAME') }}">
-   <meta name="_token" content="{{ csrf_token()}}"/>
+   <meta name="_token" content="{{ csrf_token() }}">
 {{--   <link rel="shortcut icon" href="favicon.ico">--}}
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -17,6 +17,7 @@
    <link rel="stylesheet" href="{{ asset('front-assets/css/footer-dark.css') }}">
 {{--   <link rel="stylesheet" href="{{ asset('front-assets/css/template-rtl.css')}}">--}}
    <link rel="stylesheet" href="{{ asset('front-assets/font/icont-fonts.min.css')}}">
+   <script src="{{asset('front-assets/external/jquery/jquery-2.1.4.min.js')}}"></script>
    <!--
       *THIS SCRIPT TAKES CHILDREN VALUES OF CATEGORY
       *AND PASS IT TO DIV
@@ -33,30 +34,37 @@
       }
    </script>
    <!-- EXTRA CSS -->
-   @yield('extra_css')
+   <div class="extra_css">
+      @yield('extra_css')
+   </div>
    <!-- /EXTRA CSS -->
 </head>
 <body class="loaded">
-<div class="loader-wrapper">
+{{--<div class="loader-wrapper">
    <div class="loader">
       <svg class="circular" viewBox="25 25 50 50">
          <circle class="loader-animation" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
       </svg>
    </div>
-</div>
+</div>--}}
 @include('layout.front.partials._mobil-nav')
 @include('layout.front.partials._header')
 
 <!-- Content -->
 <div id="pageContent">
-   <div class="container">
+   <div class="container" id="content-load">
       @yield('content')
+      <center><img alt="" src="{{ asset('admin-assets/5.gif') }}" class="center preview ajax-load"
+                   style="display: none">
+      </center>
    </div>
 </div>
 
 @include('layout.front.partials._footer')
 
-<script src="{{asset('front-assets/external/jquery/jquery-2.1.4.min.js')}}"></script>
+ <!-- LOAD PJAX -->
+<script src="{{ asset('js/pjax/pjax.min.js') }}"></script>
+
 <script src="{{asset('front-assets/external/bootstrap/bootstrap.min.js')}}"></script>
 <script src="{{asset('front-assets/js/add_to_cart.js')}}"></script>
 
@@ -71,11 +79,22 @@
 <script src="{{asset('front-assets/external/panelmenu/panelmenu.js')}}"></script>
 <script src="{{asset('front-assets/js/quick-view.js')}}"></script>
 <script src="{{asset('front-assets/js/main.js')}}"></script>
+<<!-- script for load page on AJAX-->
 <script>
-
+    jQuery(document).ready(function () {
+        jQuery(".load_page").one('click', function (e) {
+            var route = $(this).attr('href');
+            var pjax = new Pjax({
+                selectors: ["title","meta[name=keywords]", "#extra_css", "#content-load", "#extra_js"]
+            });
+            pjax.loadUrl(route);
+        });
+    });
 </script>
 <!-- EXTRA JS -->
-@yield('extra_js')
+<div class="extra_js">
+   @yield('extra_js')
+</div>
 <!-- /EXTRA JS -->
 </body>
 </html>

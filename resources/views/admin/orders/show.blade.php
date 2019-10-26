@@ -1,4 +1,9 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty' )
+@extends('layout.admin.index' )
+@section('title')
+   Order Details
+@stop
+@section('extra_css')
+@stop
 @section('content')
    @include('layout.errors.notifications')
    <table id="simple-table" class="table table-bordered table-hover">
@@ -23,7 +28,8 @@
       @forelse($detailsOrder as $key=> $d_order)
          <tr>
             <td class="center">{{$key+1}}</td>
-            <td class="center"><a class="click_me" data-path="/admin/product/{{ $d_order->products()->product_id }}" href="{{ route('product.show',$d_order->products()->product_id) }}">
+            <td class="center"><a class="click_me" data-path="/admin/product/{{ $d_order->products()->product_id }}"
+                                  href="{{ route('product.show',$d_order->products()->product_id) }}">
                   {{($d_order->products()->product_name)}}</a></td>
             <td class="center">{{$d_order->size}}</td>
             <td class="center">{{$d_order->color}}</td>
@@ -51,35 +57,13 @@
       </tbody>
    </table>
 
+
+@endsection
+@section('extra_js')
    <script>
        $(document).ready(function () {
-           $(".delete_me").click(function (e) {
-               e.preventDefault();
-               if (!confirm('ARE YOU SURE TO DELETE IT?')){
-                   return false
-               }
-               var obj = $(this); // first store $(this) in obj
-               var id = $(this).data("id");
-               $.ajaxSetup({
-                   headers: {
-                       'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                   }
-               });
-               $.ajax({
-                   url: "/admin/orders/" + id,
-                   method: "post",
-                   dataType: "Json",
-                   data: {"id": id},
-                   success: function ($results) {
-                       alert('Order Details Has Been successfully Deleted');
-                       history.back();
-                   },
-                   error: function (xhr) {
-                       alert('error,Order Details not deleted');
-                       console.log(xhr.responseText);
-                   }
-               });
-           });
+           deleteAjax("/admin/orders/orders-status/", "delete_me", "Order Details");
+
        });
    </script>
-@endsection
+@stop

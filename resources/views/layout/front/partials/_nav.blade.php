@@ -1,7 +1,7 @@
 <nav class="header-menu">
    <ul>
       <li class="dropdown">
-         <a href="{{ route('front.productsList') }}">PRODUCTS</a>
+         <a href="{{ route('front.productsList') }}" class="load_page">PRODUCTS</a>
          <div class="dropdown-menu">
             {{--            <h2 class="title-submenu">LAYOUT</h2>--}}
             <div class="row custom-layout-02 menu-list-col">
@@ -16,7 +16,7 @@
                               <li>
                                  <b><a class="cat-main" data-id="{{$key}}"
                                        onmouseover="nav_over(this)"
-                                       href="{{ route('front.lists',['list' => 'categories','slug' => "$category->category_slug"]) }}">
+                                       href="{{ route('front.lists',['list' => 'categories','slug' => "$category->category_slug"]) }}" class="load_page">
                                        {{ $category->category_name }}
                                     </a></b>
                               </li>
@@ -24,7 +24,7 @@
                                  @if( $category->children->count())
                                     @foreach($category->children as $child)
                                        <li><b>
-                                             <a href="{{ route('front.lists',['list' => 'categories','slug' => "$child->category_slug"]) }}">
+                                             <a href="{{ route('front.lists',['list' => 'categories','slug' => "$child->category_slug"]) }}" class="load_page">
                                                 {{ $child->category_name }}</a>
                                           </b>
                                        </li>
@@ -83,13 +83,13 @@
          </div>
       </li>
       <li class="dropdown">
-         <a href="blog_listing.html">BRANDS</a>
+         <a>BRANDS</a>
          <div class="dropdown-menu">
             <div class="row">
                <div class="carousel-brands">
                   @forelse($brands as $brand)
                      <div>
-                        <a href="{{ route('front.lists', ['list' => 'brands' , 'slug' => $brand->brand_slug ]) }}">
+                        <a href="{{ route('front.lists', ['list' => 'brands' , 'slug' => $brand->brand_slug ]) }}" class="load_page">
                            <img src="{{ $brand->src }}" alt="{{ $brand->brand_name }}">
                         </a>
                      </div>

@@ -13,16 +13,23 @@
 
 
 use App\Models\Category;
+use App\Models\CheckGift;
+use App\Models\GiftCard;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
-    Cart::update('3f98937baeb19acd123af99c4336f550',1);
-    dd(Cart::content());
+   return view('test');
 
 })->name('test');
 
 Route::get('/w0', function () {
-    return view('welcome');
+
+    if (session()->has('order_id')){
+        $x = substr(str_replace(',','',Cart::total()),0,-2) ;
+        dd($x);
+
+    }
 })->name('login');
 
 Route::get('/w', function () {
@@ -43,8 +50,12 @@ Route::match(['put','post'],'comments/{comment}', '\Laravelista\Comments\Comment
 
 
 /*---------------CHECKOUT------------------*/
+Route::get('/inter-checkout', 'Front\checkOutController@interCheckOut')->name('front.inter.checkout');
 Route::get('/checkout', 'Front\checkOutController@index')->name('front.checkout');
+Route::post('/checkout/check-discount', 'Front\checkOutController@checkDiscount')->name('front.checkout.checkDiscount');
 Route::post('/checkout', 'Front\checkOutController@store')->name('front.checkout.store');
+Route::post('/checkout/address', 'Front\checkOutController@saveAddress')->name('front.address.store');
+Route::post('/checkout/orderStatus', 'Front\checkOutController@saveOrderStatus')->name('front.order.saveStatus');
 
 
 /*---------------LISTS------------------*/
@@ -95,7 +106,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('not-sent-orders', 'Admin\orderController@notSent')->name('order.not_sent');
     Route::get('orders/{id}', 'Admin\orderController@show')->name('order.show');
     Route::delete('orders/{id}', 'Admin\orderController@destroy')->name('order.destroy');
-    Route::post('orders/{id}', 'Admin\orderController@detailDestroy')->name('order.detail.destroy');
+    Route::delete('orders/orders-status/{id}', 'Admin\orderController@detailDestroy')->name('order.detail.destroy');
     Route::get('orders/status/{id}/{status}', 'Admin\orderController@status')->name('order.status');
 //    Route::post('orders','Admin\orderController@sent')->name('order.sent');
 

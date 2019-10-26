@@ -164,6 +164,12 @@
 {{--    if ('ontouchstart' in document.documentElement) document.write("<script src='{{ asset(`admin-assets/js/jquery.mobile.custom.min.js`) }}'>" + "<" + "/script>");--}}
 </script>
 <script src="{{ asset('admin-assets/js/bootstrap.min.js')}}"></script>
+<!-- LOAD MY JS CODES  -->
+<script src="{{ asset('admin-assets/js/myCodes.js')}}"></script>
+<!-- //LOAD MY JS CODES  -->
+
+<!-- LOAD PJAX -->
+<script src="{{ asset('js/pjax/pjax.min.js') }}"></script>
 
 <!-- page specific plugin scripts -->
 
@@ -199,19 +205,13 @@
 <!-- script for load page on AJAX-->
 <script>
     jQuery(document).ready(function () {
-        jQuery(".click_me").one('click', function (event) {
+        jQuery(".click_me").one('click', function (e) {
+            e.preventDefault();
             var route = $(this).attr('href');
-            var  path = $(this).attr('data-path');
-            <!-- CHANGE THE URL -->
-            window.history.pushState('',"Title",path);
-            $("#content-load").load(route);
-            $(window).bind('popstate', function(){
-                window.location.href = window.location.href;
+            var pjax = new Pjax({
+                selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
             });
-            // <!-- add site map of the page -->
-            // jQuery("#site_map").append("<i class='ace-icon fa fa-folder-open'></i><a href='"+page_route+"' class='click_me'>"+page_title+"</a>");
-            <!-- TO preventDefault AND ON DOUBLE CLICK LOAD WITHOUT AJAX -->
-            return false;
+            pjax.loadUrl(route);
         });
     });
 </script>

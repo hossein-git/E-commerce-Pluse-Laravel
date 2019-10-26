@@ -15,14 +15,14 @@
                   <tr>
                      <td>
                         <div class="product-image">
-                           <a href="{{ route('front.show',$cart->id) }}">
+                           <a href="{{ route('front.show',$cart->id) }}" class="load_page">
                               <img src="{{ $cart->options->src }}" alt="">
                            </a>
                         </div>
                      </td>
                      <td>
                         <h5 class="product-title">
-                           <a href="{{ route('front.show',$cart->id) }}">{{ $cart->name }}</a>
+                           <a href="{{ route('front.show',$cart->id) }}" class="load_page">{{ $cart->name }} </a>
                         </h5>
                         <ul class="list-parameters">
                            <li>
@@ -86,7 +86,7 @@
                   </div>
                @else
                   <div class="pull-left">
-                     <a class="btn-link" href="{{ route('front.productsList') }}"><span
+                     <a class="btn-link load_page" href="{{ route('front.productsList') }}" ><span
                                 class="icon icon-keyboard_arrow_left"></span>CONTINUE SHOPPING
                      </a>
                   </div>

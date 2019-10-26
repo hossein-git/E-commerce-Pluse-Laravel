@@ -1,4 +1,9 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty' )
+@extends('layout.admin.index' )
+@section('title')
+   Order List
+@stop
+@section('extra_css')
+@stop
 @section('content')
    @include('layout.errors.notifications')
    <table id="simple-table" class="table table-bordered table-hover">
@@ -24,18 +29,20 @@
       <tbody>
 
       @forelse($orders as $key=> $order)
-         {{--                  {{ dd($order->giftcard() )}}--}}
          <tr>
             <td class="center">{{$order->order_id}}</td>
             <td class="center">
                @switch($order->order_status)
                   @case(0)
-                  <span class="label label-danger arrowed bolder smaller-90">NOT Sent Yet</span>
+                  <span class="label label-grey arrowed bolder smaller-90">NOT Complete</span>
                   @break
                   @case(1)
-                  <span class="label label-warning arrowed-right bolder smaller-90">Has Sent</span>
+                  <span class="label label-danger arrowed bolder smaller-90">NOT Sent Yet</span>
                   @break
                   @case(2)
+                  <span class="label label-warning arrowed-right bolder smaller-90">Has Sent</span>
+                  @break
+                  @case(3)
                   <span class="label label-success arrowed-in bolder smaller-90">Delivered</span>
                   @break
                @endswitch
@@ -82,13 +89,13 @@
                         href="" data-id="{{ $order->order_id }}">
                         <i class="ace-icon fa fa-pencil bigger-120"></i>
                      </a>
-                     @if($order->order_status == 1 )
+                     @if($order->order_status == 2 )
                         <a class="btn btn-success btn-xs sent_me" title="Delivered"
                            href="{{ route('order.status',[$order->order_id,'delivered']) }}" data-status="delivered">
                            <i class="ace-icon fa fa-thumbs-up bigger-120"></i>
                         </a>
                      @endif
-                     @if($order->order_status == 0 )
+                     @if($order->order_status == 1 )
                         <a class="btn btn-info btn-xs sent_me" title="Sent"
                            href="{{ route('order.status',[$order->order_id,'sent']) }}" data-status="sent">
                            <i class="ace-icon fa fa-send-o bigger-120"></i>
@@ -139,22 +146,41 @@
                      <h3 class="smaller lighter blue no-margin">{{ $order->address() != null ? $order->address()->name : 'NO ADDRESS' }}</h3>
                   </div>
                   <div class="modal-body">
-                     <ul>
                         @if($order->address() != null)
-                           <li><i>NAME :</i><b>{{ $order->address()->name }}</b></li>
-                           <li><i>SURNAME:</i><b>{{ $order->address()->surname }}</b></li>
-                           <li><i>STATE :</i><b>{{ $order->address()->state }}</b></li>
-                           <li><i>CITY :</i><b>{{ $order->address()->city }}</b></li>
-                           <li><i>AREA :</i><b>{{ $order->address()->area }}</b></li>
-                           <li><i>AVENUE :</i><b>{{ $order->address()->avenue }}</b></li>
-                           <li><i>STREET :</i><b>{{ $order->address()->street }}</b></li>
-                           <li><i>NOM :</i><b>{{ $order->address()->number }}</b></li>
-                           <li><i>PHONE NUMBER :</i><b>{{ $order->address()->phone_number }}</b></li>
-                           <li><i>POSTAL CODE :</i><b>{{ $order->address()->postal_code }}</b></li>
+                           <div class="row">
+                              <div class="col-sm-4">
+                                 <ul>
+                                   <li>NAME : </li>
+                                   <li>SURNAME: </li>
+                                   <li>STATE : </li>
+                                   <li>CITY : </li>
+                                   <li>AREA : </li>
+                                   <li>AVENUE : </li>
+                                   <li>STREET : </li>
+                                   <li>NOM : </li>
+                                   <li>PHONE NUMBER : </li>
+                                   <li>POSTAL CODE : </li>
+                                 </ul>
+                              </div>
+                              <div class="col-sm-8">
+                                 <ul>
+                                  <li class="bolder">{{ $order->address()->name }} </li>
+                                  <li class="bolder">{{ $order->address()->surname }} </li>
+                                  <li class="bolder">{{ $order->address()->state }} </li>
+                                  <li class="bolder">{{ $order->address()->city }} </li>
+                                  <li class="bolder">{{ $order->address()->area }} </li>
+                                  <li class="bolder">{{ $order->address()->avenue }} </li>
+                                  <li class="bolder">{{ $order->address()->street }} </li>
+                                  <li class="bolder">{{ $order->address()->number }} </li>
+                                  <li class="bolder">{{ $order->address()->phone_number }} </li>
+                                  <li class="bolder">{{ $order->address()->postal_code }} </li>
+                                 </ul>
+                              </div>
+                           </div>
+                           
                         @else
                            <h2 class="danger bolder h2"> NO ADDRESS!</h2>
                         @endif
-                     </ul>
                   </div>
 
                   <div class="modal-footer">
@@ -177,36 +203,12 @@
    </table>
 
    {{ $orders->links() }}
+
+@endsection
+@section('extra_js')
    <script>
        $(document).ready(function () {
-           $(".delete_me").click(function (e) {
-               e.preventDefault();
-               if (!confirm('ARE YOU SURE TO DELETE IT?')) {
-                   return false
-               }
-               var obj = $(this); // first store $(this) in obj
-               var id = $(this).data("id");
-               $.ajaxSetup({
-                   headers: {
-                       'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                   }
-               });
-               $.ajax({
-                   url: "/admin/orders/" + id,
-                   method: "DELETE",
-                   dataType: "Json",
-                   data: {"id": id},
-                   success: function ($results) {
-                       alert('Order Has Been successfully Deleted');
-                       $(obj).closest("tr").remove(); //delete row
-                       console.log($results);
-                   },
-                   error: function (xhr) {
-                       alert('error,Order not deleted');
-                       console.log(xhr.responseText);
-                   }
-               });
-           });
+           deleteAjax("/admin/orders/","delete_me","Order");
            <!-- SENT -->
            $(".sent_me").click(function (e) {
                e.preventDefault();
@@ -239,24 +241,19 @@
            <!-- LOAD THE EDIT PAGE-->
            jQuery(".edit_me").bind('click', function () {
                var route = $(this).attr('href');
-               var id = $(this).data('id');
-               window.history.pushState("", "edit", "order/" + id + "/edit");
-               $("#content-load").load(route);
-               $(window).bind('popstate', function () {
-                   window.location.href = window.location.href;
+               var pjax = new Pjax({
+                   selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
                });
-               return false;
+               pjax.loadUrl(route);
            });
+
            jQuery(".show_me").bind('click', function () {
                var route = $(this).attr('href');
-               var id = $(this).data('id');
-               window.history.pushState("", "", "orders/" + id);
-               $("#content-load").load(route);
-               $(window).bind('popstate', function () {
-                   window.location.href = window.location.href;
+               var pjax = new Pjax({
+                   selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
                });
-               return false;
+               pjax.loadUrl(route);
            });
        });
    </script>
-@endsection
+@stop

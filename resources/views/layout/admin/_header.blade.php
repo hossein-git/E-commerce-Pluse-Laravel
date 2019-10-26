@@ -1,7 +1,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>@yield('title','Admin Panel')</title>
+    <title>@yield('title')</title>
 
     <meta name="description" content="e-commerce"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="{{asset('admin-assets/font-awesome/4.5.0/css/font-awesome.min.css')}}"/>
 
     <!-- page specific plugin styles -->
-    @yield('extra_css')
+    <div id="extra_css">
+        @yield('extra_css')
+    </div>
     <link href="{{asset('dist/font/font-fileuploader.css')}}" rel="stylesheet">
     <link href="{{asset('dist/jquery.fileuploader.min.css')}}" rel="stylesheet">
 

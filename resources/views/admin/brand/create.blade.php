@@ -1,13 +1,15 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty')
+@extends('layout.admin.index')
+@section('title')
+    Brands
+@stop
 @section('content')
    @include('layout.errors.notifications')
-   <form id="ssss"
+   <form id="brand_form"
          action="{{ isset($brand) ? route('brand.update',$brand->brand_id) : route('brand.store') }}"
-         method="post" enctype="multipart/form-data">
-      {{ csrf_field() }}
-      @if(!env('APP_AJAX'))
+         method="post" enctype="multipart/form-data"
+   >
       {{ isset($brand) ? method_field('PUT') : '' }}
-      @endif
+      {{ csrf_field() }}
       <div class="form-group {{ $errors->has('brand_name') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="brand_name">Brand Name</label>
          <input type="text" name="brand_name" maxlength="21" id="brand_name" placeholder="Brand Name"
@@ -42,7 +44,7 @@
       <div class="form-group">
          <div class="btn-group btn-group-justified">
             <div class="btn-group">
-               <button type="submit" class="btn btn-info ">SAVE</button>
+               <input type="submit" class="btn btn-info " value="SAVE">
             </div>
             <div class="btn-group">
                <a class="btn btn-danger" onclick="history.back()">BACK</a>
@@ -50,24 +52,27 @@
          </div>
       </div>
    </form>
-   @if(env('APP_AJAX') == true)
+
+@endsection
+@section('extra_js')
+   @if(env('APP_AJAX'))
       <script>
           $(document).ready(function () {
-              $("#ssss").submit(function (e) {
+              $("#brand_form").submit(function (e) {
                   e.preventDefault();
                   var form = $(this);
                   var form_data = new FormData(this);
-                  {{ isset($brand) ? "data_form.append('_method', 'PATCH');" : ''}}
                   console.log(form_data);
-                 $.ajaxSetup({
-                     headers: {
-                         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                     }
-                 });
+                  $.ajaxSetup({
+                      headers: {
+                          'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                      }
+                  });
                   $.ajax({
                       url: "{{ isset($brand) ? route('brand.update',$brand->brand_id) : route('brand.store') }}",
                       method: "post",
                       data: form_data,
+                      enctype: 'multipart/form-data',
                       contentType: false,
                       cache: false,
                       processData: false,
@@ -77,8 +82,8 @@
                       success: function ($results) {
                           //show loading image ,reset forms ,clear gallery
                           $(".preview").toggle();
-                          {{ isset($brand) ? "" : '$("#brand_form")[0].reset()' }}
-                          alert({{ !isset($brand) ? 'new brand has created successfully' : "brand has updated successfully" }});
+                         {{ isset($brand) ? "" : '$("#brand_form")[0].reset()' }}
+                         alert('{{ !isset($brand) ? 'new brand has created successfully' : "brand has updated successfully" }}');
                       },
                       error: function (request, status, error) {
                           $(".preview").toggle();
@@ -100,7 +105,4 @@
           });
       </script>
    @endif
-
-
-
-@endsection
+@stop

@@ -7,7 +7,7 @@
       <div class="product">
          <div class="product_inside">
             <div class="image-box">
-               <a href="{{ route('front.show',$product->product_slug) }}" target="_blank">
+               <a href="{{ route('front.show',$product->product_slug) }}" class="load_page">
                   <img src="{{ $product->thumbnail }}" alt="">
                   @if($product->is_off == 1)
                      <div class="label-sale ">Sale<br>{{ $product->off }}% Off</div>
@@ -36,7 +36,7 @@
                      </div>
                   </div>
                @endif
-               <a href="{{ route('front.show',$product->product_slug) }}">{{ $product->product_name }}</a>
+               <a href="{{ route('front.show',$product->product_slug) }}" class="load_page">{{ $product->product_name }}</a>
             </h2>
             <div class="price">
                @if($product->is_off == 1)

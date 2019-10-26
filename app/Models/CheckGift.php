@@ -14,4 +14,10 @@ class CheckGift extends Model
     protected $fillable = ['user_id' , 'gift_id'];
     protected $guarded = ['check_gift_id'];
 
+    public function giftCard()
+    {
+        return $this->belongsTo(GiftCard::class,'gift_id');
+    }
+
+
 }

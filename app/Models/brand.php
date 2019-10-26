@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class brand extends Model
 {
+    protected $table = 'brands';
     protected $primaryKey = 'brand_id';
-    protected $fillable = ['brand_id','brand_name', 'brand_slug', 'brand_image','brand_description'];
+    protected $fillable = ['brand_name', 'brand_slug', 'brand_image', 'brand_description'];
     protected $guarded = ['brand_id'];
 
     public function products()
     {
-        return $this->hasMany(Product::class,'brand_id');
+        return $this->hasMany(Product::class, 'brand_id');
     }
 
     // take asset of the owned image

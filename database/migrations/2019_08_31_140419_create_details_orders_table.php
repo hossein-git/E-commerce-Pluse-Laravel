@@ -23,13 +23,11 @@ class CreateDetailsOrdersTable extends Migration
             $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
 
             $table->unsignedInteger('product_attr_id')->nullable();
-            $table->integer('product_sku');
+            $table->string('product_slug');
             $table->integer('product_price');
-            $table->integer('discount')->default(0);
             $table->smallInteger('quantity');
             $table->string('size')->nullable();
             $table->string('color')->nullable();
-            $table->integer('total_price');
             $table->timestamps();
         });
     }

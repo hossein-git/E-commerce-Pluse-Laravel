@@ -1,4 +1,9 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty' )
+@extends('layout.admin.index' )
+@section('title')
+   Gift Cards Create
+@stop
+@section('extra_css')
+@stop
 @section('content')
    @include('layout.errors.notifications')
    <form id="gift_form" action="{{ route('giftCard.store') }}" method="post">
@@ -26,7 +31,7 @@
 
       <div class="form-group {{ $errors->has('gift_amount') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="gift_amount">Gift Card Amount</label>
-         <input type="number" name="gift_amount" maxlength="21" id="gift_amount" placeholder="gift Card Slug"
+         <input type="number" name="gift_amount" maxlength="21" id="gift_amount" placeholder="gift Card Amount"
                 value="{{old('gift_amount')}}" required class="form-control">
          <span class="text-danger">{{ $errors->first('gift_amount') }}</span>
       </div>
@@ -44,12 +49,14 @@
       </div>
    </form>
 
-   @if(env('APP_AJAX') == true)
+
+@endsection
+@section('extra_js')
+   @if(env('APP_AJAX'))
       <script>
           $(document).ready(function () {
               $("#gift_form").submit(function (e) {
                   e.preventDefault();
-                  var form = $(this);
                   var form_data = new FormData(this);
                   $.ajaxSetup({
                       headers: {
@@ -69,8 +76,8 @@
                       success: function ($results) {
                           //show loading image ,reset forms ,clear gallery
                           $(".preview").toggle();
-                         $("#gift_form")[0].reset();
-                         alert('new Gift card has created successfully' );
+                          $("#gift_form")[0].reset();
+                          alert('new Gift card has created successfully');
                       },
                       error: function (request, status, error) {
                           $(".preview").toggle();
@@ -92,5 +99,4 @@
           });
       </script>
    @endif
-
-@endsection
+@stop

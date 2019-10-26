@@ -15,4 +15,9 @@ class GiftCard extends Model
         return $this->hasMany(Order::class,'gift_id','gift_id');
     }
 
+    public function checkGift()
+    {
+        return $this->hasMany(CheckGift::class,'gift_id');
+    }
+
 }

@@ -1,4 +1,9 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty')
+@extends('layout.admin.index' )
+@section('title')
+   Products List
+@stop
+@section('extra_css')
+@stop
 @section('content')
    @include('layout.errors.notifications')
 
@@ -176,36 +181,12 @@
       {{ $products->links() }}
    </div>
 
+
+@endsection()
+@section('extra_js')
    <script>
        $(document).ready(function () {
-           $(".delete_me").click(function (e) {
-               e.preventDefault();
-               if (!confirm('Are you Sure?')){
-                   return false;
-               }
-               var obj = $(this); // first store $(this) in obj
-               var id = $(this).data("id");
-               $.ajaxSetup({
-                   headers: {
-                       'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                   }
-               });
-               $.ajax({
-                   url: "/admin/product/" + id,
-                   method: "DELETE",
-                   dataType: "Json",
-                   data: {"id": id},
-                   success: function ($results) {
-                       alert('product has been successfully deleted');
-                       $(obj).closest("tr").remove(); //delete row
-                       console.log($results);
-                   },
-                   error: function (xhr) {
-                       alert('error, product not deleted');
-                       console.log(xhr.responseText);
-                   }
-               });
-           });
+           deleteAjax("/admin/product/","delete_me","product");
            $(".restore_me").click(function (e) {
                e.preventDefault();
                var obj = $(this); // first store $(this) in obj
@@ -232,13 +213,14 @@
                });
            });
            <!-- LOAD THE EDIT PAGE-->
-           jQuery(".edit_me").bind('click', function () {
+           jQuery(".edit_me").bind('click', function (e) {
+               e.preventDefault();
                var route = $(this).attr('href');
-               var id = $(this).data('id');
-               window.history.replaceState("", "", "product/" + id + "/edit");
-               $("#content-load").load(route);
-               return false;
+               var pjax = new Pjax({
+                   selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
+               });
+               pjax.loadUrl(route);
            });
        });
    </script>
-@endsection()
+@stop

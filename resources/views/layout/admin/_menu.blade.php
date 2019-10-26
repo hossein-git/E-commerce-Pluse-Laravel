@@ -12,14 +12,14 @@
    <b class="arrow"></b>
    <ul class="submenu">
       <li class="">
-         <a class="click_me" data-pjax href="{{ route($route_create) }}" data-path="{{ str_replace("","",route($route_create,[],false)) }}">
+         <a class="click_me" data-pjax href="{{ route($route_create) }}" data-title="{{ $menu_name }}">
             <i class="menu-icon fa fa-caret-right"></i>
             {{ isset($subMenu) ? ucfirst($subMenu) : "Create" }}
          </a>
          <b class="arrow"></b>
       </li>
       <li class="">
-         <a class="click_me" data-pjax href="{{ route($route_list) }}" data-path="{{ route($route_list,[],false) }}">
+         <a class="click_me" data-pjax href="{{ route($route_list) }}" data-title="{{ $menu_name }}">
             <i class="menu-icon fa fa-caret-right"></i>
             {{ isset($secondSubMenu) ? ucfirst($secondSubMenu) : "Browse" }}
          </a>

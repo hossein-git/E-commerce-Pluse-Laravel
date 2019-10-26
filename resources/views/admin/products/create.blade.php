@@ -1,4 +1,9 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty')
+@extends('layout.admin.index' )
+@section('title')
+   Create new Prodcuts
+@stop
+@section('extra_css')
+@stop
 @section('content')
    @include('layout.errors.notifications')
    <form method="post" action="{{ route('product.store') }}" enctype="multipart/form-data"
@@ -173,33 +178,31 @@
                <input type="submit" class="btn btn-success btn-block" id="" value="SAVE">
             </div>
             <div class="col-xs-6">
-               <input type="reset" class="btn btn-warning btn-block" value="Reset!" onclick=" ">
+               <input type="reset" class="btn btn-warning btn-block" value="Reset!">
             </div>
          </div>
       </div>
    </form>
 
+@endsection()
+@section('extra_js')
    <script type="text/javascript">
-      {{--let myelement = document.createElement("script");--}}
-      {{--myelement.type = "text/javascript";--}}
-      {{--myelement.src = "{{ asset('admin-assets/js/jquery.inputlimiter.min.js') }}";--}}
-      {{--$("#extra_js").append(myelement);--}}
+       // show items
+       function showMe() {
+           jQuery(".available0").toggle();
+       }
 
-      // show items
-      function showMe() {
-          jQuery(".available0").toggle();
-      }
+       function showDiscount() {
+           jQuery(".div-discount").toggle();
+       }
 
-      function showDiscount() {
-          jQuery(".div-discount").toggle();
-      }
-
-      // <!-- add site map of the page -->
-      jQuery(document).one('load', function (e) {
-          jQuery("#site_map").append("<i class='ace-icon fa '></i><a href='{{ route('product.create') }}' class='click_me'>Create Product</a>");
-          // e.isImmediatePropagationStopped()
-      });
+       // <!-- add site map of the page -->
+       jQuery(document).one('load', function (e) {
+           jQuery("#site_map").append("<i class='ace-icon fa '></i><a href='{{ route('product.create') }}' class='click_me'>Create Product</a>");
+           // e.isImmediatePropagationStopped()
+       });
    </script>
+
    <!-- inline scripts related to this page -->
    <script type="text/javascript">
        jQuery(document).ready(function ($) {
@@ -292,9 +295,6 @@
    <script type="text/javascript">
        jQuery(document).ready(function () {
            jQuery(function ($) {
-               jQuery.validator.addMethod("phone", function (value, element) {
-                   return this.optional(element) || /^\(\d{3}\) \d{3}\-\d{4}( x\d{1,6})?$/.test(value);
-               }, "Enter a valid phone number.");
 
                $("#product_form").validate({
                    errorElement: 'div',
@@ -460,6 +460,4 @@
            $(e).parents(":eq(4)").remove()
        }
    </script>
-
-@endsection()
-
+@stop

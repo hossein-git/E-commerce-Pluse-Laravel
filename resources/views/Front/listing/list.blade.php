@@ -6,7 +6,6 @@
    <meta name="_token" content="{{ csrf_token()}}"/>
 @endsection
 @section('content')
-{{--      {{ dd(\Request::route('list')) }}--}}
    <div class="row">
       <!-- left col -->
    @include('Front.listing._leftMenu')
@@ -16,9 +15,6 @@
             @include('Front.listing._data')
          </div>
          <div class="content">
-            <center><img alt="" src="{{ asset('admin-assets/5.gif') }}" class="center preview ajax-load"
-                         style="display: none"></center>
-            {{--            <center id="load" style="display: none">NO MORE DATA</center>--}}
             <hr>
          </div>
       </div>

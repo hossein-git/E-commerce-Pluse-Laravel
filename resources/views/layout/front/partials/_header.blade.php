@@ -48,7 +48,7 @@
       <div class="container-fluid text-center">
          <!-- logo -->
          <div class="logo">
-            <a href="{{ route('home') }}"><img src="{{ asset('front-assets/images/logo-mobile.png') }}" alt=""/></a>
+            <a href="{{ route('home') }}" class="load_page"><img src="{{ asset('front-assets/images/logo-mobile.png') }}" alt=""/></a>
          </div>
          <!-- /logo -->
       </div>
@@ -149,7 +149,7 @@
                <div class="col-md-4">
                   <!-- logo -->
                   <div class="logo">
-                     <a href="{{ route('home') }}"><img src="{{ asset('front-assets/images/logo-mobile.png') }}" alt=""/></a>
+                     <a href="{{ route('home') }}" class="load_page"><img src="{{ asset('front-assets/images/logo-mobile.png') }}" alt=""/></a>
                   </div>
                   <!-- /logo -->
                </div>
@@ -211,10 +211,10 @@
                                        <div class="pull-left">
                                           <div class="cart-total">TOTAL:  <span> {{ Cart::subtotal() }}</span></div>
                                        </div>
-                                       <a href="{{ route('front.checkout') }}" class="btn icon-btn-left"><span class="icon icon-check_circle"></span>CHECKOUT</a>
+                                       <a href="{{ route('front.inter.checkout') }}" class="btn icon-btn-left "><span class="icon icon-check_circle"></span>CHECKOUT</a>
                                     </div>
                                     <div class="pull-left">
-                                       <a href="{{ route('cart.index') }}" class="btn icon-btn-left"><span class="icon icon-shopping_basket"></span>VIEW CART</a>
+                                       <a href="{{ route('cart.index') }}" class="btn icon-btn-left "><span class="icon icon-shopping_basket"></span>VIEW CART</a>
                                     </div>
                                  </div>
                               </div>

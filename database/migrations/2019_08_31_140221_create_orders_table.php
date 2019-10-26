@@ -30,8 +30,9 @@ class CreateOrdersTable extends Migration
             $table->foreign('gift_id')->references('gift_id')->on('gift_cards')->onDelete('set null');
 
             $table->smallInteger('order_status')->default(0);
-            $table->integer('track_code');
+            $table->unsignedMediumInteger('track_code')->unique();
             $table->string('client_name');
+            $table->string('client_phone');
             $table->integer('total_price');
             $table->text('details')->nullable();
             $table->timestamps();

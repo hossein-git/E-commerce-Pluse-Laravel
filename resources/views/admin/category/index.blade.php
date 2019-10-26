@@ -1,9 +1,14 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty')
+@extends('layout.admin.index' )
+@section('title')
+   Category List
+@stop
+@section('extra_css')
+@stop
 @section('content')
    <div class="col-xs-6 col-lg-6">
       <form action="">
          <ul>
-            @foreach($categories as $category)
+            @foreach($admin_categories as $category)
                <li class="bolder bigger-120">
                   <i class="menu-icon fa fa-square"></i>
                   {{ $category->category_name }}
@@ -20,10 +25,14 @@
          </ul>
       </form>
    </div>
-   {{ $categories->links() }}
+   {{ $admin_categories->links() }}
+
+@endsection()
+@section('extra_js')
    <!-- DELETE WITH AJAX -->
    <script>
        $(document).ready(function () {
+           // deleteAjax("/admin/category/","delete_it","category");
            $(".delete_it").click(function (e) {
                e.preventDefault();
                if (!confirm('Are you Sure?')){
@@ -54,4 +63,4 @@
            });
        });
    </script>
-@endsection()
+@stop

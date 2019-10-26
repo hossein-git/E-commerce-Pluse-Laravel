@@ -22,8 +22,8 @@ class categoryController extends Controller
      */
     public function index()
     {
-        $categories = $this->category->whereIsRoot()->paginate(7);
-        return view('admin.category.index', compact('categories'));
+        $admin_categories = $this->category->whereIsRoot()->paginate(7);
+        return view('admin.category.index', compact('admin_categories'));
     }
 
     /**

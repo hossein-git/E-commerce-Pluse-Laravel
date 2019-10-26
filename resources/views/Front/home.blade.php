@@ -90,7 +90,7 @@
          <div class="carousel-brands">
             @forelse($brands as $brand)
                <div>
-                  <a href="#">
+                  <a href="{{ route('front.lists', ['list' => 'brands' , 'slug' => $brand->brand_slug ]) }}" class="load_page">
                      <img src="{{ $brand->src }}" alt="{{ $brand->brand_name }}">
                   </a>
                </div>

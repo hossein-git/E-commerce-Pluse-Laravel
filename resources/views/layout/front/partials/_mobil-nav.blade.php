@@ -1,11 +1,11 @@
 <nav class="panel-menu mm-right">
    <ul>
-      <li><a href="{{ route('home') }}">Home</a></li>
+      <li><a href="{{ route('home') }}" class="load_page">Home</a></li>
       <li>
-         <a href="{{ route('front.productsList') }}">Products</a>
+         <a href="{{ route('front.productsList') }}" class="load_page">Products</a>
          <ul>
             @forelse($categories as $category)
-            <li><a href="{{ route('front.lists',['list' => 'categories','slug' => "$category->category_slug", ]) }}">{{ $category->category_name }}</a></li>
+            <li><a href="{{ route('front.lists',['list' => 'categories','slug' => "$category->category_slug", ]) }}" class="load_page">{{ $category->category_name }}</a></li>
                @empty
                   <li>NOTHING YET</li>
             @endforelse
@@ -24,10 +24,10 @@
          </ul>
       </li>
       <li>
-         <a href="product.html">BRANDS</a>
+         <a >BRANDS</a>
          <ul>
             @forelse($brands as $brand)
-            <li><a href="{{ route('front.lists', ['list' => 'brands' , 'slug' => $brand->brand_slug ]) }}">{{ $brand->brand_name }}</a></li>
+            <li><a href="{{ route('front.lists', ['list' => 'brands' , 'slug' => $brand->brand_slug ]) }}" class="load_page">{{ $brand->brand_name }}</a></li>
             @empty
                <b>NO DATA</b>
             @endforelse

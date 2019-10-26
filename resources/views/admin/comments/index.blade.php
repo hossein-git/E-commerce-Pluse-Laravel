@@ -1,4 +1,10 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty')
+@extends('layout.admin.index' )
+@extends('layout.admin.index' )
+@section('title')
+   Comments Lists
+@stop
+@section('extra_css')
+@stop
 @section('content')
    <table class="table table-hover table-bordered">
       <thead>
@@ -69,34 +75,12 @@
       </tbody>
    </table>
    {{ $comments->links() }}
+
+@endsection
+@section('extra_js')
    <script>
        $(document).ready(function () {
-           $(".delete_me").click(function (e) {
-               e.preventDefault();
-               var obj = $(this); // first store $(this) in obj
-               var id = $(this).data("id");
-               $.ajaxSetup({
-                   headers: {
-                       'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                   }
-               });
-               $.ajax({
-                   url: "/admin/comments/" + id,
-                   method: "DELETE",
-                   dataType: "Json",
-                   data: {"id": id},
-                   success: function ($results) {
-                       alert('Comment has been successfully deleted');
-                       $(obj).closest("tr").remove(); //delete row
-                       console.log($results);
-                   },
-                   error: function (xhr) {
-                       alert('error, Comment not deleted');
-                       console.log(xhr.responseText);
-                   }
-               });
-           });
-
+           deleteAjax("/admin/comments/","delete_me","Comment");
            <!-- APPROVE COMMENT-->
            jQuery(".approved_me").bind('click', function (e) {
                e.preventDefault();
@@ -123,5 +107,5 @@
            });
        });
    </script>
-@endsection
+@stop
 

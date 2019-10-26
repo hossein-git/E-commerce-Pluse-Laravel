@@ -1,4 +1,9 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty')
+@extends('layout.admin.index' )
+@section('title')
+   Category Create
+@stop
+@section('extra_css')
+@stop
 @section('content')
    @include('layout.errors.notifications')
    <form id="category_form" action="{{ route('category.store') }}" method="post">
@@ -41,53 +46,56 @@
          </div>
       </div>
    </form>
+
+@endsection
+@section('extra_js')
    @if(env('APP_AJAX'))
-   <script>
-      $(document).ready(function () {
-          $("#category_form").submit(function (e) {
-              e.preventDefault();
-              var form = $(this);
-              var form_data = new FormData(this);
-              $.ajaxSetup({
-                  headers: {
-                      'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                  }
-              });
-              $.ajax({
-                  url: "{{ route('category.store') }}",
-                  method: "post",
-                  data:  form_data,
-                  contentType: false,
-                  cache: false,
-                  processData:false,
-                  beforeSend: function () {
-                      $(".preview").toggle();
-                  },
-                  success: function ($results) {
+      <script>
+          $(document).ready(function () {
+              $("#category_form").submit(function (e) {
+                  e.preventDefault();
+                  var form = $(this);
+                  var form_data = new FormData(this);
+                  $.ajaxSetup({
+                      headers: {
+                          'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                      }
+                  });
+                  $.ajax({
+                      url: "{{ route('category.store') }}",
+                      method: "post",
+                      data:  form_data,
+                      contentType: false,
+                      cache: false,
+                      processData:false,
+                      beforeSend: function () {
+                          $(".preview").toggle();
+                      },
+                      success: function ($results) {
                           //show loading image ,reset forms ,clear gallery
                           $(".preview").toggle();
                           $("#category_form")[0].reset();
                           alert("new category has created successfully");
                           //console.log($results);
-                  },
-                  error: function (request, status, error) {
-                      $(".preview").toggle();
-                      $("#error_result").empty();
-                      json = $.parseJSON(request.responseText);
-                      $.each(json.errors, function (key, value) {
-                          $('.alert-danger').show();
-                          $('.alert-danger').append('<p>' + value + '</p>');
-                      });
-                      $('html, body').animate(
-                          {
-                              scrollTop: $("#error_result").offset().top,
-                          },
-                          500,
-                      )
-                  }
+                      },
+                      error: function (request, status, error) {
+                          $(".preview").toggle();
+                          $("#error_result").empty();
+                          json = $.parseJSON(request.responseText);
+                          $.each(json.errors, function (key, value) {
+                              $('.alert-danger').show();
+                              $('.alert-danger').append('<p>' + value + '</p>');
+                          });
+                          $('html, body').animate(
+                              {
+                                  scrollTop: $("#error_result").offset().top,
+                              },
+                              500,
+                          )
+                      }
+                  });
               });
           });
-      });
-   </script>
+      </script>
    @endif
-@endsection
+@stop

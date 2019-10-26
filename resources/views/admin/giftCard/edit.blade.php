@@ -1,4 +1,9 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty' )
+@extends('layout.admin.index' )
+@section('title')
+   Gift Cards Edit
+@stop
+@section('extra_css')
+@stop
 @section('content')
    <form id="gift_form" action="{{ route('giftCard.update',$gift->gift_id) }}" method="post">
       {{ csrf_field() }}
@@ -14,12 +19,13 @@
 
       <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="status">Gift Card Status:</label><br>
-         <input type="checkbox" name="status" id="status" class="ace ace-switch ace-switch-3" {{ $gift->status == 1 ? 'checked' : ''}}>
+         <input type="checkbox" name="status" id="status"
+                class="ace ace-switch ace-switch-3" {{ $gift->status == 1 ? 'checked' : ''}}>
          <span class="lbl"></span>
          <span class="text-danger">{{ $errors->first('status') }}</span>
       </div>
 
-      <input type="hidden" name="gift_code" value="{{($gift->gift_code)}}" >
+      <input type="hidden" name="gift_code" value="{{($gift->gift_code)}}">
 
       <div class="form-group {{ $errors->has('gift_amount') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="gift_amount">Gift Card Amount</label>
@@ -40,12 +46,13 @@
       </div>
    </form>
 
+@endsection
+@section('extra_js')
    @if(env('APP_AJAX') == true)
       <script>
           $(document).ready(function () {
               $("#gift_form").submit(function (e) {
                   e.preventDefault();
-                  var form = $(this);
                   var form_data = new FormData(this);
                   form_data.append('_method', 'PATCH');
                   $.ajaxSetup({
@@ -66,8 +73,7 @@
                       success: function ($results) {
                           //show loading image ,reset forms ,clear gallery
                           $(".preview").toggle();
-                          alert('Gift has updated successfully' );
-                          history.back();
+                          alert('Gift has updated successfully');
                       },
                       error: function (request, status, error) {
                           $(".preview").toggle();
@@ -89,12 +95,4 @@
           });
       </script>
    @endif
-
-
-
-
-
-
-
-
-@endsection
+@stop

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\brand;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class brandController extends Controller
 {
@@ -22,8 +23,9 @@ class brandController extends Controller
      */
     public function index()
     {
-        $brands = $this->brand->paginate(15);
-        return view('admin.brand.index', compact('brands'));
+        $admin_brands = $this->brand->paginate(15);
+
+        return view('admin.brand.index', compact('admin_brands'));
     }
 
     /**
@@ -45,20 +47,15 @@ class brandController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'brand_name' => 'required',
-            'brand_slug' => 'required',
+            'brand_name' => 'required|string',
+            'brand_slug' => 'required|string|unique:brands',
             'brand_image' => 'required',
-            'brand_description' => 'required',
+            'brand_description' => 'required|string',
         ]);
-        $input = $request->except('_token');
-        if ($image = $request->file('brand_image')) {
-            $image_type = $image->getClientOriginalExtension();
-            $image_name = $input['brand_name'] . ',' . date('Y_m_d_H,i,s') . '.' . $image_type;
-            $image->move(env('IMAGE_PATH'), $image_name);
-            $input['brand_image'] = $image_name;
-        }
+        $input = $this->savePhoto($request);
+
         $brand = $this->brand->create($input);
-        if (env('APP_AJAX') == true) {
+        if (env('APP_AJAX')) {
             return response()->json(['success' => $brand]);
         }
         return redirect()->route('brand.create')->with(['success' => 'new brand has been created successfully']);
@@ -91,16 +88,24 @@ class brandController extends Controller
             return response()->json(['error' => 'id is not valid']);
         }
         $this->validate($request, [
-            'brand_name' => 'required',
-            'brand_slug' => 'required'
+            'brand_name' => 'required|string',
+            'brand_slug' => 'required|string',
+            'brand_description' => 'required|string',
+            'brand_image' => 'required'
         ]);
+        $input = $this->savePhoto($request);
+
         $brand = $this->brand->findOrFail($id);
-        $brand->fill($request->except('_token'));
-        $brand->update();
-        if (env('APP_AJAX') == true) {
+        $brand->fill($input)->update();
+        $result = $brand->save();
+        if (env('APP_AJAX') and $result) {
             return response()->json(['success' => $brand]);
         }
-        return redirect()->route('brand.create')->with(['success' => 'brand has updated successfully']);
+        if ($result){
+            return redirect()->route('brand.create')->with(['success' => 'brand has updated successfully']);
+        }else{
+            return redirect()->route('brand.create')->with(['error' => 'brand update error']);
+        }
 
     }
 
@@ -117,5 +122,17 @@ class brandController extends Controller
             $brand->delete();
             return response()->json(['success' => $brand]);
         }
+    }
+
+    //TO SAVE PHOTO IN UPDATE AND CREATE METHOD
+    private function savePhoto($request){
+        $input = $request->except('_token');
+        if ($image = $request->file('brand_image')) {
+            $image_type = $image->getClientOriginalExtension();
+            $image_name = $input['brand_name'] . ',' . date('Y_m_d_H,i,s') . '.' . $image_type;
+            $image->move(env('IMAGE_PATH'), $image_name);
+            $input['brand_image'] = $image_name;
+        }
+        return $input;
     }
 }

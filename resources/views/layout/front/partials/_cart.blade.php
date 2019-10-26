@@ -2,12 +2,12 @@
 
    <li class="item">
       <div class="img">
-         <a href="{{ route('front.show',$cart->options->slug) }}"><img src="{{ $cart->options->src }}" alt="product image"/></a>
+         <a href="{{ route('front.show',$cart->options->slug) }}" class="load_page"><img src="{{ $cart->options->src }}" alt="product image"/></a>
       </div>
       <div class="info">
          <div class="title-col">
             <h2 class="title">
-               <a href="{{ route('front.show',$cart->options->slug) }}">{{ $cart->name }}</a>
+               <a href="{{ route('front.show',$cart->options->slug) }}" class="load_page">{{ $cart->name }}</a>
             </h2>
             <div class="details">
                <span class="swatch-label color-orange">{{ $cart->options->color }}</span>, {{ $cart->options->size }}

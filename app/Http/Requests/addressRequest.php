@@ -13,7 +13,7 @@ class addressRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,18 +24,17 @@ class addressRequest extends FormRequest
     public function rules()
     {
         return [
-              'name'    => ['string', '']
-            , 'surname' => ['string', '']
-            , 'state' =>   ['string', '']
-            , 'city' =>    ['string', '']
-            , 'area' =>    ['string', '']
-            , 'avenue' =>  ['string', '']
-            , 'street' =>  ['string', '']
-            , 'phone_number' => []
-            , 'postal_code' => []
-            , 'number' => ['numeric','max:5']
-            , 'addressable_id' => ['numeric']
-            , 'addressable_type' => ['string']
+            'name' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/']
+            , 'surname' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/']
+            , 'state' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/']
+            , 'city' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/']
+            , 'area' => ['string', 'nullable'  , 'regex:/^([a-zA-Z\' ]+)$/']
+            , 'avenue' => ['string', 'nullable' , 'regex:/^([a-zA-Z\' ]+)$/']
+            , 'street' => ['string', 'nullable' , 'regex:/^([a-zA-Z\' ]+)$/']
+            , 'phone_number' => ['required' , 'string']
+            , 'postal_code' => ['required', 'numeric' , 'regex:^[0-9]^']
+            , 'number' => ['required', 'numeric', 'max:5']
+
         ];
     }
 }

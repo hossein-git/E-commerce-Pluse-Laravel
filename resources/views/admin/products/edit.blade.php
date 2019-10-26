@@ -1,7 +1,11 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty')
+@extends('layout.admin.index' )
+@section('title')
+   Edit Products
+@stop
+@section('extra_css')
+@stop
 @section('content')
    @include('layout.errors.notifications')
-   {{--{{ dd(substr(strchr($product->cover,'\\'),3)) }}--}}
    <div class="row" style="">
       <form method="post" action="{{ route('product.update',$product->product_id) }}" enctype="multipart/form-data"
             id="Uproduct_form">
@@ -205,6 +209,8 @@
       </form>
    </div>
 
+@endsection()
+@section('extra_js')
    <script type="text/javascript">
        // show items
        function showMe() {
@@ -310,7 +316,7 @@
        });
    </script>
    {{--send date with AJAX--}}
-   @if(env('APP_AJAX') === true)
+   @if(env('APP_AJAX') )
       <script type="text/javascript">
           $(document).ready(function () {
               //get value of radio buttons
@@ -318,13 +324,12 @@
               $(".radio").click(function () {
                   radio_val = $(this).val();
               });
-              console.log(radio_val);
               $("#Uproduct_form").submit(function (e) {
                   e.preventDefault();
                   var form = $(this);
                   var data_form = new FormData(this);
                   data_form.append('_method', 'PATCH');
-                  var data = {
+                  /*var data = {
                       product_name: $("#product_name").val(),
                       made_in: $("#made_in").val(),
                       brand_id: $("#brand_id").val(),
@@ -340,7 +345,7 @@
                       colors: $("#duallist").val(),
                       photos: $("#gallery-photo-add").val(),
                       cover: radio_val,
-                  };
+                  };*/
                   // check if the input is valid
                   // if (!form.valid()) return false;
                   $.ajaxSetup({
@@ -473,4 +478,4 @@
            });
        });
    </script>
-@endsection()
+@stop
