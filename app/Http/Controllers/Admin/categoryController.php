@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class categoryController extends Controller
 {
     private $category;
+    private $cachKey;
 
     public function __construct()
     {
         $this->category = new Category();
+        $this->cachKey = 'categories';
     }
 
     /**
@@ -56,6 +59,7 @@ class categoryController extends Controller
         }else{
             $category = $this->category->create($input);
         }
+        Cache::forget($this->cachKey);
         if (env('APP_AJAX')){
             return response()->json(['success' => $category]);
         }
@@ -77,6 +81,7 @@ class categoryController extends Controller
         $category = $this->category->findOrFail($id);
         $category->products()->detach();
         $category->delete();
+        Cache::forget($this->cachKey);
         if ($category) {
             return response()->json(['success' => $category]);
         }

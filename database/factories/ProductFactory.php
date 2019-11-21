@@ -7,13 +7,13 @@ use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
 $factory->define(\App\Models\Product::class, function (Faker $faker){
-    $brands = \App\Models\brand::select('brand_id')->get()->toArray();
+//    $brands = \App\Models\brand::select('brand_id')->get()->toArray();
     $name = $faker->name;
     return [
         'product_name' => $name,
         'product_slug' => Str::slug($name),
         'sku' => $faker->numberBetween(10000000,99999999),
-        'brand_id' => array_rand($brands),
+        'brand_id' => $faker->numberBetween(1,20),
         'buy_price' => $faker->numberBetween(100,500),
         'sale_price' => $faker->numberBetween(500,10000),
         'made_in' => $faker->country,

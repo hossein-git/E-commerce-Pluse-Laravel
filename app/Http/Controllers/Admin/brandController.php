@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Models\brand;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class brandController extends Controller
 {
     private $brand;
+    private $cachKey;
 
     public function __construct()
     {
@@ -53,8 +55,8 @@ class brandController extends Controller
             'brand_description' => 'required|string',
         ]);
         $input = $this->savePhoto($request);
-
         $brand = $this->brand->create($input);
+        Cache::forget($this->cachKey);
         if (env('APP_AJAX')) {
             return response()->json(['success' => $brand]);
         }
@@ -98,6 +100,7 @@ class brandController extends Controller
         $brand = $this->brand->findOrFail($id);
         $brand->fill($input)->update();
         $result = $brand->save();
+        Cache::forget($this->cachKey);
         if (env('APP_AJAX') and $result) {
             return response()->json(['success' => $brand]);
         }
@@ -120,6 +123,7 @@ class brandController extends Controller
         if (ctype_digit($id)) {
             $brand = $this->brand->findOrFail($id);
             $brand->delete();
+            Cache::forget($this->cachKey);
             return response()->json(['success' => $brand]);
         }
     }

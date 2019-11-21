@@ -1,4 +1,7 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty')
+@extends('layout.admin.index')
+@section('extra_css')
+   <link rel="stylesheet" href="{{ asset('admin-assets/css/w3.css') }}">
+@endsection
 @section('content')
    <div class="hr dotted"></div>
    <div>
@@ -26,13 +29,7 @@
             <div class="space-6"></div>
 
             <div class="profile-contact-info">
-               <div class="profile-contact-links align-left ">
-                  <a href="{{route('product.edit',$product->product_id)}}" data-id="{{ $product->product_id }}"
-                     class="btn btn-link edit_me">
-                     <i class="ace-icon fa fa-plus-circle bigger-120 warning"></i>
-                     Edit product
-                  </a>
-               </div>
+
                <!-- DISPLAY RATING -->
                @for( $i = 0 ; $i < round($product->averageRating) ; $i++)
                   <span class="fa fa-stack" style="color: gold">
@@ -46,22 +43,18 @@
                   </span>
             @endfor
             <!-- /DISPLAY RATING -->
-               <div class="space-6">
-
-               </div>
-
+               <div class="space-6"></div>
             </div>
-
             <div class="hr hr12 dotted"></div>
-            <div class="clearfix">
-               @foreach($product->photos as $photo)
+            <div class="clearfix w3-display-container">
+               @foreach($product->photos as $key => $photo)
                   <a href="{{$photo->src}}" target="_blank">
-                     <img id="avatar"
-                          class="editable img-responsive editable-click editable-empty"
-                          alt="{{ $photo->photo_name }}"
-                          src="{{ $photo->thumbnail }}">
+                     <img class="mySlides" src="{{ $photo->thumbnail }}"
+                          alt="{{ $photo->photo_name }}" style="width:100%">
                   </a>
                @endforeach
+               <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+               <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
             </div>
             <div class="clearfix">
                <div class="grid2">
@@ -78,10 +71,20 @@
             </div>
 
             <div class="hr hr16 dotted"></div>
+            <div class="profile-contact-links align-left ">
+               <a href="{{route('product.edit',$product->product_id)}}" data-id="{{ $product->product_id }}"
+                  class="btn btn-link edit_me">
+                  <i class="ace-icon fa fa-plus-circle bigger-120 warning"></i>
+                  Edit product
+               </a>
+            </div>
          </div>
 
          <div class="col-xs-12 col-sm-9">
-            <div class="center">
+            <div class="">
+               <span>
+                  <img src="{{ $product->brands->src }}" alt="{{ $product->brands->brand_name }}">
+               </span>
                <span class="btn btn-app btn-sm btn-light no-hover">
                   <span class="line-height-1 bigger-170 blue"> {{ $product->quantity }} </span>
                   <br>
@@ -219,7 +222,8 @@
             <h6>red color not approved yet </h6>
             <div class="col-sm-6">
                @forelse($comments as $comment)
-                  <div class="well well-lg" style="background-color: {{ $comment->approved == 1 ? '#79ffb2': '#ffaf93'}}">
+                  <div class="well well-lg"
+                       style="background-color: {{ $comment->approved == 1 ? '#79ffb2': '#ffaf93'}}">
                      <h4 class="">
                         @if($comment->commenter_id =! null)
                            <span class="tag blue"><b>{{ $comment->guest_name }}</b></span>
@@ -238,14 +242,41 @@
          </div>
       </div>
    </div>
-   <script>
-       <!-- LOAD THE EDIT PAGE-->
-       jQuery(".edit_me").bind('click', function () {
-           var route = $(this).attr('href');
-           var id = $(this).data('id');
-           window.history.replaceState("", "", "product/" + id + "/edit");
-           $("#content-load").load(route);
-           return false;
-       });
-   </script>
 @endsection
+@section('extra_js')
+   <script>
+       jQuery(".edit_me").bind('click', function (e) {
+           e.preventDefault();
+           var route = $(this).attr('href');
+           var pjax = new Pjax({
+               selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
+           });
+           pjax.loadUrl(route);
+       });
+
+   </script>
+   <!-- FOR IMAGE SLIDER -->
+   <script type="text/javascript">
+       var slideIndex = 1;
+       showDivs(slideIndex);
+
+       function plusDivs(n) {
+           showDivs(slideIndex += n);
+       }
+
+       function showDivs(n) {
+           var i;
+           var x = document.getElementsByClassName("mySlides");
+           if (n > x.length) {
+               slideIndex = 1
+           }
+           if (n < 1) {
+               slideIndex = x.length
+           }
+           for (i = 0; i < x.length; i++) {
+               x[i].style.display = "none";
+           }
+           x[slideIndex - 1].style.display = "block";
+       }
+   </script>
+@stop

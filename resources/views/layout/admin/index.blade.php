@@ -20,26 +20,6 @@
 
    <div class="main-content">
       <div class="main-content-inner">
-         <div class="breadcrumbs ace-save-state" id="breadcrumbs">
-            <ul class="breadcrumb" id="site_map">
-               <li>
-                  <i class="ace-icon fa fa-home home-icon"></i>
-                  <a href="#" class="click_me" data-route="{{ route('admin.dashboard') }}">Dashboard</a>
-               </li>
-            </ul>
-            <!-- /.breadcrumb -->
-
-            <div class="nav-search" id="nav-search">
-               <form class="form-search">
-                  <span class="input-icon">
-                     <input type="text" placeholder="Search ..." class="nav-search-input"
-                            id="nav-search-input" autocomplete="off"/>
-                     <i class="ace-icon fa fa-search nav-search-icon"></i>
-                  </span>
-               </form>
-            </div>
-            <!-- /.nav-search -->
-         </div>
 
          <div class="page-content">
             <div class="ace-settings-container" id="ace-settings-container">
@@ -117,8 +97,8 @@
             <div class="row">
                <div class="col-xs-12" id="content-load">
                   <!-- PAGE CONTENT BEGINS -->
-                  @yield('content')
-                  <!-- PAGE CONTENT ENDS -->
+               @yield('content')
+               <!-- PAGE CONTENT ENDS -->
                </div><!-- /.col -->
             </div><!-- /.row -->
          </div><!-- /.page-content -->
@@ -160,48 +140,18 @@
 <!-- basic scripts -->
 
 
-<script type="text/javascript">
-{{--    if ('ontouchstart' in document.documentElement) document.write("<script src='{{ asset(`admin-assets/js/jquery.mobile.custom.min.js`) }}'>" + "<" + "/script>");--}}
-</script>
-<script src="{{ asset('admin-assets/js/bootstrap.min.js')}}"></script>
+
+<script src="{{ asset('admin-assets/js/admin-app.js')}}"></script>
 <!-- LOAD MY JS CODES  -->
 <script src="{{ asset('admin-assets/js/myCodes.js')}}"></script>
-<!-- //LOAD MY JS CODES  -->
+
 
 <!-- LOAD PJAX -->
 <script src="{{ asset('js/pjax/pjax.min.js') }}"></script>
 
-<!-- page specific plugin scripts -->
-
-{{--<script src="{{asset('admin-assets/js/jquery-ui.custom.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/jquery.ui.touch-punch.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/chosen.jquery.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/spinbox.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/bootstrap-datepicker.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/bootstrap-timepicker.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/moment.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/daterangepicker.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/bootstrap-datetimepicker.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/bootstrap-colorpicker.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/jquery.knob.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/autosize.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/jquery.inputlimiter.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/jquery.maskedinput.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/bootstrap-tag.min.js')}}"></script>--}}
-{{--<script src="{{ asset('admin-assets/js/select2.min.js') }}"></script>--}}
-<script src="{{asset('admin-assets/js/jquery.bootstrap-duallistbox.min.js')}}"></script>
-<script src="{{asset('admin-assets/js/jquery.validate.min.js')}}"></script>
-{{--<script src="{{asset('admin-assets/js/jquery.raty.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/bootstrap-multiselect.min.js')}}"></script>--}}
-{{--<script src="{{asset('admin-assets/js/select2.min.js')}}"></script>--}}
-<script src="{{asset('admin-assets/js/jquery-typeahead.js')}}"></script>
-<script src="{{asset('admin-assets/js/tree.min.js')}}"></script>
-{{--<script src="{{ asset('dist/jquery.fileuploader.min.js') }}" type="text/javascript"></script>--}}
-{{--<script src="{{ asset('dist/custom.js') }}" type="text/javascript"></script>--}}
 
 <!-- ace scripts -->
-<script src="{{ asset('admin-assets/js/ace-elements.min.js')}}"></script>
-<script src="{{ asset('admin-assets/js/ace.min.js')}}"></script>
+
 <!-- script for load page on AJAX-->
 <script>
     jQuery(document).ready(function () {
@@ -216,6 +166,41 @@
     });
 </script>
 <!-- END script for load page on ajax-->
+<!-- SEARCH SCRIPT -->
+@if (env('APP_AJAX'))
+   <script>
+       jQuery(document).ready(function () {
+           jQuery("#form-search").submit( function (e) {
+               e.preventDefault();
+               var form_data = new FormData(this);
+
+               $.ajax({
+                   url: "{{ route('admin.search') }}",
+                   method : "POST",
+                   data: form_data,
+                   contentType: false,
+                   cache: false,
+                   processData: false,
+                   beforeSend: function () {
+                       $(".preview").show();
+                   },success : function (data) {
+                       if (data.html == " ") {
+                           $('.preview').html("No more records found");
+                           return;
+                       }
+                       $(".table_data").empty().append(data.html);
+                       $('.preview').hide();
+                   },error : function () {
+                       alert('error');
+                       $('.preview').hide();
+                   }
+               })
+           });
+       });
+   </script>
+@endif
+
+<!-- /SEARCH SCRIPT -->
 <!-- BEGIN EXTRA JS-->
 <div id="extra_js">
    @yield('extra_js')

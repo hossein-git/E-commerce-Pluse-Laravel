@@ -5,53 +5,53 @@
 @section('extra_css')
    <link rel="stylesheet" href="{{ asset('front-assets/external/magnific-popup/magnific-popup.css') }}">
    <style type="text/css">
-   /*@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);*/
-   /****** Style Star rating0 Widget *****/
+      /*@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);*/
+      /****** Style Star rating0 Widget *****/
 
-   .rating0 {
-      border: none;
-      float: left;
-   }
+      .rating0 {
+         border: none;
+         float: left;
+      }
 
-   .rating0 > input {
-      display: none;
-   }
+      .rating0 > input {
+         display: none;
+      }
 
-   .rating0 > label:before {
-      margin: 5px;
-      font-size: 1.25em;
-      font-family: FontAwesome;
-      display: inline-block;
-      content: "\f005";
-   }
+      .rating0 > label:before {
+         margin: 5px;
+         font-size: 1.25em;
+         font-family: FontAwesome;
+         display: inline-block;
+         content: "\f005";
+      }
 
-   .rating0 > .half:before {
-      content: "\f089";
-      position: absolute;
-   }
+      .rating0 > .half:before {
+         content: "\f089";
+         position: absolute;
+      }
 
-   .rating0 > label {
-      color: #ddd;
-      float: right;
-   }
+      .rating0 > label {
+         color: #ddd;
+         float: right;
+      }
 
-   /***** CSS Magic to Highlight Stars on Hover *****/
+      /***** CSS Magic to Highlight Stars on Hover *****/
 
-   .rating0 > input:checked ~ label, /* show gold star when clicked */
-   .rating0:not(:checked) > label:hover, /* hover current star */
-   .rating0:not(:checked) > label:hover ~ label {
-      color: #FFD700;
-   }
+      .rating0 > input:checked ~ label, /* show gold star when clicked */
+      .rating0:not(:checked) > label:hover, /* hover current star */
+      .rating0:not(:checked) > label:hover ~ label {
+         color: #FFD700;
+      }
 
-   /* hover previous stars in list */
+      /* hover previous stars in list */
 
-   .rating0 > input:checked + label:hover, /* hover current star when changing rating0 */
-   .rating0 > input:checked ~ label:hover,
-   .rating0 > label:hover ~ input:checked ~ label, /* lighten current selection */
-   .rating0 > input:checked ~ label:hover ~ label {
-      color: #FFED85;
-   }
-</style>
+      .rating0 > input:checked + label:hover, /* hover current star when changing rating0 */
+      .rating0 > input:checked ~ label:hover,
+      .rating0 > label:hover ~ input:checked ~ label, /* lighten current selection */
+      .rating0 > input:checked ~ label:hover ~ label {
+         color: #FFED85;
+      }
+   </style>
 @endsection
 @section('content')
    <div class="">
@@ -70,8 +70,8 @@
                      @foreach($product->photos as $photo)
                         <li>
                            <a class="zoomGalleryActive" href="#"
-                               data-image="{{ ($photo->src) }}"
-                               data-zoom-image="{{ ($photo->src) }}">
+                              data-image="{{ ($photo->src) }}"
+                              data-zoom-image="{{ ($photo->src) }}">
                               <img src="{{ ($photo->thumbnail ) }}" alt="{{ $photo->title }}"/>
                            </a>
                            fff
@@ -100,9 +100,9 @@
                <ul class="mobileGallery-product">
                   @forelse($product->photos as $photo)
                      <li><img src="{{ $photo->src }}" alt=""/></li>
-                     @empty
+                  @empty
                      <li><img src="{{ asset('front-assets/images/product/product-big-2.jpg') }}" alt=""/></li>
-                   @endforelse
+                  @endforelse
                </ul>
             </div>
             <div class="product-info product-info1">
@@ -183,7 +183,8 @@
                            <li><a href="#" size="L">L</a></li>
                         </ul>
                      </div>
-                  </div>.
+                  </div>
+                  .
                   <!-- /SIZE -->
                </div>
                <b id="p_error" style="display: none;color: red;">ddd</b>
@@ -202,20 +203,20 @@
                   </div>
 
 
-                     <ul class="product_inside_info_link">
-                        <li class="text-right">
-                           <a href="#">
-                              <span class="fa fa-heart-o"></span>
-                              <span class="text">ADD TO WISHLIST</span>
-                           </a>
-                        </li>
-                        <li class="text-left">
-                           <a href="#" class="compare-link">
-                              <span class="fa fa-balance-scale"></span>
-                              <span class="text">ADD TO COMPARE</span>
-                           </a>
-                        </li>
-                     </ul>
+                  <ul class="product_inside_info_link">
+                     <li class="text-right">
+                        <a href="#">
+                           <span class="fa fa-heart-o"></span>
+                           <span class="text">ADD TO WISHLIST</span>
+                        </a>
+                     </li>
+                     <li class="text-left">
+                        <a href="#" class="compare-link">
+                           <span class="fa fa-balance-scale"></span>
+                           <span class="text">ADD TO COMPARE</span>
+                        </a>
+                     </li>
+                  </ul>
                </div>
                <!-- SOCIALS -->
             {{--<ul class="social-icon-square">
@@ -317,10 +318,14 @@
                <span class="tt-tabs__title">TAGS</span>
                <div class="tt-tabs__content">
                   <h5 class="tab-title">TAGS</h5>
-                  <ul class="tags-list">
-                     <li><a href="#">Vintage</a></li>
-                     <li><a href="#">Style</a></li>
-                     <li><a href="#">Street Style</a></li>
+                  <ul >
+                     @forelse($product->tags as $tag)
+                        <li class="">
+                           <a  href="{{ route('front.lists',['list' => 'tags','slug' => "$tag->tag_slug", ]) }}">{{ $tag->tag_name }}</a>
+                        </li>
+                     @empty
+                        <b>NO TAG</b>
+                     @endforelse
                   </ul>
                </div>
             </div>
@@ -433,12 +438,12 @@
       </div>
    </div>
 
-<input type="hidden" id="p_color">
-<input type="hidden" id="p_size">
-<input type="hidden" id="p_slug" value="{{ $product->product_slug }}">
-<input type="hidden" id="p_id" value="{{ $product->product_id }}">
-<input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}">
-<input type="hidden" id="_url" value="{{ route('cart.store')}}">
+   <input type="hidden" id="p_color">
+   <input type="hidden" id="p_size">
+   <input type="hidden" id="p_slug" value="{{ $product->product_slug }}">
+   <input type="hidden" id="p_id" value="{{ $product->product_id }}">
+   <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}">
+   <input type="hidden" id="_url" value="{{ route('cart.store')}}">
 @endsection
 @section('extra_js')
    <script src="{{ asset('front-assets/external/isotope/isotope.pkgd.min.js') }}"></script>

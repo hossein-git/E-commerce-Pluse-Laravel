@@ -18,7 +18,7 @@ class viewComposer extends ServiceProvider
 
     public function frontComposer()
     {
-        \view()->composer(['*'],frontComposer::class);
+        \view()->composer(['layout.front.*','Front.*'],frontComposer::class);
     }
     /**
      * Register services.

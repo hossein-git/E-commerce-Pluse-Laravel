@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-
     protected $primaryKey = 'order_id';
 
     protected $fillable = [
@@ -23,12 +22,12 @@ class Order extends Model
 
     public function address()
     {
-        return $this->morphMany(Address::class,'order','addressable_type','addressable_id')->first();
+        return $this->morphMany(Address::class,'order','addressable_type','addressable_id');
     }
 
     public function giftCard()
     {
-        return $this->belongsTo(GiftCard::class,'gift_id')->first();
+        return $this->belongsTo(GiftCard::class,'gift_id');
 
     }
 

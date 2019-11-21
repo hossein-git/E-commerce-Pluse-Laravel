@@ -19,7 +19,7 @@ class adminComposer
     public function compose(View $view)
     {
         $view->with([
-            'categories' => Category::whereIsRoot()->get(['category_name','category_id']),
+            'categories' => Category::whereIsRoot()->with('children')->get(['category_name','category_id']),
         ]);
     }
     /*---------------uses on sub menu ------------------*/

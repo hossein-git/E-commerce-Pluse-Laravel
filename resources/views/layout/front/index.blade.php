@@ -9,13 +9,18 @@
    <meta name="_token" content="{{ csrf_token() }}">
 {{--   <link rel="shortcut icon" href="favicon.ico">--}}
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <!-- MIXED STYLES -->
+   <link rel="stylesheet" href="{{ asset('front-assets/css/front-style.css')}}">
+   <!-- IF YOU DONT WANT TO USE MIXED STYLE.UNCOMMENT BELOW AND COMMENT ABOVE  -->
+{{--   <link rel="stylesheet" href="{{ asset('front-assets/external/bootstrap/bootstrap.min.css')}}">--}}
+{{--   <link rel="stylesheet" href="{{ asset('front-assets/external/slick/slick.min.css')}}">--}}
+{{--   <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/external/rs-plugin/css/settings.min.css')}}" media="screen" />--}}
+{{--   <link rel="stylesheet" href="{{ asset('front-assets/css/template.css')}}">--}}
+{{--   <link rel="stylesheet" href="{{ asset('front-assets/css/footer-dark.css') }}">--}}
 
-   <link rel="stylesheet" href="{{ asset('front-assets/external/bootstrap/bootstrap.min.css')}}">
-   <link rel="stylesheet" href="{{ asset('front-assets/external/slick/slick.min.css')}}">
-   <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/external/rs-plugin/css/settings.min.css')}}" media="screen" />
-   <link rel="stylesheet" href="{{ asset('front-assets/css/template.css')}}">
-   <link rel="stylesheet" href="{{ asset('front-assets/css/footer-dark.css') }}">
+<!-- FOR RTL STYLE -->
 {{--   <link rel="stylesheet" href="{{ asset('front-assets/css/template-rtl.css')}}">--}}
+
    <link rel="stylesheet" href="{{ asset('front-assets/font/icont-fonts.min.css')}}">
    <script src="{{asset('front-assets/external/jquery/jquery-2.1.4.min.js')}}"></script>
    <!--
@@ -52,11 +57,11 @@
 
 <!-- Content -->
 <div id="pageContent">
+   <center><img alt="" src="{{ asset('admin-assets/5.gif') }}" class="center preview ajax-load"
+                style="display: none">
+   </center>
    <div class="container" id="content-load">
       @yield('content')
-      <center><img alt="" src="{{ asset('admin-assets/5.gif') }}" class="center preview ajax-load"
-                   style="display: none">
-      </center>
    </div>
 </div>
 
@@ -64,21 +69,23 @@
 
  <!-- LOAD PJAX -->
 <script src="{{ asset('js/pjax/pjax.min.js') }}"></script>
+<!-- MIXED JS -->
+<script src="{{asset('front-assets/js/front-js.js')}}"></script>
 
-<script src="{{asset('front-assets/external/bootstrap/bootstrap.min.js')}}"></script>
+{{--<script src="{{asset('front-assets/external/bootstrap/bootstrap.min.js')}}"></script>--}}
 <script src="{{asset('front-assets/js/add_to_cart.js')}}"></script>
 
-<script src="{{asset('front-assets/external/countdown/jquery.plugin.min.js')}}"></script>
-<script src="{{asset('front-assets/external/countdown/jquery.countdown.min.js')}}"></script>
-<script src="{{asset('front-assets/external/slick/slick.min.js')}}"></script>
+{{--<script src="{{asset('front-assets/external/countdown/jquery.plugin.min.js')}}"></script>--}}
+{{--<script src="{{asset('front-assets/external/countdown/jquery.countdown.min.js')}}"></script>--}}
+{{--<script src="{{asset('front-assets/external/slick/slick.min.js')}}"></script>--}}
 
-<script src="{{asset('front-assets/external/instafeed/instafeed.min.js')}}"></script>
+{{--<script src="{{asset('front-assets/external/instafeed/instafeed.min.js')}}"></script>--}}
 
-<script src="{{asset('front-assets/external/rs-plugin/js/jquery.themepunch.tools.min.js')}}"></script>
-<script src="{{asset('front-assets/external/rs-plugin/js/jquery.themepunch.revolution.min.js')}}"></script>
-<script src="{{asset('front-assets/external/panelmenu/panelmenu.js')}}"></script>
-<script src="{{asset('front-assets/js/quick-view.js')}}"></script>
-<script src="{{asset('front-assets/js/main.js')}}"></script>
+{{--<script src="{{asset('front-assets/external/rs-plugin/js/jquery.themepunch.tools.min.js')}}"></script>--}}
+{{--<script src="{{asset('front-assets/external/rs-plugin/js/jquery.themepunch.revolution.min.js')}}"></script>--}}
+{{--<script src="{{asset('front-assets/external/panelmenu/panelmenu.js')}}"></script>--}}
+{{--<script src="{{asset('front-assets/js/quick-view.js')}}"></script>--}}
+{{--<script src="{{asset('front-assets/js/main.js')}}"></script>--}}
 <<!-- script for load page on AJAX-->
 <script>
     jQuery(document).ready(function () {
@@ -88,6 +95,17 @@
                 selectors: ["title","meta[name=keywords]", "#extra_css", "#content-load", "#extra_js"]
             });
             pjax.loadUrl(route);
+        });
+
+        //SEND DATA FOR SEARCH
+        $("#search_from").submit(function (e) {
+            e.preventDefault();
+            var query = $('#search_input').val();
+            var pjax = new Pjax({
+                selectors: ["title","meta[name=keywords]", "#extra_css", "#content-load", "#extra_js"]
+            });
+            pjax.loadUrl("/search/" + query);
+
         });
     });
 </script>

@@ -67,31 +67,46 @@
             <textarea id="description" rows="6" class="form-control"
                       name="description">{{ old('description',$product->description) }}</textarea>
          </div>
-         <div class="form-group col-xs-5">
-            <h4>Available ? </h4>
-            <label>
-               <input type="checkbox" name="status" id="status" onclick=''
-                      class="ace ace-switch ace-switch-6" {{ $product->status == 1 ? 'checked': '' }} >
-               <span class="lbl"></span>
-            </label>
-            <h4>Discount ?</h4>
-            <label>
-               <input type="checkbox" name="is_off" id="is_off" onclick=""
-                      class="ace ace-switch ace-switch-6" {{ $product->is_off == 1 ? 'checked' :'' }}>
-               <span class="lbl"></span>
-            </label>
+         <div class="form-group col-xs-6">
+            <div class="col-sm-4">
+               <h4>Available ? </h4>
+               <label>
+                  <input type="checkbox" name="status" id="status" onclick=''
+                         class="ace ace-switch ace-switch-6" {{ $product->status == 1 ? 'checked': '' }} >
+                  <span class="lbl"></span>
+               </label>
+               <h4>Discount ?</h4>
+               <label>
+                  <input type="checkbox" name="is_off" id="is_off" onclick=""
+                         class="ace ace-switch ace-switch-6" {{ $product->is_off == 1 ? 'checked' :'' }}>
+                  <span class="lbl"></span>
+               </label>
+            </div>
+            <div class="col-sm-8">
+               <div class="available0">
+                  <label for="data_available"><b>Available Date</b></label>
+                  <input id="data_available" name="data_available" class="form-control"
+                         value="{{ old('data_available',$product->data_available) }}" type="date"/>
+               </div>
+               <div class="div-discount">
+                  <label for="off_price"><b>Amount of Discount:</b></label>
+                  <input id="off_price" name="off_price" class="form-control" min="0"
+                         value="{{ old('off_price',$product->off_price) }}" type="number">
+               </div>
+            </div>
          </div>
-         <div class="form-group col-xs-7">
-            <div class="available0">
-               <label for="data_available"><b>Available Date</b></label>
-               <input id="data_available" name="data_available" class="form-control"
-                      value="{{ old('data_available',$product->data_available) }}" type="date"/>
+         <div class="form-group col-xs-6">
+            <div class="form-group">
+               <label class="col-sm-3 control-label no-padding-right" for="form-field-tags">Tag input</label>
+               <div class="col-sm-9">
+                  <div class="inline">
+                     <input type="text" name="tags" id="form-field-tags" placeholder="Enter tags ..."
+                     value="<?php foreach($product->tags as $tag){ echo $tag->tag_name.','; } ?>"
+                     />
+                  </div>
+               </div>
             </div>
-            <div class="div-discount">
-               <label for="off_price"><b>Amount of Discount:</b></label>
-               <input id="off_price" name="off_price" class="form-control" min="0"
-                      value="{{ old('off_price',$product->off_price) }}" type="number">
-            </div>
+
          </div>
          <div class="form-group col-xs-12">
             <div class="col-xs-6">
@@ -401,7 +416,7 @@
       </script>
    @endif
    <!-- show selected images -->
-   <script>
+   <script type="text/javascript">
        $(document).ready(function () {
            $(function () {
                // Multiple images preview in browser
@@ -477,5 +492,26 @@
                }
            });
        });
+   </script>
+   <script src="{{ asset('admin-assets/js/bootstrap-tag.min.js') }}"></script>
+   <!-- FOR TAG INPUT -->
+   <script type="text/javascript">
+       var tag_input = $('#form-field-tags');
+       try {
+           tag_input.tag(
+               {
+                   source: function (query, process) {
+                       $.ajax({
+                           url: '/admin/product/tags/' + query,
+                           type: 'get'
+                       }).done(function (result_items) {
+                           process(result_items);
+                       });
+                   }
+               }
+           )
+       } catch (e) {
+           tag_input.after('<textarea id="' + tag_input.attr('id') + '" name="' + tag_input.attr('name') + '" rows="3">' + tag_input.val() + '</textarea>').remove();
+       }
    </script>
 @stop

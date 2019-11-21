@@ -26,7 +26,7 @@ class CreateProductsTable extends Migration
             $table->boolean('status')->default(1);
                  //if product is unavailable then an available data comes
             $table->date('data_available')->nullable();
-            $table->boolean('is_off')->nullable();
+            $table->boolean('is_off')->default(0);
             $table->integer('off_price')->default(0);
             $table->integer('buy_price');
             $table->integer('sale_price');

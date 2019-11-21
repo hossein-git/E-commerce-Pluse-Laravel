@@ -9,15 +9,16 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "algolia/algoliasearch-client-php": "^2.5",
         "fideloper/proxy": "^4.0",
         "hardevine/shoppingcart": "^2.7",
         "intervention/image": "^2.5",
         "kalnoy/nestedset": "^5.0",
         "laravel/framework": "^6.0",
+        "laravel/scout": "^7.2",
         "laravel/tinker": "^1.0",
         "laravelista/comments": "^3.0",
-        "willvincent/laravel-rateable": "^2.0",
-      "ext-http": "*"
+        "willvincent/laravel-rateable": "^2.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

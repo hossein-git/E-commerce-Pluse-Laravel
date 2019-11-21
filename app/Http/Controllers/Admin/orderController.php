@@ -23,13 +23,13 @@ class orderController extends Controller
      */
     public function index()
     {
-        $orders = $this->order->paginate(5);
+        $orders = $this->order->with(['address','giftCard'])->paginate(5);
         return view('admin.orders.index',compact('orders'));
     }
 
     public function notSent()
     {
-        $orders = $this->order->where('order_status',0)->paginate(5);
+        $orders = $this->order->where('order_status',0)->with(['address','giftCard'])->paginate(5);
         return view('admin.orders.index',compact('orders'));
     }
 

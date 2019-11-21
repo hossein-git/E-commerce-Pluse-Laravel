@@ -12,28 +12,47 @@
 */
 
 
-use App\Models\Category;
-use App\Models\CheckGift;
-use App\Models\GiftCard;
+use App\Models\brand;
+use App\Models\Color;
+use App\Models\Tag;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
-   return view('test');
+//    $arr = ['tag_name' => 'test','tag_slug'=> 'test'];
+//    $tags = \App\Models\Tag::find([1,2,3]);
+    $brands = \App\Models\brand::pluck('brand_id')->toArray();
+
+    dd(($brands));
+
+//    return view('admin.test');
+})->name('test');
+
+Route::get('/query', function () {
+
+    \Illuminate\Support\Facades\DB::enableQueryLog();
+
+    $product = \App\Models\Product::find(5);
+//    $colors = Color::findOrFail([1,2,4]);
+    $tags = $product->colors()->sync([1,2,4]);
+
+    $query = \Illuminate\Support\Facades\DB::getQueryLog();
+    dd($query);
 
 })->name('test');
 
 Route::get('/w0', function () {
 
-    if (session()->has('order_id')){
-        $x = substr(str_replace(',','',Cart::total()),0,-2) ;
+    if (session()->has('order_id')) {
+        $x = substr(str_replace(',', '', Cart::total()), 0, -2);
         dd($x);
 
     }
 })->name('login');
 
 Route::get('/w', function () {
-    return view('welcome');
+    return view('admin.log-in');
 })->name('w');
 
 
@@ -44,7 +63,7 @@ Route::get('/show/{slug}', 'Front\homeController@show')->name('front.show');
 
 /*---------------COMMENTS------------------*/
 Route::post('comments', '\Laravelista\Comments\CommentController@store');
-Route::match(['put','post'],'comments/{comment}', '\Laravelista\Comments\CommentController@update');
+Route::match(['put', 'post'], 'comments/{comment}', '\Laravelista\Comments\CommentController@update');
 //Route::put('comments/{comment}', '\Laravelista\Comments\CommentController@update');
 //Route::post('comments/{comment}', '\Laravelista\Comments\CommentController@reply');
 
@@ -59,18 +78,21 @@ Route::post('/checkout/orderStatus', 'Front\checkOutController@saveOrderStatus')
 
 
 /*---------------LISTS------------------*/
-Route::match(['get','post'],'/products', 'Front\homeController@productsList')->name('front.productsList');
-Route::match(['get','post'],'/products/{list}/{slug}','Front\homeController@list')->where([
+Route::match(['get', 'post'], '/products', 'Front\homeController@productsList')->name('front.productsList');
+Route::match(['get', 'post'], '/products/{list}/{slug}', 'Front\homeController@list')->where([
     'list' => '[A-za-z]+',
 //    'slug' => '[A-Za-z0-9]+'
 ])->name('front.lists');
 
 /*---------------CART------------------*/
-Route::resource('/cart','Front\cartController')->except(['create','edit','update']);
-Route::post('/cart/edit','Front\cartController@update')->name('cart.update');
-Route::get('/carts/clear','Front\cartController@clear')->name('cart.clear');
+Route::resource('/cart', 'Front\cartController')->except(['create', 'edit', 'update']);
+Route::post('/cart/edit', 'Front\cartController@update')->name('cart.update');
+Route::get('/carts/clear', 'Front\cartController@clear')->name('cart.clear');
 
 
+/*---------------SEARCh------------------*/
+Route::get('/search/{query}', 'Front\homeController@search')->name('front.search')->where(
+    ['query' => '[A-za-z]+']);
 
 
 /*---------------***************ADMIN ROUTES******************------------------*/
@@ -80,20 +102,24 @@ Route::group(['prefix' => 'admin'], function () {
         return view('admin.category.index');
     })->name('cat');
 
+    /*---------------SEARCH------------------*/
+    Route::post('/search', 'Admin\dashboardController@search')->name('admin.search');
+
     /*---------------DASHBOARD------------------*/
     Route::get('/dashboard', 'Admin\dashboardController@index')->name('admin.dashboard');
 
     /*---------------Products Routes------------------*/
     Route::resource('product', 'Admin\productController');
-    Route::get('product/sort/{sort?}', 'Admin\productController@sort')->name('product.index.sort');
-    Route::get('product/sort/sort/{category_id}', 'Admin\productController@sortByCategory')->name('product.index.sortCat');
+    Route::post('product/sort', 'Admin\productController@sort')->name('product.index.sort');
     Route::get('product/index/trash', 'Admin\productController@withTrash')->name('product.index.trash');
     Route::get('product/index/restore/{id}', 'Admin\productController@restore')->name('product.restore');
+    Route::get('product/tags/{tag}', 'Admin\productController@productTags')->name('products.tags');
+
     /*---------------PHOTOS Routes------------------*/
     Route::resource('photo', 'Admin\PhotoController');
 
     /*---------------CATEGORIES ROUTE------------------*/
-    Route::resource('category', 'Admin\categoryController')->except(['show','edit','update']);
+    Route::resource('category', 'Admin\categoryController')->except(['show', 'edit', 'update']);
 
     /*---------------BRAND ROUT------------------*/
     Route::resource('brand', 'Admin\brandController')->except(['show']);

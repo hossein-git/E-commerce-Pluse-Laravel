@@ -1,4 +1,9 @@
-@extends(!Request::ajax() ? 'layout.admin.index' : 'layout.empty')
+@extends('layout.admin.index' )
+@section('title')
+   Admin Dashboard
+@stop
+@section('extra_css')
+@stop
 @section('content')
    <div class="row">
       <div class="col-sm-12">

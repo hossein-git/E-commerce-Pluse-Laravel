@@ -156,11 +156,11 @@
                <!-- SEARCH -->
                <div class="col-md-4 text-center">
                   <div class="social-icon">
-                     <form action="#" method="get">
+                     <form id="search_from">
                         <div class="input-group">
-                           <input type="text" class="form-control search-query" placeholder="Type your query">
-                           <span class="input-group-btn">
-                              <button type="button" class="btn btn-purple">
+                           <input name="search" type="text" id="search_input" class="form-control search-query" placeholder="Type your query" required>
+                           <span class="input-group-btn" autocomplete="off">
+                              <button type="submit" class="btn btn-purple">
                                  <span class="fa fa-search"></span>
                               </button>
                            </span>
@@ -205,8 +205,8 @@
                                  </ul>
                                  @if (Cart::count() == 0)
                                     <h4 class="empty-cart-js">Your Cart is Empty</h4>
-                                 @endif
-                                 <div class="cart-bottom">
+                                 @else
+                                    <div class="cart-bottom">
                                     <div class="pull-right">
                                        <div class="pull-left">
                                           <div class="cart-total">TOTAL:  <span> {{ Cart::subtotal() }}</span></div>
@@ -217,6 +217,7 @@
                                        <a href="{{ route('cart.index') }}" class="btn icon-btn-left "><span class="icon icon-shopping_basket"></span>VIEW CART</a>
                                     </div>
                                  </div>
+                                 @endif
                               </div>
                            </div>
                         </div>

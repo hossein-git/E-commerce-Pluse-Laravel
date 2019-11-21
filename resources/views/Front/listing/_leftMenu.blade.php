@@ -22,7 +22,7 @@
                   <option value="sale_price">Price</option>
                </select>
             </div>
-            <div class="filters-row_select ">
+            <div class="filters-row_select">
                <label ></label>
                <select name="dcs" class="form-control sort-position">
                   <option value="desc">High to lower</option>

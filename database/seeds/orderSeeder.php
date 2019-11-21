@@ -22,14 +22,12 @@ class orderSeeder extends Seeder
             \App\Models\DetailsOrder::create([
                 'order_id' => $order->order_id ,
                 'product_id' => $product->product_id,
+                'product_slug' => $product->product_slug,
 //                'product_attr_id',
-                'product_sku' => ($product->sku),
                 'product_price'=> ($product->sale_price),
-                'discount' => ($product->off_price),
                 'quantity' => rand(1,10),
                 'size' => array_rand(['s','M','L','XL']),
-//                'color',
-                'total_price' => random_int(2000,100000)
+//                'color'
             ]);
         });
     }

@@ -123,7 +123,7 @@
    <div class="row custom-layout indent-col-none" id="bot_box">
 
       <div class="item-large">
-         <a href="listing-left-column.html" class="promo-box zoom-in design-default">
+         <a href="#" class="promo-box zoom-in design-default">
             <img src="{{ asset('front-assets/images/custom/promo-img-03.jpg') }}" alt="">
             <div class="description point-center-vertical point-left left-offset text-center">
                <div class="block-table">

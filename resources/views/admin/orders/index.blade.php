@@ -6,6 +6,21 @@
 @stop
 @section('content')
    @include('layout.errors.notifications')
+
+   <form method="post" action="{{ route('admin.search') }}" id="form-search">
+      @csrf
+      <input type="hidden" value="orders" name="search_kind">
+      <span class="input-icon">
+         <input type="text" placeholder="Search ..." class="nav-search-input"
+                id="nav-search-input" autocomplete="off" name="search"/>
+         <i class="ace-icon fa fa-search nav-search-icon"></i>
+         <button type="submit" class="btn btn-sm">
+            <span class="fa fa-search"></span>
+         </button>
+      </span>
+      <span><i>search for <b>TRACK CODE</b></i></span>
+   </form>
+
    <table id="simple-table" class="table table-bordered table-hover">
       <thead>
       <tr class="info">
@@ -26,179 +41,9 @@
          <th class="center">Operations</th>
       </tr>
       </thead>
-      <tbody>
+      <tbody class="table_data">
+         @include('admin.orders._data')
 
-      @forelse($orders as $key=> $order)
-         <tr>
-            <td class="center">{{$order->order_id}}</td>
-            <td class="center">
-               @switch($order->order_status)
-                  @case(0)
-                  <span class="label label-grey arrowed bolder smaller-90">NOT Complete</span>
-                  @break
-                  @case(1)
-                  <span class="label label-danger arrowed bolder smaller-90">NOT Sent Yet</span>
-                  @break
-                  @case(2)
-                  <span class="label label-warning arrowed-right bolder smaller-90">Has Sent</span>
-                  @break
-                  @case(3)
-                  <span class="label label-success arrowed-in bolder smaller-90">Delivered</span>
-                  @break
-               @endswitch
-            </td>
-            <td><b>{{ $order->track_code }}</b></td>
-            <td class="center">
-               <a href="#addr{{$order->order_id}}" class="bolder" data-toggle="modal">
-                  <b><i class="fa fa-book bigger-250"></i>Address</b>
-               </a>
-            </td>
-            <td class="center">
-               @if($order->user_id == null)
-               <span class="label label-default">GUEST</span>
-                  @else
-                  {{ $order->user_id }}
-               @endif
-            </td>
-            <td class="center">{{ $order->client_name }}</td>
-            <td class="center">{{ $order->employee }}</td>
-            <td class="center">{{ $order->payment_id }}</td>
-            <td class="bolder">{{ number_format($order->total_price) }}</td>
-            <td CLASS="center">
-               @if($order->gift_id != null)
-                  <a href="#gift{{$order->order_id}}" class="bolder" data-toggle="modal">
-                     {{ $order->giftcard()->gift_name }}
-                  </a>
-               @else
-                  <i>NO GIFTCARD</i>
-               @endif
-            </td>
-            <td>
-               {{ Str::limit($order->details,50) }}</td>
-            <td>{{ $order->created_at }}
-            </td>
-            <td class="center">
-               <div class="hidden-sm hidden-xs btn-group">
-                  <form>
-                     <a class="btn btn-info2 btn-xs show_me" title="Show Details"
-                        href="{{ route('order.show',$order->order_id) }}" data-id="{{ $order->order_id }}">
-                        <i class="ace-icon fa fa-eye bigger-120"></i>
-                     </a>
-                     <a class="btn btn-warning btn-xs edit_me" title="Edit"
-                        {{--                        data-path="{{ str_replace("","",route('order.update',[],false)) }}"--}}
-                        href="" data-id="{{ $order->order_id }}">
-                        <i class="ace-icon fa fa-pencil bigger-120"></i>
-                     </a>
-                     @if($order->order_status == 2 )
-                        <a class="btn btn-success btn-xs sent_me" title="Delivered"
-                           href="{{ route('order.status',[$order->order_id,'delivered']) }}" data-status="delivered">
-                           <i class="ace-icon fa fa-thumbs-up bigger-120"></i>
-                        </a>
-                     @endif
-                     @if($order->order_status == 1 )
-                        <a class="btn btn-info btn-xs sent_me" title="Sent"
-                           href="{{ route('order.status',[$order->order_id,'sent']) }}" data-status="sent">
-                           <i class="ace-icon fa fa-send-o bigger-120"></i>
-                        </a>
-                     @endif
-                     <button class="btn btn-sm btn-danger delete_me" title="Delete" data-id="{{ $order->order_id }}">
-                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                     </button>
-                  </form>
-               </div>
-            </td>
-         </tr>
-         <!--***POP UP MODELS*** -->
-
-         <!-- GIFT -->
-         @if($order->gift_id != null)
-            <div id="gift{{$order->order_id}}" class="modal fade" tabindex="-1" style="display: none;">
-               <div class="modal-dialog">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 class="smaller lighter blue no-margin">{{ $order->giftcard()->gift_name }}</h3>
-                     </div>
-                     <div class="modal-body">
-                        <ul>
-                           <li><b>Gift Price:</b>{{ $order->giftcard()->gift_amount }}</li>
-                           <li><b>Gift Code :</b>{{ $order->giftcard()->gift_code }}</li>
-                        </ul>
-                     </div>
-
-                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
-                           <i class="ace-icon fa fa-times"></i>
-                           Close
-                        </button>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         @endif
-         <!-- ADDRESS MODEL -->
-
-         <div id="addr{{$order->order_id}}" class="modal fade" tabindex="-1" style="display: none;">
-            <div class="modal-dialog">
-               <div class="modal-content">
-                  <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                     <h3 class="smaller lighter blue no-margin">{{ $order->address() != null ? $order->address()->name : 'NO ADDRESS' }}</h3>
-                  </div>
-                  <div class="modal-body">
-                        @if($order->address() != null)
-                           <div class="row">
-                              <div class="col-sm-4">
-                                 <ul>
-                                   <li>NAME : </li>
-                                   <li>SURNAME: </li>
-                                   <li>STATE : </li>
-                                   <li>CITY : </li>
-                                   <li>AREA : </li>
-                                   <li>AVENUE : </li>
-                                   <li>STREET : </li>
-                                   <li>NOM : </li>
-                                   <li>PHONE NUMBER : </li>
-                                   <li>POSTAL CODE : </li>
-                                 </ul>
-                              </div>
-                              <div class="col-sm-8">
-                                 <ul>
-                                  <li class="bolder">{{ $order->address()->name }} </li>
-                                  <li class="bolder">{{ $order->address()->surname }} </li>
-                                  <li class="bolder">{{ $order->address()->state }} </li>
-                                  <li class="bolder">{{ $order->address()->city }} </li>
-                                  <li class="bolder">{{ $order->address()->area }} </li>
-                                  <li class="bolder">{{ $order->address()->avenue }} </li>
-                                  <li class="bolder">{{ $order->address()->street }} </li>
-                                  <li class="bolder">{{ $order->address()->number }} </li>
-                                  <li class="bolder">{{ $order->address()->phone_number }} </li>
-                                  <li class="bolder">{{ $order->address()->postal_code }} </li>
-                                 </ul>
-                              </div>
-                           </div>
-                           
-                        @else
-                           <h2 class="danger bolder h2"> NO ADDRESS!</h2>
-                        @endif
-                  </div>
-
-                  <div class="modal-footer">
-                     <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
-                        <i class="ace-icon fa fa-times"></i>
-                        Close
-                     </button>
-                  </div>
-               </div>
-            </div>
-         </div>
-
-         <!-- /.POP UP MODELS -->
-      @empty
-         <tr>
-            <td colspan="12">No Data</td>
-         </tr>
-      @endforelse
       </tbody>
    </table>
 
@@ -208,6 +53,7 @@
 @section('extra_js')
    <script>
        $(document).ready(function () {
+           <!-- DELETE -->
            deleteAjax("/admin/orders/","delete_me","Order");
            <!-- SENT -->
            $(".sent_me").click(function (e) {

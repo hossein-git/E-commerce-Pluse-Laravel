@@ -24,15 +24,16 @@ class productRequest extends FormRequest
     public function rules()
     {
         return [
-            'brand_id' => 'numeric',
+            'brand_id' => 'required|numeric',
             'product_name' => 'required|string',
-            'product_slug' => 'required|string',
+            'product_slug' => 'required|string|unique:products',
             'buy_price' => 'required|numeric',
             'sale_price' => 'required|numeric',
             'quantity' => 'required|numeric',
-            'made_in' => 'required',
-            'description' => 'required',
+            'made_in' => 'required|string',
+            'description' => 'required|string',
             'colors' => 'required',
+            'tags' => 'required',
             'categories' => 'required',
             'photos.*' => 'image|mimes:jpeg,png,jpg',
             'cover' => 'required|string'

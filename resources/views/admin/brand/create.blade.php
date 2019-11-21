@@ -60,9 +60,8 @@
           $(document).ready(function () {
               $("#brand_form").submit(function (e) {
                   e.preventDefault();
-                  var form = $(this);
+                  //var form = $(this);
                   var form_data = new FormData(this);
-                  console.log(form_data);
                   $.ajaxSetup({
                       headers: {
                           'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')

@@ -1,5 +1,4 @@
 @extends('layout.admin.index' )
-@extends('layout.admin.index' )
 @section('title')
    Comments Lists
 @stop

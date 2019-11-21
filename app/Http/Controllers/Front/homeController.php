@@ -7,38 +7,41 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use PhpParser\Comment;
 
 class homeController extends Controller
 {
-    private $data;
     private $product;
 
     public function __construct()
     {
-        //VARIABLE TO TAKE PRODUCTS IN LAST WEEK FOR DISPLAYING -NEW- LABEL
-//      $this->data = \Carbon\Carbon::today()->subDays(7);
         $this->product = new Product();
     }
 
     //home page method
     public function home(Request $request)
     {
-        $products = $this->product->select(['product_id','product_slug', 'product_name', 'description', 'status',
+        $products = $this->product->select(['product_id','product_slug', 'product_name', 'status',
                 'data_available', 'is_off', 'off_price', 'cover', 'sale_price', 'created_at']
         )->paginate(4);
-        $brands = brand::select(['brand_slug', 'brand_name', 'brand_image'])->get();
         if ($request->ajax()) {
             $view = view('Front._data', compact('products'))->render();
             return response()->json(['html' => $view]);
         }
-        return view('Front.home', compact('products', 'brands'));
+        //set cache to get the number of reviews on this page
+        if (!Cache::has('homePage')){
+            (Cache::put('homePage', 1, 99999999));
+        }
+        Cache::increment('homePage');
+
+        return view('Front.home', compact('products'));
     }
 
     public function show($slug)
     {
-            $product = $this->product->with(['photos:src,photo_id','brands'])->where('product_slug',"$slug")->first();
-            return view('front.product.show', compact('product'));
+        $product = $this->product->with(['photos:src,photo_id','brands'])->where('product_slug',"$slug")->first();
+        return view('front.product.show', compact('product'));
     }
 
     //get all products with filters
@@ -59,7 +62,7 @@ class homeController extends Controller
         return view('Front.listing.list', compact('products'));
     }
 
-    //get products related to brands or categories
+    //get products related to brands or categories OR TAGS
     public function list(Request $request, $list, $slug)
     {
         $this->validate($request, [
@@ -73,6 +76,10 @@ class homeController extends Controller
 
             case $list === 'brands':
                 $model_slug = 'brand_slug';
+                break;
+
+            case $list === 'tags':
+                $model_slug = 'tag_slug';
                 break;
             //if $list is non of above then 404
             default:
@@ -93,6 +100,23 @@ class homeController extends Controller
         }
         return view('Front.listing.list', compact('products'));
 
+    }
+
+    //SEARCH
+    public function search($query)
+    {
+        if (ctype_alnum($query)){
+            $products = [];
+            if ($query){
+                $products = $this->product->search($query)->paginate(10);
+            }
+
+            if (\request()->ajax()) {
+                $view = view('Front.listing._data', compact('products'))->render();
+                return response()->json(['html' => $view]);
+            }
+            return view('Front.search.search', compact('products'));
+        }
     }
 
     //use for lists
@@ -124,4 +148,5 @@ class homeController extends Controller
         return $request;
 
     }
+
 }

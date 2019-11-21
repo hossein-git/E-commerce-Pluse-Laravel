@@ -47,9 +47,9 @@
 
          <div class="form-group col-xs-12">
             <div class="form-group col-xs-3">
-               <label class=" control-label no-padding-right" for="sale_price"> Sale Price </label>
+               <label class=" control-label no-padding-right" for="sale_price"> Sell Price </label>
                <div class="clearfix">
-                  <input placeholder="Sale Price" name="sale_price" value="{{ old('sale_price') }}" id="sale_price"
+                  <input placeholder="Sell Price" name="sale_price" value="{{ old('sale_price') }}" id="sale_price"
                          class="form-control" min="0" type="number">
                </div>
             </div>
@@ -82,32 +82,50 @@
                             name="description">{{ old('description') }}</textarea>
             </div>
          </div>
-         <div class="form-group col-xs-5">
-            <h4>Available ? </h4>
-            <label>
-               <input type="checkbox" name="status" id="status" onclick="showMe()" class="ace ace-switch ace-switch-6"
-                      {{ old('status') == 1 ? 'checked': '' }} checked>
-               <span class="lbl"></span>
-            </label>
-            <h4>Discount ?</h4>
-            <label>
-               <input type="checkbox" name="is_off" id="is_off" onclick="showDiscount()"
-                      class="ace ace-switch ace-switch-6" {{ old('is_off') == 1 ? 'checked' :'' }}>
-               <span class="lbl"></span>
-            </label>
-         </div>
-         <div class="form-group col-xs-7">
-            <div class="available0" style="display:none ">
-               <label for="data_available"><b>Available Date</b></label>
-               <input id="data_available" name="data_available" class="form-control" value="{{ old('data_available') }}"
-                      type="date"/>
+         <div class="form-group col-xs-6">
+            <div class="col-sm-4">
+               <h4>Available ? </h4>
+               <label>
+                  <input type="checkbox" name="status" id="status" onclick="showMe()"
+                         class="ace ace-switch ace-switch-6"
+                         {{ old('status') == 1 ? 'checked': '' }} checked>
+                  <span class="lbl"></span>
+               </label>
+               <h4>Discount ?</h4>
+               <label>
+                  <input type="checkbox" name="is_off" id="is_off" onclick="showDiscount()"
+                         class="ace ace-switch ace-switch-6" {{ old('is_off') == 1 ? 'checked' :'' }}>
+                  <span class="lbl"></span>
+               </label>
             </div>
-            <div class="div-discount" style="display:none ">
-               <label for="off_price"><b>Amount of Discount:</b></label>
-               <input id="off_price" name="off_price" class="form-control" min="0" value="{{ old('off_price',0) }}"
-                      type="number">
+            <div class="col-sm-8">
+               <div class="available0" style="display:none ">
+                  <label for="data_available"><b>Available Date</b></label>
+                  <input id="data_available" name="data_available" class="form-control"
+                         value="{{ old('data_available') }}"
+                         type="date"/>
+               </div>
+
+               <div class="div-discount" style="display:none ">
+                  <label for="off_price"><b>Amount of Discount:</b></label>
+                  <input id="off_price" name="off_price" class="form-control" min="0" value="{{ old('off_price',0) }}"
+                         type="number">
+               </div>
             </div>
          </div>
+         <!-- TAGS -->
+
+         <div class="form-group col-xs-6">
+            <div class="form-group">
+               <label class="col-sm-3 control-label no-padding-right" for="form-field-tags">Tag input</label>
+               <div class="col-sm-9">
+                  <div class="inline">
+                     <input type="text" name="tags" id="form-field-tags" placeholder="Enter tags ..." />
+                  </div>
+               </div>
+            </div>
+         </div>
+
          <div class="form-group col-xs-12">
             <div class="col-xs-6">
                <!-- file input -->
@@ -172,7 +190,7 @@
                </div>
             </div>
          </div>
-         <input type="hidden" name="cover" id="cover_name" value="">
+{{--         <input type="hidden" name="cover" id="cover_name" value="">--}}
          <div class="col-xs-12">
             <div class="col-xs-6">
                <input type="submit" class="btn btn-success btn-block" id="" value="SAVE">
@@ -459,5 +477,37 @@
        function removeImage(e) {
            $(e).parents(":eq(4)").remove()
        }
+   </script>
+   <script src="{{ asset('admin-assets/js/bootstrap-tag.min.js') }}"></script>
+   <!-- FOR TAG INPUT -->
+   <script type="text/javascript">
+       var tag_input = $('#form-field-tags');
+       try {
+           tag_input.tag(
+               {
+                   // placeholder: tag_input.attr('placeholder'),
+                   //or fetch data from database, fetch those that match "query"
+                   source: function (query, process) {
+                       $.ajax({
+                           url: '/admin/product/tags/' + query,
+                           type: 'get'
+                       }).done(function (result_items) {
+                               process(result_items);
+                           });
+                   }
+               }
+           )
+           //programmatically add/remove a tag
+           // var $tag_obj = $('#form-field-tags').data('tag');
+           // $tag_obj.add('Programmatically Added');
+           //
+           // var index = $tag_obj.inValues('some tag');
+           // $tag_obj.remove(index);
+       } catch (e) {
+           //display a textarea for old IE, because it doesn't support this plugin or another one I tried!
+           tag_input.after('<textarea id="' + tag_input.attr('id') + '" name="' + tag_input.attr('name') + '" rows="3">' + tag_input.val() + '</textarea>').remove();
+           //autosize($('#form-field-tags'));
+       }
+
    </script>
 @stop

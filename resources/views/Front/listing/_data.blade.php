@@ -66,7 +66,7 @@
    </div>
 @empty
    <br><br>
-   <center><h3>NOTHING FOUND</h3></center>
+   <h1 class="text-center">NOTHING FOUND</h1>
 @endforelse
 <div class="container">
    <div class="pagination">

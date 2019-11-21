@@ -94,12 +94,10 @@
                })
                    .done(function (data) {
                        if (data.html == " ") {
-                           // $('.ajax-load').attr('src', '');
                            $('#load').hide();
                            $('.ajax-load').html("No more records found");
                            return;
                        }
-                       // $("#product_data").empty();
                        $("#product_data").empty().append(data.html);
                        $('.ajax-load').hide();
                    }).fail(function () {

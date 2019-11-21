@@ -56,4 +56,31 @@ class dashboardController extends Controller
             'discounted_products','available_products','product_news',
             'order_news','order_sent','order_delivered','popular_products'));
     }
+
+    public function search(Request $request)
+    {
+        $this->validate($request,[
+            'search_kind' => 'required',
+            'search' => 'string|nullable'
+        ]);
+        if ($request->search_kind == 'orders'){
+            $orders = $this->order
+                ->Where('track_code', $request->search )->paginate(10);
+            $view = view('admin.orders._data',compact('orders'))->render();
+
+        }else{
+            $products = $this->product
+                ->Where('product_name', 'like', '%' . $request->search . '%')
+                ->orWhere('sku', $request->search )
+                ->paginate(10);
+            $index_categories = true;
+            $view = view('admin.products._data',compact('products','index_categories'))->render();
+        }
+
+        if ($request->ajax()){
+            return response()->json(['html' => $view]);
+        }
+
+
+    }
 }

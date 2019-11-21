@@ -8,11 +8,14 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\Photo;
 use App\Models\Product;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
 
@@ -20,11 +23,15 @@ class productController extends Controller
 {
     private $product;
     private $category;
+    private $paginate;
+    private $cachKey;
 
     public function __construct()
     {
         $this->product = new Product();
         $this->category = new Category();
+        $this->paginate = 10;
+        $this->cachKey = 'products';
     }
 
     /**
@@ -34,33 +41,47 @@ class productController extends Controller
      */
     public function index()
     {
-        $products = $this->product->paginate(10);
-        return view('admin.products.index', compact('products'));
+        $products = $this->product->with(['categories', 'colors'])->paginate($this->paginate);
+        $index_categories = Category::select(['category_slug', 'category_name'])->get();
+        return view('admin.products.index', compact('products', 'index_categories'));
     }
 
     //take trash products
     public function withTrash()
     {
-        $products = $this->product::onlyTrashed()->paginate(10);
+        $products = $this->product::onlyTrashed()->with(['categories', 'colors'])->paginate($this->paginate);
         return view('admin.products.index', compact('products'));
     }
 
-    //Route : $this->product/sort/{sort?} route name: $product.index.sort
-    public function sort($sort = 'product_id')
+    //sort and listing products
+    public function sort(Request $request)
     {
-        $products = $this->product::orderBy("$sort")->paginate(10);
-        return view('admin.products.index', compact('products'));
-    }
+        $this->validate($request, [
+            'sort' => 'string|required',
+            'sort_category' => 'string|nullable',
+            'dcs' => 'string|required',
+        ]);
 
-    //Route : $this->product/sort/sort/{category_id} route name:$product.index.sortCat
-    public function sortByCategory($category_id)
-    {
-        if (ctype_digit($category_id)) {
-            $category = $this->category->findOrFail($category_id);
-            $products = $category->products()->paginate(10);
-            return view('admin.products.index', compact('products'));
+        $query = $this->product;
+        if ($request->status) {
+            $query = $this->product->where('status', 1);
         }
+        if ($cat_slug = $request->sort_category) {
+            $products = $query->whereHas("categories", function ($query) use ($cat_slug) {
+                return $query->where('category_slug', $cat_slug);
+            })->orderBy("$request->sort", "$request->dcs")->paginate($this->paginate);
+
+        } else {
+            $products = $query->orderBy("$request->sort", "$request->dcs")->paginate($this->paginate);
+        }
+        if ($request->ajax()) {
+            $view = view('admin.products._data', compact('products'))->render();
+            return response()->json(['html' => $view]);
+        }
+
+        return view('admin.products.index', compact('products'));
     }
+
 
     //Route : $this->product/index/restore name:$this->product.restore
     public function restore($id)
@@ -86,14 +107,27 @@ class productController extends Controller
     }
 
     /**
+     * Show tags in tag input- create product page .
+     *
+     * @param $tag string
+     * @return \Illuminate\Http\Response
+     */
+    public function productTags($tag)
+    {
+        $tags = \App\Models\Tag::where('tag_slug', 'like', '%' . $tag . '%')->pluck('tag_name')->toArray();
+        return response()->json($tags);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param App\Http\Requests\productRequest $request
      * @return \Illuminate\Http\Response
      */
 
     public function store(productRequest $request)
     {
+//        \Illuminate\Support\Facades\DB::enableQueryLog();
         $path = public_path(env('THUMBNAIL_PATH'));
         if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
@@ -102,31 +136,32 @@ class productController extends Controller
 //        dd($input);
 //        return response()->json(['success' => $input ] );
 
-        if ($request->status == 'on') {
+        if ($request->status) {
             $input['status'] = 1;
-        } else {
-            $input['status'] = 0;
         }
-        if ($request->is_off == 'on') {
+        if ($request->is_off) {
             $input['is_off'] = 1;
-        } else {
-            $input['is_off'] = 0;
         }
+
         //generate 12 digit code
         $input['sku'] = date('ymdHms');
         $product = $this->product->create($input);
+        //save tags
+        $this->saveTags($input,$product);
         //save colors
-        $colors = Color::findOrFail($input['colors']);
-        $product->colors()->saveMany($colors);
+        $product->colors()->attach($input['colors']);
         //save categories
-        $categories = $this->category->findOrFail($input['categories']);
-        $product->categories()->saveMany($categories);
+        $product->categories()->attach($input['categories']);
         //SAVE PHOTOS
         if ($images = $request->file('photos')) {
             $this->saveImage($images, $input, $product);
         }
+        //clear cache
+        Cache::forget($this->cachKey);
+//        $query = \Illuminate\Support\Facades\DB::getQueryLog();
+//        dd($query);
 
-        if (env('APP_AJAX') == true) {
+        if (env('APP_AJAX')) {
             return response()->json(1);
         }
         return redirect()->route('product.index')->with(['success' => 'product has created successfully']);
@@ -140,7 +175,7 @@ class productController extends Controller
      */
     public function show($id)
     {
-        if (!ctype_digit($id)){
+        if (!ctype_digit($id)) {
             return response()->json(['error' => 'id is not valid']);
         }
         $product = $this->product->findOrFail($id);
@@ -156,7 +191,7 @@ class productController extends Controller
      */
     public function edit($id)
     {
-        if (!ctype_digit($id)){
+        if (!ctype_digit($id)) {
             return response()->json(['error' => 'id is not valid']);
         }
         $product = $this->product->findOrFail($id);
@@ -177,11 +212,12 @@ class productController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(productRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        if (!ctype_digit($id)){
+        if (!ctype_digit($id)) {
             return response()->json(['error' => 'id is not valid']);
         }
+        //IF THIS FOLDER IS NOR DEFINED THEN CREATE IT. TO AVOID ERRORS
         $path = public_path(env('THUMBNAIL_PATH'));
         if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
@@ -189,25 +225,21 @@ class productController extends Controller
         $input = $request->except('_token');
 //        dd($input);
 //        return response()->json(['success' => $input] );
-        if ($request->status == 'on') {
+        if ($request->status) {
             $input['status'] = 1;
-        } else {
-            $input['status'] = 0;
         }
-        if ($request->is_off == 'on') {
+        if ($request->is_off) {
             $input['is_off'] = 1;
-        } else {
-            $input['is_off'] = 0;
         }
 
         $product = $this->product->findOrFail($id);
         $product->fill($input);
         //Update colors
-        $colors = Color::findOrFail($input['colors']);
-        $product->colors()->sync($colors);
+        $product->colors()->sync($input['colors']);
         //Update categories
-        $categories = $this->category->findOrFail($input['categories']);
-        $product->categories()->sync($categories);
+        $product->categories()->sync($input['categories']);
+        //update tags
+        $this->saveTags($input,$product);
         //SET COVER IF ITS NOT FROM NEW IMAGES
         if ($input['cover'] != null) {
             $product->cover = $input['cover'];
@@ -218,6 +250,7 @@ class productController extends Controller
             $this->saveImage($images, $input, $product);
         }
         $product->save();
+        Cache::forget($this->cachKey);
         if (env('APP_AJAX') == true) {
             return response()->json(1);
         }
@@ -233,15 +266,16 @@ class productController extends Controller
      */
     public function destroy($id)
     {
-        if (!ctype_digit($id)){
+        if (!ctype_digit($id)) {
             return response()->json(['error' => 'id is not valid']);
         }
         $product = $this->product->withTrashed()->findOrFail($id);
-        if ($product->trashed() == false) {
+        if (!$product->trashed()) {
             $product->delete();
         } else {
             $product->categories()->detach();
             $product->colors()->detach();
+            $product->tags()->detach();
             // if product has photo then delete em
             if (count($product->photos) > 0) {
                 $photo_ids = [];
@@ -260,6 +294,8 @@ class productController extends Controller
             }
             $product->forceDelete();
         }
+
+        Cache::forget($this->cachKey);
         if ($product) {
             return response()->json(['success' => $product]);
         }
@@ -300,5 +336,35 @@ class productController extends Controller
         }
         //using query builder to avoid fucking server with lots of query
         DB::table('photos')->insert($all_images);
+    }
+
+    /**
+     * create tags
+     * @param $input array
+     * @param $product object
+     */
+    public function saveTags($input,$product)
+    {
+        //take all tags input and convert them to array and add slug for each one
+        $tags_input = (explode(','  , $input['tags']));
+        $tags = [];
+        foreach ($tags_input as $tag){
+            array_push($tags, [
+                'tag_name' => Str::lower($tag),
+                'tag_slug' => Str::slug($tag)
+            ]);
+        }
+        //check if inputed tag exists or not
+        //  if not exist create new one and if exist take id of that
+        $tag_obj = [];
+        foreach ($tags as $tag){
+            $tag_exist = Tag::where('tag_slug',$tag['tag_slug'])->first();
+            if ($tag_exist){
+                array_push($tag_obj,$tag_exist->tag_id);
+            }else{
+                array_push($tag_obj,Tag::create($tag)->tag_id);
+            }
+        }
+        $product->tags()->sync($tag_obj);
     }
 }
