@@ -72,13 +72,13 @@
                <h4>Available ? </h4>
                <label>
                   <input type="checkbox" name="status" id="status" onclick=''
-                         class="ace ace-switch ace-switch-6" {{ $product->status == 1 ? 'checked': '' }} >
+                         class="ace ace-switch ace-switch-5" {{ $product->status == 1 ? 'checked': '' }} >
                   <span class="lbl"></span>
                </label>
                <h4>Discount ?</h4>
                <label>
                   <input type="checkbox" name="is_off" id="is_off" onclick=""
-                         class="ace ace-switch ace-switch-6" {{ $product->is_off == 1 ? 'checked' :'' }}>
+                         class="ace ace-switch ace-switch-5" {{ $product->is_off == 1 ? 'checked' :'' }}>
                   <span class="lbl"></span>
                </label>
             </div>
@@ -101,8 +101,8 @@
                <div class="col-sm-9">
                   <div class="inline">
                      <input type="text" name="tags" id="form-field-tags" placeholder="Enter tags ..."
-                     value="<?php foreach($product->tags as $tag){ echo $tag->tag_name.','; } ?>"
-                     />
+                     value="<?php foreach($product->tags as $tag){ echo $tag->tag_name.','; } ?>"/>
+                     <span class="help-button" title="Type your tag and press enter">?</span>
                   </div>
                </div>
             </div>

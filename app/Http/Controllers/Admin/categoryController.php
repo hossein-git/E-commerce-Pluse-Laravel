@@ -32,7 +32,7 @@ class categoryController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return view
      */
     public function create()
     {
@@ -60,11 +60,11 @@ class categoryController extends Controller
             $category = $this->category->create($input);
         }
         Cache::forget($this->cachKey);
-        if (env('APP_AJAX')){
-            return response()->json(['success' => $category]);
+
+        return env('APP_AJAX')
+            ? response()->json(['success' => $category])
+            : redirect()->route('category.create')->with(['success' => 'new category has been created']);
         }
-        return redirect()->route('category.create')->with(['success' => 'new category has been created']);
-    }
 
 
     /**
@@ -82,9 +82,9 @@ class categoryController extends Controller
         $category->products()->detach();
         $category->delete();
         Cache::forget($this->cachKey);
-        if ($category) {
-            return response()->json(['success' => $category]);
-        }
-        return response()->json(['error' => 'error']);
+        return $category
+            ? response()->json(['success' => $category])
+            : response()->json(['error' => 'error']);
+
     }
 }

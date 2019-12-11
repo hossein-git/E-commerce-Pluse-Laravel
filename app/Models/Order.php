@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -27,8 +28,13 @@ class Order extends Model
 
     public function giftCard()
     {
-        return $this->belongsTo(GiftCard::class,'gift_id');
+        return $this->belongsTo(GiftCard::class,'gift_id')->select(['gift_id','gift_name','gift_amount','gift_code']);
 
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class,'user_id')->select(['user_id','name']);
     }
 
 }

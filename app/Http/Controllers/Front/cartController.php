@@ -33,8 +33,17 @@ class cartController extends Controller
             'qty' => 'numeric',
             'src' => 'string',
             'size' => 'nullable|string',
-            'color' => 'nullable|string'
+            'color' => 'nullable|string',
+            'attr' => 'nullable'
         ]);
+        //set a empty var for saving all attributes in one line in string
+        $attributes= ' ';
+        if ($request->attr){
+            foreach ($request->attr as $attribute){
+                $attributes .= implode($attribute,',');
+            }
+        }
+
         $request->price = str_replace(',', '', $request->price);
         Cart::add(['id' => "$request->id", 'name' => "$request->name", 'qty' => $request->qty, 'price' => "$request->price",
             'options' => [
@@ -42,6 +51,7 @@ class cartController extends Controller
                 'color' => "$request->color",
                 'src' => "$request->src",
                 'slug' => "$request->slug",
+                'attr' => "$attributes"
             ]
         ]);
 
@@ -74,12 +84,11 @@ class cartController extends Controller
 
     public function update(Request $request)
     {
-//        dd($request->all());
         $this->validate($request, [
             'rowId' => 'required|string',
             'qty' => 'required|numeric'
         ]);
-        Cart::update($request->rowId, [ 'qty' => $request->qty ]);
+        Cart::update($request->rowId, $request->qty );
         return response()->json(['success' => 1]);
     }
 
@@ -102,5 +111,6 @@ class cartController extends Controller
     public function clear()
     {
         Cart::destroy();
+        return back();
     }
 }

@@ -33,5 +33,4 @@
 </div>
 @endif
 
-<img alt="" src="{{ asset('admin-assets/5.gif') }}" class="preview"
-     style="position: fixed;z-index: 999;height: 12em; width: 12em;overflow: visible;margin: auto; top: 0;left: 0;bottom: 0;right: 0;display: none">
+<img alt="" src="{{ asset('admin-assets/5.gif') }}" class="preview" style="position: fixed;z-index: 999;height: 12em; width: 12em;overflow: visible;margin: auto; top: 0;left: 0;bottom: 0;right: 0;display: none">

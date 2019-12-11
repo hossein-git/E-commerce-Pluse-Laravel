@@ -15,11 +15,9 @@
          <th class="center">Product Name</th>
          <th class="center">Size</th>
          <th class="center">Color</th>
-         <th class="center">Product SKU</th>
+         <th class="center">Attributes</th>
          <th class="center">Product Price</th>
-         <th class="center">Discount</th>
          <th class="center">Quantity</th>
-         <th class="center">Total Price</th>
          <th class="center">Create Date</th>
          <th class="center">Operations</th>
       </tr>
@@ -28,16 +26,15 @@
       @forelse($detailsOrder as $key=> $d_order)
          <tr>
             <td class="center">{{$key+1}}</td>
-            <td class="center"><a class="click_me" data-path="/admin/product/{{ $d_order->products()->product_id }}"
-                                  href="{{ route('product.show',$d_order->products()->product_id) }}">
-                  {{($d_order->products()->product_name)}}</a></td>
+            <td class="center">
+               <a class="click_me" href="{{ route('product.show',$d_order->products()->product_id) }}">
+                  {{($d_order->products()->product_name)}}</a>
+            </td>
             <td class="center">{{$d_order->size}}</td>
             <td class="center">{{$d_order->color}}</td>
-            <td class="center">{{$d_order->product_sku}}</td>
+            <td class="center">{{$d_order->attributes}}</td>
             <td class="center">{{$d_order->product_price}}</td>
-            <td class="center">{{$d_order->discount}}</td>
             <td class="center">{{$d_order->quantity}}</td>
-            <td class="center">{{$d_order->total_price}}</td>
             <td class="center">{{$d_order->created_at}}</td>
             <td class="center">
                <div class="hidden-sm hidden-xs btn-group">

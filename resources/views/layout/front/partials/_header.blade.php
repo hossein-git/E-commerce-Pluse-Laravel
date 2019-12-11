@@ -188,16 +188,16 @@
                   </div>
                   <!-- /account -->
                   <!-- cart -->
-                  <div class="main-parent-cart">
-                     <div class="cart">
+                  <div class="main-parent-cart" >
+                     <div class="cart" id="cart_div">
                         <div class="dropdown">
                            <a class="dropdown-toggle">
                               <span class="icon icon-shopping_basket"></span>
                               <span class="badge badge-cart" id="cart_count" data-id="{{ Cart::count() }}">{{ Cart::count() }}</span>
                               <div class="dropdown-label hidden-sm hidden-xs">YOUR BAG</div>
                            </a>
-                           <div class="dropdown-menu slide-from-top">
-                              <div class="container">
+                           <div class="dropdown-menu slide-from-top" >
+                              <div class="container" >
                                  <div class="top-title">RECENTLY ADDED ITEM(S)</div>
                                  <a href="#" class="icon icon-close cart-close"></a>
                                  <ul id="cart_content">
@@ -209,7 +209,7 @@
                                     <div class="cart-bottom">
                                     <div class="pull-right">
                                        <div class="pull-left">
-                                          <div class="cart-total">TOTAL:  <span> {{ Cart::subtotal() }}</span></div>
+                                          <div class="cart-total">TOTAL:  <span id="cart_sub"> {{ Cart::subtotal() }}</span></div>
                                        </div>
                                        <a href="{{ route('front.inter.checkout') }}" class="btn icon-btn-left "><span class="icon icon-check_circle"></span>CHECKOUT</a>
                                     </div>

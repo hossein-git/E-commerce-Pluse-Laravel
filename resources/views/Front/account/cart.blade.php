@@ -12,6 +12,7 @@
             <table class="shopping-cart-table">
                <tbody>
                @forelse(Cart::content() as $cart)
+
                   <tr>
                      <td>
                         <div class="product-image">
@@ -21,8 +22,8 @@
                         </div>
                      </td>
                      <td>
-                        <h5 class="product-title">
-                           <a href="{{ route('front.show',$cart->id) }}" class="load_page">{{ $cart->name }} </a>
+                        <h5 class="product-title ">
+                           <a href="{{ route('front.show',$cart->id) }}" class="load_page font-weight-500">{{ $cart->name }} </a>
                         </h5>
                         <ul class="list-parameters">
                            <li>
@@ -42,19 +43,20 @@
                         </ul>
                      </td>
                      <td>
-                        <div class="product-price unit-price">
-
+                        <div class="font-weight-600">
+                           {{ $cart->options->attr }}
                         </div>
                      </td>
                      <td>
                         <div class="detach-quantity-desctope">
                            <div class="input">
-                              <label>Qty:</label>
-                              <div class="style-2 input-counter">
-                                 <span class="minus-btn"></span>
-                                 <input type="text" value="{{ $cart->qty }}" size="5"/>
-                                 <span class="plus-btn"></span>
-                              </div>
+                              <form >
+                                 @csrf
+                                 <div class="style-2 input-counter">
+                                    <input type="number" id="qty_update" name="qty" class="" value="{{ $cart->qty }}" size="5" min="1"/>
+                                    <button href="#" data-url="{{ route('cart.update') }}" onclick="event.preventDefault();editCart(this)" data-id="{{ $cart->rowId }}" class="btn icon icon-edit cart_edit_" title="Edit"></button>
+                                 </div>
+                              </form>
                            </div>
                         </div>
                      </td>
@@ -64,7 +66,7 @@
                         </div>
                      </td>
                      <td>
-                        <a class="product-delete icon icon-delete cart_delete_" data-id="{{ $cart->id }}" href="#"></a>
+                        <a class="product-delete icon icon-delete" onclick="deleteCart(this)" data-id="{{ $cart->rowId }}" href="#"></a>
                      </td>
                   </tr>
                @empty

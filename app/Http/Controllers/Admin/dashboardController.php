@@ -65,7 +65,7 @@ class dashboardController extends Controller
         ]);
         if ($request->search_kind == 'orders'){
             $orders = $this->order
-                ->Where('track_code', $request->search )->paginate(10);
+                ->Where('track_code', 'like', '%' . $request->search )->paginate(10);
             $view = view('admin.orders._data',compact('orders'))->render();
 
         }else{

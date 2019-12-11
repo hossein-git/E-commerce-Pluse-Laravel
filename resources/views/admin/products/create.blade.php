@@ -1,6 +1,6 @@
 @extends('layout.admin.index' )
 @section('title')
-   Create new Prodcuts
+   Create new Product
 @stop
 @section('extra_css')
 @stop
@@ -87,14 +87,14 @@
                <h4>Available ? </h4>
                <label>
                   <input type="checkbox" name="status" id="status" onclick="showMe()"
-                         class="ace ace-switch ace-switch-6"
+                         class="ace ace-switch ace-switch-5"
                          {{ old('status') == 1 ? 'checked': '' }} checked>
                   <span class="lbl"></span>
                </label>
                <h4>Discount ?</h4>
                <label>
                   <input type="checkbox" name="is_off" id="is_off" onclick="showDiscount()"
-                         class="ace ace-switch ace-switch-6" {{ old('is_off') == 1 ? 'checked' :'' }}>
+                         class="ace ace-switch ace-switch-5" {{ old('is_off') == 1 ? 'checked' :'' }}>
                   <span class="lbl"></span>
                </label>
             </div>
@@ -121,6 +121,7 @@
                <div class="col-sm-9">
                   <div class="inline">
                      <input type="text" name="tags" id="form-field-tags" placeholder="Enter tags ..." />
+                     <span class="help-button" title="Type your tag and press enter">?</span>
                   </div>
                </div>
             </div>

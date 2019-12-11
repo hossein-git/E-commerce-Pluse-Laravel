@@ -12,7 +12,7 @@ $factory->define(\App\Models\Photo::class, function (Faker $faker) {
 //    $photoable_id = \App\Models\Product::all()->pluck('product_id')->toArray();
     return [
         'photo_title' => $faker->lastName,
-        'src' => $faker->image(null,300,400),
+        'src' => 'sample',
         'photo_size' => $faker->numberBetween(100,1000),
         'photo_type' => $faker->mimeType,
         'photoable_type' => array_rand($photoable),

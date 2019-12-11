@@ -55,10 +55,10 @@ class GiftCardController extends Controller
         }
         $input['gift_code'] = strtolower($input['gift_code']);
         $gift = $this->gift->create($input);
-        if (env('APP_AJAX')){
-            return response()->json(['success' => $gift]);
-        }
-        return view('admin.giftCard.create')->with(['success' => 'New Gift Card has created successfully']);
+        return env('APP_AJAX')
+            ? response()->json(['success' => $gift])
+            : view('admin.giftCard.create')->with(['success' => 'New Gift Card has created successfully']);
+
     }
 
 
@@ -99,11 +99,9 @@ class GiftCardController extends Controller
             $gift = $this->gift->findOrFail($id);
             $gift->fill($input);
             $gift->update();
-            if (env('APP_AJAX')){
-                return response()->json(['success' => $gift]);
-            }
-            return redirect()->route('giftCard.index')->with(['success' => ' Gift Card has updated successfully']);
-
+            return env('APP_AJAX')
+                ? response()->json(['success' => $gift])
+                : redirect()->route('giftCard.index')->with(['success' => ' Gift Card has updated successfully']);
         }
     }
 
@@ -117,10 +115,9 @@ class GiftCardController extends Controller
     {
         if (ctype_digit($id)){
             $gift = $this->gift->findOrFail($id)->delete();
-            if ($gift){
-                return response()->json(['success' => $gift]);
-            }
-            return response()->json(['error' => 'error']);
+            return $gift
+                ? response()->json(['success' => $gift])
+                : response()->json(['error' => 'error']);
         }
     }
 }

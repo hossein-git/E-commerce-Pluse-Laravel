@@ -151,7 +151,7 @@
 
 
 <!-- ace scripts -->
-
+@if (env('APP_AJAX'))
 <!-- script for load page on AJAX-->
 <script>
     jQuery(document).ready(function () {
@@ -165,9 +165,10 @@
         });
     });
 </script>
+@endif
 <!-- END script for load page on ajax-->
 <!-- SEARCH SCRIPT -->
-@if (env('APP_AJAX'))
+
    <script>
        jQuery(document).ready(function () {
            jQuery("#form-search").submit( function (e) {
@@ -198,7 +199,7 @@
            });
        });
    </script>
-@endif
+
 
 <!-- /SEARCH SCRIPT -->
 <!-- BEGIN EXTRA JS-->

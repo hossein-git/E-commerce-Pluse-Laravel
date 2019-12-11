@@ -22,7 +22,7 @@ class homeController extends Controller
     //home page method
     public function home(Request $request)
     {
-        $products = $this->product->select(['product_id','product_slug', 'product_name', 'status',
+        $products = $this->product->select(['product_id', 'product_slug', 'product_name', 'status',
                 'data_available', 'is_off', 'off_price', 'cover', 'sale_price', 'created_at']
         )->paginate(4);
         if ($request->ajax()) {
@@ -30,7 +30,7 @@ class homeController extends Controller
             return response()->json(['html' => $view]);
         }
         //set cache to get the number of reviews on this page
-        if (!Cache::has('homePage')){
+        if (!Cache::has('homePage')) {
             (Cache::put('homePage', 1, 99999999));
         }
         Cache::increment('homePage');
@@ -40,7 +40,7 @@ class homeController extends Controller
 
     public function show($slug)
     {
-        $product = $this->product->with(['photos:src,photo_id','brands'])->where('product_slug',"$slug")->first();
+        $product = $this->product->with(['photos:src,photo_id', 'brands','attributes'])->where('product_slug', "$slug")->first();
         return view('front.product.show', compact('product'));
     }
 
@@ -66,9 +66,10 @@ class homeController extends Controller
     public function list(Request $request, $list, $slug)
     {
         $this->validate($request, [
-            'list' => 'sting',
-            'slug' => 'sting',
+            'list' => ['sting'],
+            'slug' => ['sting']
         ]);
+
         switch ($list) {
             case $list === 'categories':
                 $model_slug = 'category_slug';
@@ -87,9 +88,9 @@ class homeController extends Controller
                 break;
         }
         $this->inputs($request);
-        $products = $this->product->whereHas("$list",function ($query) use ($slug,$model_slug) {
+        $products = $this->product->whereHas("$list", function ($query) use ($slug, $model_slug) {
             return $query->where("$model_slug", "$slug");
-        })->select(['product_slug','product_name', 'description', 'status',
+        })->select(['product_slug', 'product_name', 'description', 'status',
             'data_available', 'is_off', 'off_price', 'cover', 'sale_price', 'created_at'])
             ->orderBy("$request->sort", "$request->dcs")
             ->whereBetween('sale_price', [$request->priceMin, $request->priceMax])
@@ -105,9 +106,9 @@ class homeController extends Controller
     //SEARCH
     public function search($query)
     {
-        if (ctype_alnum($query)){
+        if (ctype_alnum($query)) {
             $products = [];
-            if ($query){
+            if ($query) {
                 $products = $this->product->search($query)->paginate(10);
             }
 
@@ -123,8 +124,8 @@ class homeController extends Controller
     private function inputs($request)
     {
         $this->validate($request, [
-            'sort' => 'string',
-            'dcs' => 'string',
+            'sort' => ['string'],
+            'dcs' => ['string'],
             'paginate' => 'numeric',
             'priceMin' => 'nullable|numeric',
             'priceMax' => 'nullable|numeric',

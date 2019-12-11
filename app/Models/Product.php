@@ -30,32 +30,48 @@ class Product extends Model
     protected $guarded = ['product_id'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
      */
 
     public function brands()
     {
         return $this->belongsTo(brand::class, 'brand_id');
     }
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'category_product', 'product_id', 'category_id');
     }
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
     public function colors()
     {
         return $this->belongsToMany(Color::class, 'color_product', 'product_id', 'color_id');
     }
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\morphMany
+     */
     public function photos()
     {
         return $this->morphMany(Photo::class, 'products', 'photoable_type', 'photoable_id');
     }
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'product_tags', 'product_id', 'tag_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function attributes()
+    {
+        return $this->hasMany(Attribute::class,'product_id', 'product_id')->with('attributeValues');
     }
 
     //get created at in diffForHumans format

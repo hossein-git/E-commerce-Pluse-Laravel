@@ -1,4 +1,5 @@
 //uses for delete row
+
 function deleteAjax(url,cls,msg) {
     $("."+ cls).click(function (e) {
         e.preventDefault();
@@ -20,10 +21,9 @@ function deleteAjax(url,cls,msg) {
             success: function ($results) {
                 alert(msg + ' has been successfully deleted');
                 $(obj).closest("tr").remove(); //delete row
-                console.log($results);
             },
             error: function (xhr) {
-                alert('error, brand not deleted');
+                alert('error, '+ msg +' not deleted');
                 console.log(xhr.responseText);
             }
         });

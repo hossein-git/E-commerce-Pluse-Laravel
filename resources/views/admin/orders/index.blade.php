@@ -11,8 +11,8 @@
       @csrf
       <input type="hidden" value="orders" name="search_kind">
       <span class="input-icon">
-         <input type="text" placeholder="Search ..." class="nav-search-input"
-                id="nav-search-input" autocomplete="off" name="search"/>
+         <input type="number" placeholder="Search ..." class="nav-search-input"
+                autocomplete="off" name="search"/>
          <i class="ace-icon fa fa-search nav-search-icon"></i>
          <button type="submit" class="btn btn-sm">
             <span class="fa fa-search"></span>
@@ -42,7 +42,7 @@
       </tr>
       </thead>
       <tbody class="table_data">
-         @include('admin.orders._data')
+      @include('admin.orders._data')
 
       </tbody>
    </table>
@@ -54,7 +54,7 @@
    <script>
        $(document).ready(function () {
            <!-- DELETE -->
-           deleteAjax("/admin/orders/","delete_me","Order");
+           deleteAjax("/admin/orders/", "delete_me", "Order");
            <!-- SENT -->
            $(".sent_me").click(function (e) {
                e.preventDefault();
@@ -72,11 +72,12 @@
                $.ajax({
                    url: href,
                    method: "get",
-
                    success: function ($results) {
                        alert('Order Status Has Been successfully changed');
-                       $(obj).closest("a").remove(); //delete row
-                       console.log($results);
+                       $(obj).closest("a").remove(); //delete icon
+                       // var x = $(obj).parents('tr').load(location.href + obj); //delete icon
+
+                       // console.log($results);
                    },
                    error: function (xhr) {
                        alert('error,');
@@ -84,6 +85,7 @@
                    }
                });
            });
+          @if(env('APP_AJAX'))
            <!-- LOAD THE EDIT PAGE-->
            jQuery(".edit_me").bind('click', function () {
                var route = $(this).attr('href');
@@ -92,14 +94,14 @@
                });
                pjax.loadUrl(route);
            });
-
-           jQuery(".show_me").bind('click', function () {
-               var route = $(this).attr('href');
-               var pjax = new Pjax({
-                   selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
-               });
-               pjax.loadUrl(route);
-           });
+          jQuery(".show_me").bind('click', function () {
+              var route = $(this).attr('href');
+              var pjax = new Pjax({
+                  selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
+              });
+              pjax.loadUrl(route);
+          });
+          @endif
        });
    </script>
 @stop

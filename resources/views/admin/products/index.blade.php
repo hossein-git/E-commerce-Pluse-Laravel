@@ -61,7 +61,7 @@
             <input type="hidden" value="products" name="search_kind">
             <span class="input-icon">
          <input type="text" placeholder="Search ..." class="nav-search-input"
-                id="nav-search-input" autocomplete="off" name="search"/>
+                 autocomplete="off" name="search"/>
          <i class="ace-icon fa fa-search nav-search-icon"></i>
          <button type="submit" class="btn btn-sm">
             <span class="fa fa-search"></span>
@@ -131,6 +131,7 @@
                    }
                });
            });
+           @if(env('APP_AJAX'))
            <!-- LOAD THE EDIT PAGE-->
            jQuery(".edit_me").bind('click', function (e) {
                e.preventDefault();
@@ -140,6 +141,7 @@
                });
                pjax.loadUrl(route);
            });
+           @endif
        });
    </script>
    <!-- TO SORT PRODUCTS -->

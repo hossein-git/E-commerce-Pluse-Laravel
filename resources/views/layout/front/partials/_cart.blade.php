@@ -21,18 +21,15 @@
             <form class="cart_edit_form" method="post" action="{{ route('cart.update') }}" data-id="{{ $cart->rowId }}">
                @csrf
                <div class="style-2 input-counter">
-                  <span class="minus-btn"></span>
-                  <input type="text" id="qty_update" name="qty" class="" value="{{ $cart->qty }}" size="5"/>
-                  <span class="plus-btn"></span>
+                  <input type="number" id="qty_update" name="qty" class="" value="{{ $cart->qty }}" size="5" min="1"/>
+                  <button href="#" data-url="{{ route('cart.update') }}" onclick="event.preventDefault();editCart(this)" data-id="{{ $cart->rowId }}" class="btn icon icon-edit cart_edit_" title="Edit"></button>
                </div>
-               <button href="#" data-url="{{ route('cart.update') }}" data-id="{{ $cart->rowId }}" class="btn icon icon-edit cart_edit_" title="Edit"></button>
 
             </form>
          </div>
-
       </div>
       <div class="item-control">
-         <div class="delete" ><a href="#" data-id="{{ $cart->rowId }}" onclick="" class="icon icon-delete cart_delete_" title="Delete"></a></div>
+         <div class="delete" ><a href="#" data-id="{{ $cart->rowId }}" onclick="deleteCart(this)" class="icon icon-delete" title="Delete"></a></div>
       </div>
    </li>
 

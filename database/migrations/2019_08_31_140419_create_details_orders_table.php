@@ -22,7 +22,7 @@ class CreateDetailsOrdersTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
 
-            $table->unsignedInteger('product_attr_id')->nullable();
+            $table->string('attributes')->nullable();
             $table->string('product_slug');
             $table->integer('product_price');
             $table->smallInteger('quantity');

@@ -74,7 +74,7 @@ class checkOutController extends Controller
     }
 
     //save address
-    public function saveAddress(addressRequest $request)
+    public function saveAddress(Request $request)
     {
         $input = $request->except('_token');
 
@@ -102,7 +102,7 @@ class checkOutController extends Controller
             array_push($input, [
                     'product_id' => $cart->id,
                     'product_slug' => $cart->options->slug,
-                    'product_attr_id' => $cart->options->attr,
+                    'attributes' => $cart->options->attr,
                     'product_price' => $cart->price,
                     'quantity' => $cart->qty,
                     'size' => $cart->options->size,
@@ -112,10 +112,10 @@ class checkOutController extends Controller
             );
         }
         $query = DB::table('details_orders')->insert($input);
-        if ($query){
-            return response()->json(['success' => 'order status ok']);
-        }
-        return response()->json(['error' => 'system not response']);
+        return $query
+            ? response()->json(['success' => 'order status ok'])
+            : response()->json(['error' => 'system not response']);
+
     }
 
     //save PAYMENTS

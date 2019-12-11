@@ -57,13 +57,11 @@ class brandController extends Controller
         $input = $this->savePhoto($request);
         $brand = $this->brand->create($input);
         Cache::forget($this->cachKey);
-        if (env('APP_AJAX')) {
-            return response()->json(['success' => $brand]);
-        }
-        return redirect()->route('brand.create')->with(['success' => 'new brand has been created successfully']);
+        return env('APP_AJAX')
+            ? response()->json(['success' => $brand])
+            : redirect()->route('brand.create')->with(['success' => 'new brand has been created successfully']);
 
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -80,13 +78,13 @@ class brandController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        if (!ctype_digit($id)){
+        if (!ctype_digit($id)) {
             return response()->json(['error' => 'id is not valid']);
         }
         $this->validate($request, [
@@ -104,9 +102,9 @@ class brandController extends Controller
         if (env('APP_AJAX') and $result) {
             return response()->json(['success' => $brand]);
         }
-        if ($result){
+        if ($result) {
             return redirect()->route('brand.create')->with(['success' => 'brand has updated successfully']);
-        }else{
+        } else {
             return redirect()->route('brand.create')->with(['error' => 'brand update error']);
         }
 
@@ -128,8 +126,14 @@ class brandController extends Controller
         }
     }
 
-    //TO SAVE PHOTO IN UPDATE AND CREATE METHOD
-    private function savePhoto($request){
+    /**
+     * TO SAVE PHOTO IN UPDATE AND CREATE METHOD
+     *
+     * @param Request $request
+     * @return array $input
+     */
+    private function savePhoto($request)
+    {
         $input = $request->except('_token');
         if ($image = $request->file('brand_image')) {
             $image_type = $image->getClientOriginalExtension();

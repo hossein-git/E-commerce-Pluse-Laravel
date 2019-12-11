@@ -3,7 +3,7 @@
    @php($gift =  $order->giftCard ? $order->giftCard->first() : false)
    <tr>
       <td class="center">{{$order->order_id}}</td>
-      <td class="center">
+      <td class="center order_status" >
          @switch($order->order_status)
             @case(0)
             <span class="label label-grey arrowed bolder smaller-90">NOT Complete</span>
@@ -26,10 +26,10 @@
          </a>
       </td>
       <td class="center">
-         @if($order->user_id == null)
-            <span class="label label-default">GUEST</span>
+         @if($order->user_id)
+            <a href="{{ $order->users->user_id}}">{{ $order->users->name}}</a>
          @else
-            {{ $order->user_id }}
+            <span class="label label-default">GUEST</span>
          @endif
       </td>
       <td class="center">{{ $order->client_name }}</td>

@@ -23,13 +23,13 @@ class orderController extends Controller
      */
     public function index()
     {
-        $orders = $this->order->with(['address','giftCard'])->paginate(5);
+        $orders = $this->order->with(['address','giftCard','users'])->paginate(5);
         return view('admin.orders.index',compact('orders'));
     }
 
     public function notSent()
     {
-        $orders = $this->order->where('order_status',0)->with(['address','giftCard'])->paginate(5);
+        $orders = $this->order->where('order_status',0)->with(['address','giftCard','users'])->paginate(5);
         return view('admin.orders.index',compact('orders'));
     }
 
@@ -82,10 +82,9 @@ class orderController extends Controller
             $order = $this->order->findOrFail($id);
             $order->detailsOrder()->delete();
             $order->delete();
-            if ($order){
-                return response()->json(['success' => $order]);
-            }
-            return response()->json(['error' => 'error']);
+            return $order
+                ? response()->json(['success' => $order])
+                : response()->json(['error' => 'error']);
         }
     }
 
@@ -94,10 +93,10 @@ class orderController extends Controller
         if (ctype_digit($id)){
             $d_order = DetailsOrder::findOrFail($id);
             $d_order->delete();
-            if ($d_order){
-                return response()->json(['success' => $d_order]);
-            }
-            return response()->json(['error' => 'error']);
+            return $d_order
+                ? response()->json(['success' => $d_order])
+                : response()->json(['error' => 'error']);
+
         }
     }
 
@@ -110,10 +109,10 @@ class orderController extends Controller
             }elseif($status == 'delivered'){
                 $s = $order->update(['order_status' => 3]);
             }
-            if ($s){
-                return response()->json(['success' => $order]);
-            }
-            return response()->json(['error' => 'error']);
+            return $s
+                ? response()->json(['success' => $order])
+                : response()->json(['error' => 'error']);
+
         }
     }
 }

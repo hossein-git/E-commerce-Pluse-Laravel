@@ -12,6 +12,7 @@
 */
 
 
+use App\Models\Attribute;
 use App\Models\brand;
 use App\Models\Color;
 use App\Models\Tag;
@@ -20,22 +21,24 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
-//    $arr = ['tag_name' => 'test','tag_slug'=> 'test'];
-//    $tags = \App\Models\Tag::find([1,2,3]);
-    $brands = \App\Models\brand::pluck('brand_id')->toArray();
+   return 2 == 2
+       ? 'true'
+       : 'false' ;
 
-    dd(($brands));
 
 //    return view('admin.test');
 })->name('test');
+
 
 Route::get('/query', function () {
 
     \Illuminate\Support\Facades\DB::enableQueryLog();
 
-    $product = \App\Models\Product::find(5);
-//    $colors = Color::findOrFail([1,2,4]);
-    $tags = $product->colors()->sync([1,2,4]);
+    $attr = Attribute::findOrFail(3);
+    $attr->attributeValues()->delete();
+    $attr->delete();
+
+
 
     $query = \Illuminate\Support\Facades\DB::getQueryLog();
     dd($query);
@@ -47,7 +50,6 @@ Route::get('/w0', function () {
     if (session()->has('order_id')) {
         $x = substr(str_replace(',', '', Cart::total()), 0, -2);
         dd($x);
-
     }
 })->name('login');
 
@@ -114,6 +116,12 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('product/index/trash', 'Admin\productController@withTrash')->name('product.index.trash');
     Route::get('product/index/restore/{id}', 'Admin\productController@restore')->name('product.restore');
     Route::get('product/tags/{tag}', 'Admin\productController@productTags')->name('products.tags');
+
+    /*---------------ATTRIBUTES ROUTES------------------*/
+    Route::resource('attribute','Admin\attributeController')->except(['index','show']);
+    Route::delete('attribute/value/{id}','Admin\attributeController@deleteValue')->name('attribute.deleteValue');
+    //when create new attribute calling from show product
+    Route::get('/attribute/createNew/{id}', 'Admin\attributeController@createNew')->name('attribute.createNew');
 
     /*---------------PHOTOS Routes------------------*/
     Route::resource('photo', 'Admin\PhotoController');

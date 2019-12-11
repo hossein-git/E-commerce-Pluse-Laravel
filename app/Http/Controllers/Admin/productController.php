@@ -61,7 +61,7 @@ class productController extends Controller
             'sort_category' => 'string|nullable',
             'dcs' => 'string|required',
         ]);
-
+        $index_categories = true;
         $query = $this->product;
         if ($request->status) {
             $query = $this->product->where('status', 1);
@@ -75,11 +75,11 @@ class productController extends Controller
             $products = $query->orderBy("$request->sort", "$request->dcs")->paginate($this->paginate);
         }
         if ($request->ajax()) {
-            $view = view('admin.products._data', compact('products'))->render();
+            $view = view('admin.products._data', compact('products','index_categories'))->render();
             return response()->json(['html' => $view]);
         }
-
-        return view('admin.products.index', compact('products'));
+        // this var provide to display 'restore' icon
+        return view('admin.products.index', compact('products','index_categories'));
     }
 
 
@@ -160,11 +160,9 @@ class productController extends Controller
         Cache::forget($this->cachKey);
 //        $query = \Illuminate\Support\Facades\DB::getQueryLog();
 //        dd($query);
-
-        if (env('APP_AJAX')) {
-            return response()->json(1);
-        }
-        return redirect()->route('product.index')->with(['success' => 'product has created successfully']);
+        return env('APP_AJAX')
+            ? response()->json(1)
+            : redirect()->route('product.index')->with(['success' => 'product has created successfully']);
     }
 
     /**
@@ -212,7 +210,7 @@ class productController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(productRequest $request, $id)
     {
         if (!ctype_digit($id)) {
             return response()->json(['error' => 'id is not valid']);
@@ -251,11 +249,9 @@ class productController extends Controller
         }
         $product->save();
         Cache::forget($this->cachKey);
-        if (env('APP_AJAX') == true) {
-            return response()->json(1);
-        }
-        return redirect()->route('product.index')->with(['success' => 'product has updated successfully']);
-
+        return env('APP_AJAX')
+            ? response()->json(1)
+            : redirect()->route('product.index')->with(['success' => 'product has updated successfully']);
     }
 
     /**
@@ -296,10 +292,9 @@ class productController extends Controller
         }
 
         Cache::forget($this->cachKey);
-        if ($product) {
-            return response()->json(['success' => $product]);
-        }
-        return response()->json(['error' => 'error']);
+        return $product
+            ? response()->json(['success' => $product])
+            : response()->json(['error' => 'error']);
     }
 
     /**

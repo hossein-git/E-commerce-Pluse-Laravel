@@ -7,16 +7,13 @@
    <style type="text/css">
       /*@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);*/
       /****** Style Star rating0 Widget *****/
-
       .rating0 {
          border: none;
          float: left;
       }
-
       .rating0 > input {
          display: none;
       }
-
       .rating0 > label:before {
          margin: 5px;
          font-size: 1.25em;
@@ -24,27 +21,21 @@
          display: inline-block;
          content: "\f005";
       }
-
       .rating0 > .half:before {
          content: "\f089";
          position: absolute;
       }
-
       .rating0 > label {
          color: #ddd;
          float: right;
       }
-
-      /***** CSS Magic to Highlight Stars on Hover *****/
-
+      /**** CSS Magic to Highlight Stars on Hover *****/
       .rating0 > input:checked ~ label, /* show gold star when clicked */
       .rating0:not(:checked) > label:hover, /* hover current star */
       .rating0:not(:checked) > label:hover ~ label {
          color: #FFD700;
       }
-
       /* hover previous stars in list */
-
       .rating0 > input:checked + label:hover, /* hover current star when changing rating0 */
       .rating0 > input:checked ~ label:hover,
       .rating0 > label:hover ~ input:checked ~ label, /* lighten current selection */
@@ -127,7 +118,7 @@
                <h1 class="title" id="p_name">{{ $product->product_name }}</h1>
                <div class="price">
                   @if($product->is_off == 1)
-                     <span class="old-price">{{ number_format($product->sale_rice) }}</span>
+                     <span class="old-price">{{ number_format($product->sale_price) }}</span>
                      <span class="new-price" id="p_price">{{ $product->price }}</span>
                   @else
                      <span class="price" id="p_price">{{ $product->price }}</span>
@@ -151,8 +142,9 @@
                </div>
                <!-- /RATING -->
                <div class="row">
-                  <!-- COLOR -->
+                  <form>
                   <div class="col-sm-6">
+                     <!-- COLOR -->
                      <div class="wrapper">
                         <div class="title-options">
                            COLOR<span class="color-required">*</span>
@@ -170,10 +162,7 @@
                            <span class="tab swatch-label color-orange"></span>
                         </ul>
                      </div>
-                  </div>
-                  <!-- /COLOR -->
-                  <!-- SIZE -->
-                  <div class="col-sm-6">
+                     <!-- SIZE -->
                      <div class="wrapper">
                         <div class="title-options">SIZE<span class="color-required">*</span></div>
                         <ul class="tags-list _size">
@@ -184,8 +173,23 @@
                         </ul>
                      </div>
                   </div>
-                  .
-                  <!-- /SIZE -->
+
+                  <!-- ATTRIBUTES -->
+                  <div class="col-sm-6">
+                     @forelse($product->attributes as $attribute)
+                        <div class="wrapper">
+                           <label class="title-options" for="{{ $attribute->attr_name }}"><span class="color-required">*</span>{{ $attribute->attr_name }}:</label>
+                           <select name="attr_name[]" class="form-control select-inline" id="{{ $attribute->attr_name }}" required>
+                              @foreach($attribute->attributeValues as $value)
+                                 <option value="{{$attribute->attr_name.':'.$value->value.'-' }}">{{ $value->value }}</option>
+                              @endforeach
+                           </select>
+                        </div>
+                     @empty
+
+                     @endforelse
+                  </div>
+                  </form>
                </div>
                <b id="p_error" style="display: none;color: red;">ddd</b>
                <div class="wrapper">
@@ -196,7 +200,7 @@
                         <input type="text" value="1" size="10" id="p_qty"/>
                         <span class="plus-btn"></span>
                      </div>
-                     <a href="#" id="add_to_cart" class="btn btn-lg btn-addtocart" style="">
+                     <a href="#" id="add_to_cart" class="btn btn-lg btn-addtocart add_to_cart" style="">
                         <span class="icon icon-shopping_basket"></span>SHOP
                         NOW!
                      </a>

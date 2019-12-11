@@ -78,6 +78,16 @@
                   Edit product
                </a>
             </div>
+
+            <div class="space-2"></div>
+               <div class="profile-contact-links align-left ">
+                  <a href="{{ route('attribute.edit',$product->product_id) }}" data-id="{{ $product->product_id }}"
+                     class="btn btn-link edit_attr">
+                     <i class="ace-icon fa fa-plus-circle bigger-120 green"></i>
+                     Edit Attributes
+                  </a>
+               </div>
+
          </div>
 
          <div class="col-xs-12 col-sm-9">
@@ -168,7 +178,7 @@
                         @if($product->is_off)
                            <span class='label label-warning smaller-80'>HAS-OFF</span>
                         @else
-                           <span class="label label-info smaller-80">NOT OFF</span>
+                           <span class="label label-default smaller-80">NOT OFF</span>
                         @endif</span>
                   </div>
                </div>
@@ -203,6 +213,34 @@
                      </span>
                   </div>
                </div>
+
+               <div class="profile-info-row">
+                  <div class="profile-info-name">Tags</div>
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="about">
+                        @foreach($product->tags as $tag)
+                           <span class='label label-info'>{{ $tag->tag_name }}</span>
+                        @endforeach
+                     </span>
+                  </div>
+               </div>
+
+               <div class="profile-info-row">
+                  <div class="profile-info-name">Attributes</div>
+                  <div class="profile-info-value">
+                     <span class="editable editable-click" id="about">
+                        @forelse($product->attributes as $attribute)
+                           <b>{{ $attribute->attr_name }}:</b>
+                           @foreach($attribute->attributeValues as $value)
+                              <span class='label label-default'>{{ $value->value }}</span>
+                           @endforeach
+                           @empty
+                           <b>NO ATTRIBUTES</b>
+                        @endforelse
+                     </span>
+                  </div>
+               </div>
+
                <div class="profile-info-row">
                   <div class="profile-info-name"> Created Date</div>
 
@@ -244,17 +282,20 @@
    </div>
 @endsection
 @section('extra_js')
-   <script>
-       jQuery(".edit_me").bind('click', function (e) {
-           e.preventDefault();
-           var route = $(this).attr('href');
-           var pjax = new Pjax({
-               selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
-           });
-           pjax.loadUrl(route);
-       });
+   @if (env('APP_AJAX'))
+      <script>
+          jQuery(".edit_me").bind('click', function (e) {
+              e.preventDefault();
+              var route = $(this).attr('href');
+              var pjax = new Pjax({
+                  selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
+              });
+              pjax.loadUrl(route);
+          });
 
-   </script>
+      </script>
+   @endif
+
    <!-- FOR IMAGE SLIDER -->
    <script type="text/javascript">
        var slideIndex = 1;

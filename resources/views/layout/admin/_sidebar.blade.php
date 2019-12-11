@@ -73,6 +73,11 @@
       ['menu_name' => 'Products', 'number' => 'products' ,'icon' => 'fa-globe', 'route_create' => 'product.create' ,'route_list' => 'product.index'])
 
       @include('layout.admin._menu',
+        ['menu_name' => 'Attributes', 'number0' => '' ,'icon' => 'fa-globe',
+        'subMenu' => 'Create New','secondSubMenu' => 'Attach to product',
+        'route_create' => 'attribute.create' ])
+
+      @include('layout.admin._menu',
       ['menu_name' => 'Categories','icon' => 'fa-list', 'number' => 'categories_count' , 'route_create' => 'category.create' ,'route_list' => 'category.index'])
 
       @include('layout.admin._menu',
