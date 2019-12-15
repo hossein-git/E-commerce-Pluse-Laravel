@@ -31,9 +31,10 @@ class dashboardController extends Controller
 
         /*---------------orders------------------*/
 
-        $order_sent = $this->order->where('order_status',1)->count();
-        $order_delivered = $this->order->where('order_status',2)->count();
-        $order_news = $this->order->where('order_status','=',0)->count();
+        $order_sent = $this->order->where('order_status',2)->count();
+        $order_delivered = $this->order->where('order_status',3)->count();
+        $order_news = $this->order->where('order_status','=',1)->count();
+        $order_not_complete = $this->order->where('order_status','=',0)->count();
         /*---------------payments------------------*/
         
         /*---------------users------------------*/

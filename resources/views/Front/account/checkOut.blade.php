@@ -61,7 +61,7 @@
    </style>
 @endsection
 @section('content')
-
+@include('layout.errors.notifications')
       <div class="stepwizard">
          <div class="stepwizard-row setup-panel">
             <div class="stepwizard-step col-xs-3">
@@ -94,6 +94,8 @@
       <div role="form">
          <!-- STEP1 -->
          <form id="form_step1">
+            <!-- SET THIS EMPTY INPUT FORM MORE SECURITY  -->
+            <input type="hidden" name="input" value="">
             <div class=" setup-content" id="step-1">
                <div class="panel-heading">
                   <h2 class="panel-title">Shipper</h2>
@@ -114,7 +116,7 @@
                         <label for="inputStreet" class=" control-label">Phone Number: <span>*</span>
                            <small>Like +905534676564</small></label>
                            <input type="text" name="client_phone" class="form-control" id="clientPhoneNumber"
-                                  required>
+                                  required value="{{ isset($address) ? $address->phone_number : '' }}">
                      </div>
                   </div>
                   <div class="col-sm-12">
@@ -124,26 +126,19 @@
                      </div>
                      <div class="form-group">
                         @auth()
-                           <label for="giftCode" class=" control-label">Gift Code: <span>*</span></label>
-                           <div id="off_div" class="form-group">
+                           <div id="off_div" class="form-group" >
+                              <label for="giftCode" class="control-label ">Gift Code: <span>*</span></label>
                               <input type="text" name="giftCode" class="form-control" id="giftCode">
                               <button class="btn btn-border color-default" data-loading-text="loading ..."
                                       id="apply_gift">APPLY DISCOUNT
                               </button>
-                              <span class="invalid-feedback" role="alert">
-                              <strong id="answer" class="alert-success"
-                                      style="display: none">
-                              </strong>
-                              <strong id="answerz" class="alert-danger"
-                                      style="display: none">
-                              </strong>
-                           </span>
+                              <span id="error-gift" class="invalid-feedback font-weight-bolder" role="alert"></span>
                            </div>
                         @else()
                            <h5>for using Gift card, please <a href="{{ route('login') }}">login</a></h5>
                         @endauth
                      </div>
-                     @if (Cart::count() > 0)
+                     @if (\Cart::count() > 0)
                         <button class="btn btn-primary nextBtn pull-right" id="first_step" type="button">Next</button>
                      @else
                         <h4>YOUR CART IS EMPTY</h4>
@@ -156,6 +151,8 @@
 
          <!-- STEP2 -->
          <form id="form_step2">
+            <!-- SET THIS EMPTY INPUT FORM MORE SECURITY  -->
+            <input type="hidden" name="input" value="">
             <div class="setup-content" id="step-2">
                <div class="panel-heading">
                   <h3 class="panel-title">Destination</h3>
@@ -164,59 +161,60 @@
                   <div class="col-sm-6">
                      <div class="form-group required">
                         <label for="name" class=" control-label">First Name: <span>*</span></label>
-                        <input type="text" name="name" class="form-control" id="name" required>
+                        <input type="text" value="{{ isset($address) ? $address->name : '' }}" name="name" class="form-control" id="name" required>
                      </div>
                      <div class="form-group required">
                         <label for="number" class="control-label">Number: <span>*</span></label>
-                        <input type="number" name="number" class="form-control" id="number" required>
+                        <input type="number" value="{{ isset($address) ? $address->number : '' }}" name="number" class="form-control" id="number" required>
                      </div>
                      <div class="form-group required">
                         <label for="area" class=" control-label">Area: </label>
-                        <input type="text" name="area" class="form-control" id="area">
+                        <input type="text" name="area"  value="{{ isset($address) ? $address->area : '' }}" class="form-control" id="area">
                      </div>
                      <div class="form-group required">
                         <label for="city" class=" control-label">City: <span>*</span></label>
-                        <input type="text" name="city" class="form-control" id="city" required>
+                        <input type="text" name="city" value="{{ isset($address) ? $address->city : '' }}" class="form-control" id="city" required>
                      </div>
                      <div class="form-group required">
                         <label for="postal_code" class=" control-label">Zip/Postal Code: <span>*</span></label>
-                        <input type="text" class="form-control" name="postal_code" id="postal_code" required>
+                        <input type="text" class="form-control" value="{{ isset($address) ? $address->postal_code : '' }}" name="postal_code" id="postal_code" required>
                      </div>
-                     @auth()
-                        <div class="checkbox-group ">
-                           <input type="checkbox" id="def_addr" name="def_addr">
-                           <label for="def_addr">
-                              <span class="check"></span>
-                              <span class="box"></span>
-                              save this address as my address
-                           </label>
-                        </div>
-                     @endauth
-
+                     @if (!isset($address))
+                        @auth()
+                           <div class="checkbox-group ">
+                              <input type="checkbox" id="def_addr" name="def_addr">
+                              <label for="def_addr">
+                                 <span class="check"></span>
+                                 <span class="box"></span>
+                                 save this address as my address
+                              </label>
+                           </div>
+                        @endauth
+                     @endif
                   </div>
                   <div class="col-sm-6">
                      <div class="form-group required">
                         <label for="surname" class=" control-label">Last Name: <span>*</span></label>
                         <div class="">
-                           <input type="text" name="surname" class="form-control" id="surname" required>
+                           <input type="text" name="surname" value="{{ isset($address) ? $address->surname : '' }}" class="form-control" id="surname" required>
                         </div>
                      </div>
                      <div class="form-group required">
                         <label for="street" class=" control-label">Street: <span>*</span></label>
-                           <input type="text" name="street" class="form-control" id="street">
+                           <input type="text" name="street" value="{{ isset($address) ? $address->street : '' }}" class="form-control" id="street">
                      </div>
                      <div class="form-group required">
                         <label for="avenue" class=" control-label">Avenue:</label>
-                           <input type="text" name="avenue" class="form-control" id="avenue">
+                           <input type="text" name="avenue" value="{{ isset($address) ? $address->avenue : '' }}" class="form-control" id="avenue">
                      </div>
                      <div class="form-group required">
                         <label for="state" class=" control-label">State/Province: <span>*</span></label>
-                           <input type="text" name="state" class="form-control" id="state" required>
+                           <input type="text" name="state" value="{{ isset($address) ? $address->state : '' }}" class="form-control" id="state" required>
                      </div>
                      <div class="form-group required">
                         <label for="phone_number" class=" control-label">Phone Number: <span>*</span>
                            <small>Like +905534676564</small></label>
-                        <input type="text" name="phone_number" class="form-control" id="phone_number" required>
+                        <input type="text" name="phone_number" value="{{ isset($address) ? $address->phone_number : '' }}" class="form-control" id="phone_number" required>
                      </div>
 
                      <button class="btn btn-primary nextBtn pull-right" id="second_step" type="button">Next</button>
@@ -228,6 +226,8 @@
 
          <!-- STEP 3 -->
          <div class="setup-content" id="step-3">
+            <!-- SET THIS EMPTY INPUT FORM MORE SECURITY  -->
+            <input type="hidden" name="input" value="">
             <h3>Review</h3>
             <table class="table table-hover table-bordered">
                <thead>
@@ -284,6 +284,8 @@
 
          <!-- STEP 4  -->
          <div id="step_4">
+            <!-- SET THIS EMPTY INPUT FORM MORE SECURITY  -->
+            <input type="hidden" name="input" value="">
             <div class="panel panel-primary setup-content" id="step-4">
                <div class="panel-heading">
                   <h3 class="panel-title">Payment</h3>
@@ -308,8 +310,8 @@
 
 @endsection
 @section('extra_js')
-   <script type="text/javascript"
-           src="{{ asset('front-assets/external/jquery/jquery-validation.js') }}"></script>
+   <script type="text/javascript" src="{{ asset('front-assets/external/jquery/jquery-validation.js') }}"></script>
+   <script type="text/javascript" src="{{ asset('front-assets/js/checkOut.js') }}"></script>
    <script type="text/javascript">
        $(document).ready(function () {
            var navListItems = $('div.setup-panel div a'),
@@ -434,92 +436,7 @@
 
            });
 
-           //USE FOR SAVE REQUESTS WITH AJAX + validate it
-           function upload_ajax(url, data, formId, rules,msg) {
-               var bool = false;
 
-               if (formId){
-                   var $form = $('#' + formId);
-                   //add phone validation
-                   jQuery.validator.addMethod("phone", function (phone_number, element) {
-                       phone_number = phone_number.replace(/\s+/g, "");
-                       return this.optional(element) || phone_number.length > 10 &&
-                           phone_number.match(/^\+[0-9]{12}$/);
-                   }, "Please specify a valid phone number");
-                   //add post code validation
-                   jQuery.validator.addMethod("post_code", function(value, element) {
-                       return this.optional(element) || /^\d{10}(?:-\d{4})?$/.test(value);
-                   }, "Please provide a valid postal Code.");
-                   //add text only
-                   jQuery.validator.addMethod("lettersonly", function(value, element) {
-                       return this.optional(element) || /^[a-z," "]+$/i.test(value);
-                   }, "Letters and spaces only please");
-                   $form.validate({
-                       rules: rules,
-                       // message: msg,
-                       errorElement: "em",
-                       errorPlacement: function (error, element) {
-                           // Add the `help-block`,"text-danger" class to the error element
-                           error.addClass("text-danger");
-
-                           if (element.prop("type") === "checkbox") {
-                               error.insertAfter(element.parent("label"));
-                           } else {
-                               error.insertAfter(element);
-                           }
-
-                       },
-                       success: function (label, element) {
-                           // Add the span element, if doesn't exists, and apply the icon classes to it.
-                           /* if ( !$( element ).next( "span" )[ 0 ] ) {
-                                $( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
-                            }*/
-                       },
-                       highlight: function (element, errorClass, validClass) {
-                           $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
-                           // $( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
-                       },
-                       unhighlight: function (element, errorClass, validClass) {
-                           $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
-                           // $( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
-                       }
-                   });
-
-                   //check if the input is valid
-                   if (!$form.valid()) return false;
-
-               }
-
-
-               $.ajaxSetup({
-                   headers: {
-                       'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                   }
-               });
-
-               $.ajax({
-                   async: false,
-                   url: url,
-                   method: "POST",
-                   data: data,
-                   cache: false,
-                   beforeSend: function () {
-                       $(".ajax-load").show();
-                   },
-                   success: function (result) {
-                       // alert(result.success);
-                       bool = true;
-                       $(".ajax-load").hide();
-                   },
-                   error: function (request, status, error) {
-                       alert('server not responding....');
-                   }
-               });
-
-               return (bool);
-
-           }
-           // /function
        });
    </script>
    <!-- CHECK DISCOUNT CODE -->
@@ -538,29 +455,35 @@
                    url: "{{ route('front.checkout.checkDiscount') }}",
                    method: "post",
                    data: {giftCode: $("#giftCode").val()},
+                   beforeSend: function () {
+                       $("#apply_gift").text('loading...');
+                   },
                })
                    .done(function (result) {
+                       $("#apply_gift").text('APPLY DISCOUNT');
                        if (result.success == 'empty') {
-                           jQuery('#answerz').html('').show().html('the filed is empty ');
-                           jQuery('#off_div').removeClass().addClass('has-error');
+                           jQuery('#error-gift').empty().html('the filed is empty ').addClass('alert-danger');
+                           jQuery('#off_div').removeClass('has-success').addClass('has-error');
                        }
                        if (result.success == 'true') {
-                           jQuery('#answerz').html('').show().html('okay ');
+                           jQuery('#error-gift').empty().html('the code has added ').removeClass().addClass('alert-success');
                            jQuery('#off_div').removeClass('has-error').addClass('has-success');
-                           jQuery('#off_check').removeClass('btn-primary').addClass('btn-success');
+
                        }
                        if (result.success == 'false') {
-                           jQuery('#answer').html('').show().html('the code is not true');
+                           jQuery('#error-gift').empty().html('the code is not true').removeClass().addClass('alert-danger');
                            jQuery('#off_div').removeClass('has-success').addClass('has-error');
-                           jQuery('#off_check').removeClass('btn-success').addClass('btn-primary');
                        }
                        if (result.success == 'repeat') {
-                           jQuery('#answer').html('').show().html('u can use this code only one time');
+                           jQuery('#error-gift').empty().html('u can use this code only one time').removeClass().addClass('alert-danger');
                            jQuery('#off_div').removeClass('has-success').addClass('has-error');
+
                        }
                        // $('.ajax-load').hide();
-                   }).fail(function (xhr) {
-                   alert('error');
+                   }).error(function (result) {
+                   jQuery('#error-gift').empty().html(result.error).removeClass().addClass('alert-danger');
+                   jQuery('#off_div').removeClass('has-success').addClass('has-error');
+                     alert('error');
                })
            });
 

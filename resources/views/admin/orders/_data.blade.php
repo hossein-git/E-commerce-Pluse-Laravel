@@ -1,5 +1,5 @@
 @forelse($orders as $key=> $order)
-   @php($address = $order->address->first())
+   @php($address = $order->address)
    @php($gift =  $order->giftCard ? $order->giftCard->first() : false)
    <tr>
       <td class="center">{{$order->order_id}}</td>
@@ -17,6 +17,9 @@
             @case(3)
             <span class="label label-success arrowed-in bolder smaller-90">Delivered</span>
             @break
+            @case(5)
+            <span class="label label-yellow bolder smaller-90">Canceled</span>
+            @break
          @endswitch
       </td>
       <td><b>{{ $order->track_code }}</b></td>
@@ -27,7 +30,7 @@
       </td>
       <td class="center">
          @if($order->user_id)
-            <a href="{{ $order->users->user_id}}">{{ $order->users->name}}</a>
+            <a href="{{ route('user.show',$order->users->user_id)}}">{{ $order->users->name}}</a>
          @else
             <span class="label label-default">GUEST</span>
          @endif
@@ -57,7 +60,6 @@
                   <i class="ace-icon fa fa-eye bigger-120"></i>
                </a>
                <a class="btn btn-warning btn-xs edit_me" title="Edit"
-                  {{--                        data-path="{{ str_replace("","",route('order.update',[],false)) }}"--}}
                   href="" data-id="{{ $order->order_id }}">
                   <i class="ace-icon fa fa-pencil bigger-120"></i>
                </a>
@@ -167,7 +169,7 @@
 
    <!-- /.POP UP MODELS -->
 @empty
-   <tr>
+   <tr class="center">
       <td colspan="12">No Data</td>
    </tr>
 @endforelse

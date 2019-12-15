@@ -62,6 +62,11 @@
       'subMenu' => 'All reviews','secondSubMenu' => 'New Reviews',
       'route_create' => 'comments.index' ,'route_list' => 'comments.new'])
 
+      @include('layout.admin._menu',
+     ['menu_name' => 'Users', 'numbe0r' => '' ,'icon' => 'fa-user',
+     'subMenu' => 'All Users','secondSubMenu' => 'Add User',
+     'route_create' => 'user.index' ,'route_list' => 'user.create'])
+
       <li class="">
          <a disabled="">
             <i class="menu-icon fa fa-shopping-basket"></i>

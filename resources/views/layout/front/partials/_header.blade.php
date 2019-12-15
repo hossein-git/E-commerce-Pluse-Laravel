@@ -31,12 +31,15 @@
                <a class="dropdown-toggle" data-toggle="dropdown"><span class="icon icon-person "></span></a>
                <div class="dropdown-label hidden-sm hidden-xs">My Account</div>
                <ul class="dropdown-menu">
-                  <li><a href="login-form.html"><span class="icon icon-person"></span>My Account</a></li>
-                  <li><a href="wishlist.html"><span class="icon icon-favorite_border"></span>My Wishlist</a></li>
-                  <li><a href="compare.html"><span class="fa fa-balance-scale"></span>Compare</a></li>
-                  <li><a href="checkout.html"><span class="icon icon-check"></span>Checkout</a></li>
-                  <li><a href="#" data-toggle="modal" data-target="#modalLoginForm"><span class="icon icon-lock_outline"></span>Log In</a></li>
-                  <li><a href="login-form.html"><span class="icon icon-person_add"></span>Create an account</a></li>
+                  @auth
+                     <li><a href="login-form.html"><span class="icon icon-person"></span>My Account</a></li>
+                     <li><a href="wishlist.html"><span class="icon icon-favorite_border"></span>My Wishlist</a></li>
+                     <li><a href="{{ route('logout') }}" data-toggle="modal" data-target="#modalLoginForm"><span class="icon icon-lock_outline"></span>Log Out</a></li>
+
+                  @elseauth
+                     <li><a href="{{ route('login') }}" data-toggle="modal" data-target="#modalLoginForm"><span class="icon icon-lock_outline"></span>Log In</a></li>
+                     <li><a href="{{ route('register') }}"><span class="icon icon-person_add"></span>Create an account</a></li>
+                  @endauth
                </ul>
             </div>
             <!-- /account -->
@@ -178,12 +181,27 @@
                         <span class="dropdown-label hidden-sm hidden-xs">My Account</span>
                      </a>
                      <ul class="dropdown-menu">
-                        <li><a href="login-form.html"><span class="icon icon-person"></span>My Account</a></li>
-                        <li><a href="wishlist.html"><span class="icon icon-favorite_border"></span>My Wishlist</a></li>
                         <li><a href="compare.html"><span class="fa fa-balance-scale"></span>Compare</a></li>
-                        <li><a href="checkout.html"><span class="icon icon-check"></span>Checkout</a></li>
-                        <li><a href="#" data-toggle="modal" data-target="#modalLoginForm"><span class="icon icon-lock_outline"></span>Log In</a></li>
-                        <li><a href="login-form.html"><span class="icon icon-person_add"></span>Create an account</a></li>
+                        @auth
+                           <li>Welcome <b>{{ auth()->user()->name }}</b></li>
+                           <li><a href="{{ route('front.profile') }}"><span class="icon icon-person"></span>My Account</a></li>
+                           <li><a href="wishlist.html"><span class="icon icon-favorite_border"></span>My Wishlist</a></li>
+                           <li><a href="{{ route('front.myOrders') }}"><span class="icon icon-favorite_border"></span>My Orders</a></li>
+                           <li>
+                              <a href="{{ route('logout') }}"
+                                 onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                 <span class="glyphicon glyphicon-log-out"></span>{{ __('Logout') }}
+                              </a>
+
+                              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                 @csrf
+                              </form>
+                           </li>
+                        @else
+                           <li><a href="{{ route('login') }}"  ><span class="icon icon-lock_outline"></span>Log In</a></li>
+                           <li><a href="{{ route('register') }}"><span class="icon icon-person_add"></span>Create an account</a></li>
+                        @endauth
                      </ul>
                   </div>
                   <!-- /account -->
@@ -211,7 +229,11 @@
                                        <div class="pull-left">
                                           <div class="cart-total">TOTAL:  <span id="cart_sub"> {{ Cart::subtotal() }}</span></div>
                                        </div>
-                                       <a href="{{ route('front.inter.checkout') }}" class="btn icon-btn-left "><span class="icon icon-check_circle"></span>CHECKOUT</a>
+                                       @auth
+                                          <a href="{{ route('front.checkout') }}" class="btn icon-btn-left "><span class="icon icon-check_circle"></span>CHECKOUT</a>
+                                       @else
+                                          <a href="{{ route('front.inter.checkout') }}" class="btn icon-btn-left "><span class="icon icon-check_circle"></span>CHECKOUT</a>
+                                       @endauth
                                     </div>
                                     <div class="pull-left">
                                        <a href="{{ route('cart.index') }}" class="btn icon-btn-left "><span class="icon icon-shopping_basket"></span>VIEW CART</a>

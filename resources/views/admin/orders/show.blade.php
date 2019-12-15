@@ -25,14 +25,14 @@
       <tbody>
       @forelse($detailsOrder as $key=> $d_order)
          <tr>
-            <td class="center">{{$key+1}}</td>
+            <td class="center">{{$key++}}</td>
             <td class="center">
-               <a class="click_me" href="{{ route('product.show',$d_order->products()->product_id) }}">
-                  {{($d_order->products()->product_name)}}</a>
+               <a class="click_me" href="{{ route('product.show',$d_order->product_id) }}">
+                  {{($d_order->products->product_name)}}</a>
             </td>
             <td class="center">{{$d_order->size}}</td>
             <td class="center">{{$d_order->color}}</td>
-            <td class="center">{{$d_order->attributes}}</td>
+            <td class="center">{{$d_order->attributes ?: ''}}</td>
             <td class="center">{{$d_order->product_price}}</td>
             <td class="center">{{$d_order->quantity}}</td>
             <td class="center">{{$d_order->created_at}}</td>

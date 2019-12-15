@@ -19,7 +19,7 @@ class DetailsOrder extends Model
 
     public function products()
     {
-        return $this->hasOne(Product::class,'product_id','product_id')->first();
+        return $this->belongsTo(Product::class,'product_id');
     }
 
 

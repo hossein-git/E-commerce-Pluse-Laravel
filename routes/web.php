@@ -14,17 +14,20 @@
 
 use App\Models\Attribute;
 use App\Models\brand;
+use App\Models\CheckGift;
 use App\Models\Color;
+use App\Models\GiftCard;
 use App\Models\Tag;
+use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
-   return 2 == 2
-       ? 'true'
-       : 'false' ;
 
+
+
+dd(Cache::has('user-is-online'.  101));
 
 //    return view('admin.test');
 })->name('test');
@@ -34,11 +37,18 @@ Route::get('/query', function () {
 
     \Illuminate\Support\Facades\DB::enableQueryLog();
 
-    $attr = Attribute::findOrFail(3);
-    $attr->attributeValues()->delete();
-    $attr->delete();
+//    $user = \App\User::with('orders')->findOrFail(151);
+    $user = \App\User::findOrFail(auth()->id());
+    $orders = $user->orders;
+    foreach ($orders as $order){
+        ($order->order_id);
+        dump($order->address);
+        dump($order->giftCard);
+        foreach ($order->detailsOrder as $o){
+            ($o);
+        }
 
-
+    }
 
     $query = \Illuminate\Support\Facades\DB::getQueryLog();
     dd($query);
@@ -60,7 +70,10 @@ Route::get('/w', function () {
 
 /********************---------------FRONT ROUTES------------------************************/
 Route::get('/', 'Front\homeController@home')->name('home');
+Route::get('/home', 'Front\homeController@home');
 Route::get('/show/{slug}', 'Front\homeController@show')->name('front.show');
+
+
 
 
 /*---------------COMMENTS------------------*/
@@ -97,12 +110,32 @@ Route::get('/search/{query}', 'Front\homeController@search')->name('front.search
     ['query' => '[A-za-z]+']);
 
 
+/*------------------------------FRONT AUTH ROUTES------------------*/
+
+/*---------------ACCOUNT------------------*/
+Route::get('/profile', 'Front\accountController@profile')->name('front.profile');
+Route::get('/my-orders', 'Front\accountController@myOrders')->name('front.myOrders');
+Route::put('/my-orders','Front\accountController@cancelOrder')->name('front.cancel.order');
+Route::get('/edit-address', 'Front\accountController@editAddress')->name('front.address.edit');
+Route::put('/edit-address/{id}', 'Front\accountController@updateAddress')->name('front.address.update');
+Route::get('/edit-order-address/{id}', 'Front\accountController@editOrderAddress')->name('front.order.address.edit');
+
+
+
+
+
+
 /*---------------***************ADMIN ROUTES******************------------------*/
 Route::group(['prefix' => 'admin'], function () {
 
     Route::get('/cat', function () {
         return view('admin.category.index');
     })->name('cat');
+
+    /*---------------USERS------------------*/
+    Route::resource('/user','Admin\userController');
+    Route::get('/user-address/{id}','Admin\userController@editAddress')->name('admin.address.edit');
+    Route::put('/user-address/{id}','Admin\userController@updateAddress')->name('admin.address.update');
 
     /*---------------SEARCH------------------*/
     Route::post('/search', 'Admin\dashboardController@search')->name('admin.search');
@@ -152,3 +185,8 @@ Route::group(['prefix' => 'admin'], function () {
 
 
 });
+
+Auth::routes();
+/*---------------GOOGLE------------------*/
+Route::get('auth/google', 'Auth\GoogleController@redirectToGoogle')->name('auth.google');
+Route::get('auth/google/callback', 'Auth\GoogleController@handleGoogleCallback');

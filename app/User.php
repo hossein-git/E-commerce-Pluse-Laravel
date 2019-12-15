@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Models\Address;
 use App\Models\Order;
+use App\Models\Role;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Cache;
 use Laravelista\Comments\Commenter;
 
 class User extends Authenticatable
@@ -24,7 +27,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','role_id','google_id'
     ];
 
     /**
@@ -45,8 +48,42 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * ORDERS REL many to many
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
     public function orders()
     {
-        return $this->hasMany(Order::class,'user_id');
+        return $this->hasMany(Order::class,'user_id')->with('detailsOrder','address');
+    }
+
+    /**
+     * ROLES REL ONE-toMany
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function roles()
+    {
+        return $this->belongsTo(Role::class,'role_id');
+    }
+
+    /**
+     * CHECK USER ACTIVITY WITH MIDDLEWARE ADN THIS FUNC
+     * @return bool
+     */
+    public function isOnline()
+    {
+        return Cache::has('user-is-online'.  $this->user_id);
+    }
+
+    /**
+     * Address REL morph one to many
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\morphOne
+     */
+    public function address()
+    {
+        return $this->morphOne(Address::class,'addressable');
     }
 }

@@ -20,10 +20,10 @@ class Order extends Model
     {
         return $this->hasMany(DetailsOrder::class, 'order_id');
     }
-
+    //addressable
     public function address()
     {
-        return $this->morphMany(Address::class,'order','addressable_type','addressable_id');
+        return $this->morphOne(Address::class,'addressable');
     }
 
     public function giftCard()

@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
         $this->call(userSeeder::class);
         $this->call(brandSeeder::class);
         $this->call(tagSeeder::class);
@@ -26,5 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(orderSeeder::class);
         $this->call(commentSeeder::class);
         $this->call(ratingSeeder::class);
+        $this->call(roleSeeder::class);
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
     }
 }

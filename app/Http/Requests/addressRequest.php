@@ -33,7 +33,7 @@ class addressRequest extends FormRequest
             , 'street' => ['string', 'nullable' , 'regex:/^([a-zA-Z\' ]+)$/']
             , 'phone_number' => ['required' , 'string']
             , 'postal_code' => ['required', 'numeric' , 'regex:^[0-9]^']
-            , 'number' => ['required', 'numeric', 'max:5']
+            , 'number' => ['required', 'numeric']
 
         ];
     }
