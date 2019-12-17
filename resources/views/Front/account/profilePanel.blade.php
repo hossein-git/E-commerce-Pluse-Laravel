@@ -36,7 +36,9 @@
                <div class="panel panel-default">
                   <div class="panel-heading">
                      <span class="panel-title">Default Address</span>
-                     <a href="{{ route('front.address.edit') }}" class="pull-right btn btn-primary btn-xs ">Edit Address</a><br><br>
+                     <a href="{{ route('front.address.edit') }}" class="pull-right btn btn-primary btn-xs ">
+                        {{ $address  ? 'Edit Address' : 'Add New Address' }}
+                     </a><br><br>
                   </div>
                  <div class="panel-body">
                     @if ($address)

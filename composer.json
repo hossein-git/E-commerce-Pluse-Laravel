@@ -19,6 +19,7 @@
         "laravel/socialite": "^4.3",
         "laravel/tinker": "^1.0",
         "laravelista/comments": "^3.0",
+        "spatie/laravel-permission": "^3.3",
         "willvincent/laravel-rateable": "^2.0"
     },
     "require-dev": {

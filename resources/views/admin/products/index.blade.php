@@ -61,7 +61,7 @@
             <input type="hidden" value="products" name="search_kind">
             <span class="input-icon">
          <input type="text" placeholder="Search ..." class="nav-search-input"
-                 autocomplete="off" name="search"/>
+                autocomplete="off" name="search"/>
          <i class="ace-icon fa fa-search nav-search-icon"></i>
          <button type="submit" class="btn btn-sm">
             <span class="fa fa-search"></span>
@@ -70,10 +70,10 @@
          </form>
       </div>
    @endif
-
-   <table id="simple-table" class="table table-bordered table-hover responsive">
+   <div class="col-sm-12 col-lg-12 col-xs-12">
+      <table id="simple-table" class="table table-bordered table-hover table-responsive">
       <thead>
-         <tr>
+      <tr>
          <th>#</th>
          <th>Product Name</th>
          <th class="center">SKU</th>
@@ -96,7 +96,7 @@
       @include('admin.products._data')
       </tbody>
    </table>
-
+   </div>
    <div class="">
       {{ $products->links() }}
    </div>
@@ -105,7 +105,8 @@
 @section('extra_js')
    <script>
        $(document).ready(function () {
-           deleteAjax("/admin/product/", "delete_me", "product");
+          @can('product-delete')
+          deleteAjax("/admin/product/", "delete_me", "product");
            $(".restore_me").click(function (e) {
                e.preventDefault();
                var obj = $(this); // first store $(this) in obj
@@ -131,17 +132,7 @@
                    }
                });
            });
-           @if(env('APP_AJAX'))
-           <!-- LOAD THE EDIT PAGE-->
-           jQuery(".edit_me").bind('click', function (e) {
-               e.preventDefault();
-               var route = $(this).attr('href');
-               var pjax = new Pjax({
-                   selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
-               });
-               pjax.loadUrl(route);
-           });
-           @endif
+          @endcan
        });
    </script>
    <!-- TO SORT PRODUCTS -->

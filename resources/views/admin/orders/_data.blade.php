@@ -55,14 +55,16 @@
       <td class="center">
          <div class="hidden-sm hidden-xs btn-group">
             <form>
-               <a class="btn btn-info2 btn-xs show_me" title="Show Details"
-                  href="{{ route('order.show',$order->order_id) }}" data-id="{{ $order->order_id }}">
+               <a class="btn btn-info2 btn-xs click_me" title="Show Details"
+                  href="{{ route('order.show',$order->order_id) }}">
                   <i class="ace-icon fa fa-eye bigger-120"></i>
                </a>
-               <a class="btn btn-warning btn-xs edit_me" title="Edit"
-                  href="" data-id="{{ $order->order_id }}">
-                  <i class="ace-icon fa fa-pencil bigger-120"></i>
-               </a>
+               @can('order-edit')
+                  {{--<a class="btn btn-warning btn-xs click_me" title="Edit"
+                     href="" data-id="{{ $order->order_id }}">
+                     <i class="ace-icon fa fa-pencil bigger-120"></i>
+                  </a>--}}
+
                @if($order->order_status == 2 )
                   <a class="btn btn-success btn-xs sent_me" title="Delivered"
                      href="{{ route('order.status',[$order->order_id,'delivered']) }}" data-status="delivered">
@@ -75,9 +77,12 @@
                      <i class="ace-icon fa fa-send-o bigger-120"></i>
                   </a>
                @endif
-               <button class="btn btn-sm btn-danger delete_me" title="Delete" data-id="{{ $order->order_id }}">
-                  <i class="ace-icon fa fa-trash-o bigger-120"></i>
-               </button>
+               @endcan
+               @can('order-delete')
+                  <button class="btn btn-sm btn-danger delete_me" title="Delete" data-id="{{ $order->order_id }}">
+                     <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                  </button>
+               @endcan
             </form>
          </div>
       </td>

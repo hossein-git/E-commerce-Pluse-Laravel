@@ -5,6 +5,7 @@
 @section('extra_css')
 @stop
 @section('content')
+
    <table class="table table-hover table-bordered">
       <thead>
       <tr class="center">
@@ -17,20 +18,24 @@
       </tr>
       </thead>
       <tbody>
-      @forelse($comments as $comment)
-         @php($product = $comment->commentable->get(['product_name','product_id'])->first())
+      @forelse($comments as $key => $comment)
+
+{{--         @php($product . $key = $comment->commentable->first(['product_id','product_name']))--}}
          <tr>
             <td class="center">{{ $comment->comment }}</td>
             <td class="center">
-               @if($comment->commenter_id =! null)
-                  <span class="tag blue"><b>{{ $comment->guest_name }}</b></span>
-                  <small><a href="mailTo:{{ $comment->guest_email }}">{{ $comment->guest_email }}</a></small>
+               @if(!$comment->commenter_id)
+                  <span class="tag blue"><b>{{ $comment->guest_name }}</b></span><br>
+                  <span><a href="mailTo:{{ $comment->guest_email }}">{{ $comment->guest_email }}</a></span>
                @else
-                  {{ $comment->commenter() }}
+                  @if ($comment->commenter)
+                     <a href="{{ route('user.show',$comment->commenter->user_id) }}">{{ ($comment->commenter->name) }}</a>
+                  @endif
                @endif
             </td>
             <td class="center">
-               <a href="">{{ $product->product_name }}</a>
+               <a href="{{ route('product.show',$comment->commentable->product_id) }}">
+                  {{ $comment->commentable->product_name }}</a>
             </td>
             {{--<td class="small">
                <!-- DISPLAY RATING -->
@@ -55,7 +60,7 @@
                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
                      </button>
                   </form>
-                  @if($comment->approved == 0)
+                  @if(!$comment->approved)
                      <form>
                         <button class="btn btn-success btn-xs approved_me" title="approved"
                                 data-route="{{ route('comment.approve',$comment->id) }}">
@@ -92,15 +97,15 @@
                });
                $.ajax({
                    url: route,
-                   method: "get",
+                   method: "post",
                    success: function ($results) {
                        alert('Comment has been successfully Approved');
                        $(obj).closest("button").remove(); //delete button
                        console.log($results);
                    },
-                   error: function (xhr) {
+                   error: function (xhr,error) {
                        alert('error, not approved ');
-                       console.log(xhr.responseText);
+                       console.log(error.responseText);
                    }
                });
            });

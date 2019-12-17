@@ -140,7 +140,6 @@
 <!-- basic scripts -->
 
 
-
 <script src="{{ asset('admin-assets/js/admin-app.js')}}"></script>
 <!-- LOAD MY JS CODES  -->
 <script src="{{ asset('admin-assets/js/myCodes.js')}}"></script>
@@ -152,53 +151,63 @@
 
 <!-- ace scripts -->
 @if (env('APP_AJAX'))
-<!-- script for load page on AJAX-->
-<script>
-    jQuery(document).ready(function () {
-        jQuery(".click_me").one('click', function (e) {
-            e.preventDefault();
-            var route = $(this).attr('href');
-            var pjax = new Pjax({
-                selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
-            });
-            pjax.loadUrl(route);
-        });
-    });
-</script>
+   <!-- script for load page on AJAX-->
+   <script>
+       jQuery(document).ready(function () {
+           jQuery(".click_me").on('click', function (e) {
+               e.preventDefault();
+               var route = $(this).attr('href');
+               var pjax = new Pjax({
+                   selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
+               });
+               pjax.loadUrl(route);
+           });
+       });
+   </script>
 @endif
 <!-- END script for load page on ajax-->
 <!-- SEARCH SCRIPT -->
 
-   <script>
-       jQuery(document).ready(function () {
-           jQuery("#form-search").submit( function (e) {
-               e.preventDefault();
-               var form_data = new FormData(this);
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery("#form-search").submit(function (e) {
+            e.preventDefault();
+            var form_data = new FormData(this);
 
-               $.ajax({
-                   url: "{{ route('admin.search') }}",
-                   method : "POST",
-                   data: form_data,
-                   contentType: false,
-                   cache: false,
-                   processData: false,
-                   beforeSend: function () {
-                       $(".preview").show();
-                   },success : function (data) {
-                       if (data.html == " ") {
-                           $('.preview').html("No more records found");
-                           return;
-                       }
-                       $(".table_data").empty().append(data.html);
-                       $('.preview').hide();
-                   },error : function () {
-                       alert('error');
-                       $('.preview').hide();
-                   }
-               })
-           });
-       });
-   </script>
+            $.ajax({
+                url: "{{ route('admin.search') }}",
+                method: "POST",
+                data: form_data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend: function () {
+                    $(".preview").show();
+                }, success: function (data) {
+                    if (data.html == " ") {
+                        $('.preview').html("No more records found");
+                        return;
+                    }
+                    $(".table_data").empty().append(data.html);
+                    $('.preview').hide();
+                }, error: function () {
+                    alert('error');
+                    $('.preview').hide();
+                }
+            })
+        });
+    });
+{{--    @if(env('APP_AJAX'))--}}
+{{--       <!-- LOAD THE EDIT PAGE-->--}}
+{{--       jQuery(".edit_me").bind('click', function () {--}}
+{{--           var route = $(this).attr('href');--}}
+{{--           var pjax = new Pjax({--}}
+{{--               selectors: ["title", "#extra_css", "#content-load", "#extra_js"]--}}
+{{--           });--}}
+{{--           pjax.loadUrl(route);--}}
+{{--       });--}}
+{{--    @endif--}}
+</script>
 
 
 <!-- /SEARCH SCRIPT -->

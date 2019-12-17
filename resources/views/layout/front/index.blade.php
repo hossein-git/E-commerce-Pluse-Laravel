@@ -21,6 +21,7 @@
 <!-- FOR RTL STYLE -->
 {{--   <link rel="stylesheet" href="{{ asset('front-assets/css/template-rtl.css')}}">--}}
 
+
    <link rel="stylesheet" href="{{ asset('front-assets/font/icont-fonts.min.css')}}">
    <script src="{{asset('front-assets/external/jquery/jquery-2.1.4.min.js')}}"></script>
    <!--
@@ -75,6 +76,8 @@
 {{--<script src="{{asset('front-assets/external/bootstrap/bootstrap.min.js')}}"></script>--}}
 <script src="{{asset('front-assets/js/add_to_cart.js')}}"></script>
 
+<!-- AJAX AUTO COMPLETE -->
+<script src="{{ asset('front-assets/js/typeahead.js') }}"></script>
 {{--<script src="{{asset('front-assets/external/countdown/jquery.plugin.min.js')}}"></script>--}}
 {{--<script src="{{asset('front-assets/external/countdown/jquery.countdown.min.js')}}"></script>--}}
 {{--<script src="{{asset('front-assets/external/slick/slick.min.js')}}"></script>--}}
@@ -96,9 +99,18 @@
             });
             pjax.loadUrl(route);
         });
+        //SEND DATA FOR auto complete SEARCH
+        var path = "{{ route('front.search.autoComplete') }}";
+        $('input.typeahead').typeahead({
+            source:  function (query, process) {
+                return $.get(path, { query: query }, function (data) {
+                    return process(data);
+                });
+            }
+        });
 
-        //SEND DATA FOR SEARCH
-        $("#search_from").submit(function (e) {
+
+        /*$("#search_from").submit(function (e) {
             e.preventDefault();
             var query = $('#search_input').val();
             var pjax = new Pjax({
@@ -106,7 +118,7 @@
             });
             pjax.loadUrl("/search/" + query);
 
-        });
+        });*/
     });
 </script>
 <!-- EXTRA JS -->

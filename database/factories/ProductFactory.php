@@ -19,6 +19,7 @@ $factory->define(\App\Models\Product::class, function (Faker $faker){
         'made_in' => $faker->country,
         'quantity' => $faker->numberBetween(1,100),
         'weight' => $faker->numberBetween(1,10),
-        'description' => $faker->text
+        'description' => $faker->text,
+        'cover' => 'sample-pr.jpg'
     ];
 });

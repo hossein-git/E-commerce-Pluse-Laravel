@@ -53,8 +53,10 @@
 @section('extra_js')
    <script>
        $(document).ready(function () {
+          @can('order-delete')
            <!-- DELETE -->
            deleteAjax("/admin/orders/", "delete_me", "Order");
+          @endcan
            <!-- SENT -->
            $(".sent_me").click(function (e) {
                e.preventDefault();
@@ -85,23 +87,6 @@
                    }
                });
            });
-          @if(env('APP_AJAX'))
-           <!-- LOAD THE EDIT PAGE-->
-           jQuery(".edit_me").bind('click', function () {
-               var route = $(this).attr('href');
-               var pjax = new Pjax({
-                   selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
-               });
-               pjax.loadUrl(route);
-           });
-          jQuery(".show_me").bind('click', function () {
-              var route = $(this).attr('href');
-              var pjax = new Pjax({
-                  selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
-              });
-              pjax.loadUrl(route);
-          });
-          @endif
        });
    </script>
 @stop

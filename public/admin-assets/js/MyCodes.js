@@ -1,5 +1,13 @@
 //uses for delete row
 
+/**
+ *
+ * @param  url  string = URL OF ROUTE LIKE : /admin/xxx/
+ * @param cls string = THE CLASS NAME OF INPUT
+ * @param msg  string = show msg after success.ONLY RELATED WORD
+ * @returns {boolean}
+ */
+
 function deleteAjax(url,cls,msg) {
     $("."+ cls).click(function (e) {
         e.preventDefault();

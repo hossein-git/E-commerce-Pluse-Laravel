@@ -32,9 +32,18 @@
                <div class="dropdown-label hidden-sm hidden-xs">My Account</div>
                <ul class="dropdown-menu">
                   @auth
-                     <li><a href="login-form.html"><span class="icon icon-person"></span>My Account</a></li>
+                     <li><a href="{{ route('front.profile') }}"><span class="icon icon-person"></span>My Account</a></li>
                      <li><a href="wishlist.html"><span class="icon icon-favorite_border"></span>My Wishlist</a></li>
-                     <li><a href="{{ route('logout') }}" data-toggle="modal" data-target="#modalLoginForm"><span class="icon icon-lock_outline"></span>Log Out</a></li>
+                     <li>
+                        <a href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                document.getElementById('logout-form-m').submit();">
+                           <span class="glyphicon glyphicon-log-out"></span>{{ __('Logout') }}
+                        </a>
+                        <form id="logout-form-m" action="{{ route('logout') }}" method="POST" style="display: none;">
+                           @csrf
+                        </form>
+                     </li>
 
                   @elseauth
                      <li><a href="{{ route('login') }}" data-toggle="modal" data-target="#modalLoginForm"><span class="icon icon-lock_outline"></span>Log In</a></li>
@@ -62,9 +71,7 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
-                  <span class="menu-text">
-								MENU
-								</span>
+                  <span class="menu-text">MENU</span>
                </div>
             </div>
          </div>
@@ -75,7 +82,7 @@
                <div class="search-dropdown">
                   <form action="#" method="get">
                      <div class="input-outer">
-                        <input type="search" name="search" value="" maxlength="128" placeholder="Enter keyword">
+                        <input type="search" class="typeahead" name="search" value="" maxlength="128" placeholder="Enter keyword">
                         <button type="submit" class="btn-search"><span>Search</span></button>
                      </div>
                      <a href="#" class="search-close"><span class="icon icon-close"></span></a>
@@ -159,9 +166,9 @@
                <!-- SEARCH -->
                <div class="col-md-4 text-center">
                   <div class="social-icon">
-                     <form id="search_from">
-                        <div class="input-group">
-                           <input name="search" type="text" id="search_input" class="form-control search-query" placeholder="Type your query" required>
+                     <form method="get" action="{{ route('front.search') }}" id="search_from">
+                        <div  class="input-group">
+                           <input name="search" type="text" id="search_input" class="typeahead form-control search-query " placeholder="Type your query" required>
                            <span class="input-group-btn" autocomplete="off">
                               <button type="submit" class="btn btn-purple">
                                  <span class="fa fa-search"></span>

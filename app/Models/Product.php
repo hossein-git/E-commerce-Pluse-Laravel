@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Laravelista\Comments\Commentable;
 use Laravel\Scout\Searchable;
+use willvincent\Rateable\Rateable;
 
 class Product extends Model
 {
-    use SoftDeletes, Commentable, \willvincent\Rateable\Rateable;
+    use SoftDeletes, Commentable, Rateable;
 
     protected $primaryKey = 'product_id';
 

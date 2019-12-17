@@ -11,6 +11,7 @@
    </a>
    <b class="arrow"></b>
    <ul class="submenu">
+{{--      @can("$gate-create")--}}
       <li class="">
          <a class="click_me" data-pjax href="{{ route($route_create) }}" data-title="{{ $menu_name }}">
             <i class="menu-icon fa fa-caret-right"></i>
@@ -18,6 +19,7 @@
          </a>
          <b class="arrow"></b>
       </li>
+{{--      @endcan--}}
       @if (isset($route_list))
          <li class="">
             <a class="click_me" data-pjax href="{{ route($route_list) }}" data-title="{{ $menu_name }}">

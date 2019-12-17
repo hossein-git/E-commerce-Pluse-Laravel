@@ -39,9 +39,11 @@
             <td class="center">
                <div class="hidden-sm hidden-xs btn-group">
                   <form>
-                     <button class="btn btn-xs btn-danger delete_me" data-id="{{ $d_order->details_order_id }}">
-                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                     </button>
+                     @can('order-delete')
+                        <button class="btn btn-xs btn-danger delete_me" data-id="{{ $d_order->details_order_id }}">
+                           <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                        </button>
+                     @endcan
                   </form>
                </div>
             </td>
@@ -57,10 +59,11 @@
 
 @endsection
 @section('extra_js')
-   <script>
-       $(document).ready(function () {
-           deleteAjax("/admin/orders/orders-status/", "delete_me", "Order Details");
-
-       });
-   </script>
+   @can('order-delete')
+      <script>
+          $(document).ready(function () {
+              deleteAjax("/admin/orders/orders-status/", "delete_me", "Order Details");
+          });
+      </script>
+   @endcan
 @stop

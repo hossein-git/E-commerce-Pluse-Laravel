@@ -16,6 +16,7 @@ class homeController extends Controller
 
     public function __construct()
     {
+        $this->middleware('web');
         $this->product = new Product();
     }
 
@@ -40,7 +41,7 @@ class homeController extends Controller
 
     public function show($slug)
     {
-        $product = $this->product->with(['photos:src,photo_id', 'brands','attributes'])->where('product_slug', "$slug")->first();
+        $product = $this->product->with(['photos:src,photo_id', 'brands', 'attributes'])->where('product_slug', "$slug")->first();
         return view('front.product.show', compact('product'));
     }
 
@@ -103,21 +104,40 @@ class homeController extends Controller
 
     }
 
-    //SEARCH
-    public function search($query)
+    /** SEARCH */
+    public function search(Request $request)
     {
-        if (ctype_alnum($query)) {
-            $products = [];
-            if ($query) {
-                $products = $this->product->search($query)->paginate(10);
-            }
-
-            if (\request()->ajax()) {
-                $view = view('Front.listing._data', compact('products'))->render();
-                return response()->json(['html' => $view]);
-            }
-            return view('Front.search.search', compact('products'));
+        $this->validate($request, ['search' => 'required|string']);
+        $query = $request->input('search');
+        $products = [];
+        if ($query) {
+            /** IF USING ALOGRITA SEARCH SYSTEM UNCOMMENT BELOW AND COMMENT AFTER THAT **/
+//                $products = $this->product->search($query)->paginate(10);
+            $products = $this->product
+                ->Where('product_name', 'like', '%' . $query . '%')
+                ->select(['product_slug', 'product_name', 'status',
+                    'data_available', 'is_off', 'off_price', 'cover', 'sale_price', 'created_at'])
+                ->paginate(6);
+            ;
         }
+//        if (\request()->ajax()) {
+//            $view = view('Front.listing._data', compact('products'))->render();
+//            return response()->json(['html' => $view]);
+//        }
+        return view('Front.search.search', compact('products'));
+
+    }
+
+    public function autoComplete(Request $request)
+    {
+        $this->validate($request,['query' => 'string']);
+        $products = $this->product->select(['product_name'])
+            ->Where('product_name', 'LIKE', '%' . $request->input('query') . '%')->get();
+        $data = [];
+        foreach ($products as $product) {
+            $data[] = $product->product_name;
+        }
+        return response()->json($data);
     }
 
     //use for lists

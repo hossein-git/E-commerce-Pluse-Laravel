@@ -13,7 +13,7 @@
                   <i class="ace-icon fa fa-signal"></i>
                   <b>Orders</b>
                </h5>
-               <div class="widget-toolbar no-border">
+               {{--<div class="widget-toolbar no-border">
                   <div class="inline dropdown-hover">
                      <button class="btn btn-minier btn-primary">
                         Today
@@ -50,7 +50,7 @@
                         </li>
                      </ul>
                   </div>
-               </div>
+               </div>--}}
             </div>
             <div class="widget-body">
                <div class="space-10"></div>
@@ -255,22 +255,22 @@
                         <span class="grey">
                            <i class="ace-icon fa fa-user fa-2x blue"></i>
                             Users</span>
-                        <h4 class="bigger pull-right">1,255</h4>
+                        <h4 class="bigger pull-right">{{ $menu_count['users'] }}</h4>
                      </div>
 
                      <div class="grid3">
                         <span class="grey">
                            <i class="ace-icon fa fa-user-times fa-2x purple"></i>
-                           Guests
+                           Employees
                         </span>
-                        <h4 class="bigger pull-right">941</h4>
+                        <h4 class="bigger pull-right">{{ $employees }}</h4>
                      </div>
 
                      <div class="grid3">
                         <span class="grey"><i class="ace-icon fa fa-user-plus fa-2x red"></i>
                            New Users
                         </span>
-                        <h4 class="bigger pull-right">1,050</h4>
+                        <h4 class="bigger pull-right">{{ $new_users }}</h4>
                      </div>
                   </div>
                </div><!-- /.widget-main -->

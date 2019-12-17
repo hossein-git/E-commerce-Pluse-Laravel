@@ -11,9 +11,11 @@
          border: none;
          float: left;
       }
+
       .rating0 > input {
          display: none;
       }
+
       .rating0 > label:before {
          margin: 5px;
          font-size: 1.25em;
@@ -21,20 +23,24 @@
          display: inline-block;
          content: "\f005";
       }
+
       .rating0 > .half:before {
          content: "\f089";
          position: absolute;
       }
+
       .rating0 > label {
          color: #ddd;
          float: right;
       }
+
       /**** CSS Magic to Highlight Stars on Hover *****/
       .rating0 > input:checked ~ label, /* show gold star when clicked */
       .rating0:not(:checked) > label:hover, /* hover current star */
       .rating0:not(:checked) > label:hover ~ label {
          color: #FFD700;
       }
+
       /* hover previous stars in list */
       .rating0 > input:checked + label:hover, /* hover current star when changing rating0 */
       .rating0 > input:checked ~ label:hover,
@@ -143,52 +149,55 @@
                <!-- /RATING -->
                <div class="row">
                   <form>
-                  <div class="col-sm-6">
-                     <!-- COLOR -->
-                     <div class="wrapper">
-                        <div class="title-options">
-                           COLOR<span class="color-required">*</span>
-                        </div>
-                        <ul class="options-swatch-color">
-                           @foreach($product->colors()->get(['color_code','color_name']) as $color)
-                              <li class="">
-                                 <a href="#" class="p_color" data-id="{{ $color->color_name }}">
+                     <div class="col-sm-6">
+                        <!-- COLOR -->
+                        <div class="wrapper">
+                           <div class="title-options">
+                              COLOR<span class="color-required">*</span>
+                           </div>
+                           <ul class="options-swatch-color">
+                              @foreach($product->colors()->get(['color_code','color_name']) as $color)
+                                 <li class="">
+                                    <a href="#" class="p_color" data-id="{{ $color->color_name }}">
                                     <span class="swatch-label color-orange active"
                                           style="background: {{ $color->color_code }}">
                                     </span>
-                                 </a>
-                              </li>
-                           @endforeach
-                           <span class="tab swatch-label color-orange"></span>
-                        </ul>
-                     </div>
-                     <!-- SIZE -->
-                     <div class="wrapper">
-                        <div class="title-options">SIZE<span class="color-required">*</span></div>
-                        <ul class="tags-list _size">
-                           <li><a href="#" size="XS">XS</a></li>
-                           <li><a href="#" size="S">S</a></li>
-                           <li><a href="#" size="M">M</a></li>
-                           <li><a href="#" size="L">L</a></li>
-                        </ul>
-                     </div>
-                  </div>
-
-                  <!-- ATTRIBUTES -->
-                  <div class="col-sm-6">
-                     @forelse($product->attributes as $attribute)
-                        <div class="wrapper">
-                           <label class="title-options" for="{{ $attribute->attr_name }}"><span class="color-required">*</span>{{ $attribute->attr_name }}:</label>
-                           <select name="attr_name[]" class="form-control select-inline" id="{{ $attribute->attr_name }}" required>
-                              @foreach($attribute->attributeValues as $value)
-                                 <option value="{{$attribute->attr_name.':'.$value->value.'-' }}">{{ $value->value }}</option>
+                                    </a>
+                                 </li>
                               @endforeach
-                           </select>
+                              <span class="tab swatch-label color-orange"></span>
+                           </ul>
                         </div>
-                     @empty
+                        <!-- SIZE -->
+                        <div class="wrapper">
+                           <div class="title-options">SIZE<span class="color-required">*</span></div>
+                           <ul class="tags-list _size">
+                              <li><a href="#" size="XS">XS</a></li>
+                              <li><a href="#" size="S">S</a></li>
+                              <li><a href="#" size="M">M</a></li>
+                              <li><a href="#" size="L">L</a></li>
+                           </ul>
+                        </div>
+                     </div>
 
-                     @endforelse
-                  </div>
+                     <!-- ATTRIBUTES -->
+                     <div class="col-sm-6">
+                        @forelse($product->attributes as $attribute)
+                           <div class="wrapper">
+                              <label class="title-options" for="{{ $attribute->attr_name }}"><span
+                                         class="color-required">*</span>{{ $attribute->attr_name }}:</label>
+                              <select name="attr_name[]" class="form-control select-inline"
+                                      id="{{ $attribute->attr_name }}" required>
+                                 @forelse($attribute->attributeValues as $value)
+                                    <option value="{{$attribute->attr_name.':'.$value->value.'-' }}">{{ $value->value }}</option>
+                                 @empty
+                                 @endforelse
+                              </select>
+                           </div>
+                        @empty
+
+                        @endforelse
+                     </div>
                   </form>
                </div>
                <b id="p_error" style="display: none;color: red;">ddd</b>
@@ -256,7 +265,17 @@
                      {{ $product->description }}
                   </P>
                   <ul class="list-simple-dot">
-                     <li><a href="#">{{ $product->made_in }}</a></li>
+                     <li><span class="font-weight-600">Made In :</span> {{ $product->made_in }}</li>
+                     @forelse($product->attributes as $attribute)
+                        <li>
+                           <span class="badge-grey font-weight-600">{{ $attribute->attr_name }} : </span>
+                           @forelse($attribute->attributeValues as $value)
+                              <span class="badge-dark">{{ $value->value }}</span>
+                           @empty
+                           @endforelse
+                        </li>
+                     @empty
+                     @endforelse
                   </ul>
                </div>
             </div>
@@ -322,10 +341,10 @@
                <span class="tt-tabs__title">TAGS</span>
                <div class="tt-tabs__content">
                   <h5 class="tab-title">TAGS</h5>
-                  <ul >
+                  <ul>
                      @forelse($product->tags as $tag)
-                        <li class="">
-                           <a  href="{{ route('front.lists',['list' => 'tags','slug' => "$tag->tag_slug", ]) }}">{{ $tag->tag_name }}</a>
+                        <li >
+                           <a class="badge-primary" href="{{ route('front.lists',['list' => 'tags','slug' => "$tag->tag_slug", ]) }}">{{ $tag->tag_name }}</a>
                         </li>
                      @empty
                         <b>NO TAG</b>
@@ -335,9 +354,10 @@
             </div>
             <!-- COMMENTS -->
             <div id="">
-               <span class="tt-tabs__title">REVIEWS</span>
+               <span class="tt-tabs__title badge-">REVIEWS</span>
                <div class="tt-tabs__content">
                   <h5 class="right tab-title">CUSTOMER REVIEWS</h5>
+                  <h6 id="comment_answer"></h6>
                   <h6>Write a review</h6>
                   @comments([
                   'model' => $product,
@@ -452,4 +472,27 @@
 @section('extra_js')
    <script src="{{ asset('front-assets/external/isotope/isotope.pkgd.min.js') }}"></script>
    <script src="{{ asset('front-assets/external/elevatezoom/jquery.elevatezoom.js') }}"></script>
+   <!-- to load uploadAjax function -->
+   <script src="{{ asset('front-assets/js/checkOut.js') }}"></script>
+   <!-- FOR CREATE COMMENT WITH AJAX  -->
+   <script type="text/javascript">
+       function getRatingVal(e) {
+           $('#rating_value').val($(e).val());
+       }
+
+       $(document).ready(function () {
+           $('#comment_form').submit(function (e) {
+               e.preventDefault();
+               var data = {
+                   commentable_type: $('#commentable_type').val(),
+                   commentable_id: $('#commentable_id').val(),
+                   rating: $("#rating_value").val(),
+                   message: $('#comment_message').val(),
+               };
+               if (upload_ajax("{{ route('comment.store') }}", data)) {
+                   $('#comment_answer').addClass('text-center badge-success').text('your comment has uploaded successfully')
+               }
+           });
+       });
+   </script>
 @endsection

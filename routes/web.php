@@ -26,8 +26,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/test', function () {
 
 
-
-dd(Cache::has('user-is-online'.  101));
+    dd(auth()->user()->getRoleNames()->count());
 
 //    return view('admin.test');
 })->name('test');
@@ -37,16 +36,10 @@ Route::get('/query', function () {
 
     \Illuminate\Support\Facades\DB::enableQueryLog();
 
-//    $user = \App\User::with('orders')->findOrFail(151);
-    $user = \App\User::findOrFail(auth()->id());
-    $orders = $user->orders;
-    foreach ($orders as $order){
-        ($order->order_id);
-        dump($order->address);
-        dump($order->giftCard);
-        foreach ($order->detailsOrder as $o){
-            ($o);
-        }
+    $comments  = \Laravelista\Comments\Comment::with('commenter','commentable')->get();
+    foreach ($comments as $order) {
+        echo($order->commentable->product_name);
+//        echo($order->commenter);
 
     }
 
@@ -68,74 +61,86 @@ Route::get('/w', function () {
 })->name('w');
 
 
-/********************---------------FRONT ROUTES------------------************************/
-Route::get('/', 'Front\homeController@home')->name('home');
-Route::get('/home', 'Front\homeController@home');
-Route::get('/show/{slug}', 'Front\homeController@show')->name('front.show');
+Route::group(['middleware' => 'web'], function () {
+
+
+    /********************---------------FRONT ROUTES------------------************************/
+    Route::get('/', 'Front\homeController@home')->name('home');
+    Route::get('/home', 'Front\homeController@home');
+    Route::get('/show/{slug}', 'Front\homeController@show')->name('front.show');
 
 
 
 
-/*---------------COMMENTS------------------*/
-Route::post('comments', '\Laravelista\Comments\CommentController@store');
-Route::match(['put', 'post'], 'comments/{comment}', '\Laravelista\Comments\CommentController@update');
-//Route::put('comments/{comment}', '\Laravelista\Comments\CommentController@update');
-//Route::post('comments/{comment}', '\Laravelista\Comments\CommentController@reply');
+
+    /*---------------CHECKOUT------------------*/
+    Route::get('/inter-checkout', 'Front\checkOutController@interCheckOut')->name('front.inter.checkout');
+    Route::get('/checkout', 'Front\checkOutController@index')->name('front.checkout');
+    Route::post('/checkout', 'Front\checkOutController@store')->name('front.checkout.store');
+    Route::post('/checkout/address', 'Front\checkOutController@saveAddress')->name('front.address.store');
+    Route::post('/checkout/orderStatus', 'Front\checkOutController@saveOrderStatus')->name('front.order.saveStatus');
 
 
-/*---------------CHECKOUT------------------*/
-Route::get('/inter-checkout', 'Front\checkOutController@interCheckOut')->name('front.inter.checkout');
-Route::get('/checkout', 'Front\checkOutController@index')->name('front.checkout');
-Route::post('/checkout/check-discount', 'Front\checkOutController@checkDiscount')->name('front.checkout.checkDiscount');
-Route::post('/checkout', 'Front\checkOutController@store')->name('front.checkout.store');
-Route::post('/checkout/address', 'Front\checkOutController@saveAddress')->name('front.address.store');
-Route::post('/checkout/orderStatus', 'Front\checkOutController@saveOrderStatus')->name('front.order.saveStatus');
-
-
-/*---------------LISTS------------------*/
-Route::match(['get', 'post'], '/products', 'Front\homeController@productsList')->name('front.productsList');
-Route::match(['get', 'post'], '/products/{list}/{slug}', 'Front\homeController@list')->where([
-    'list' => '[A-za-z]+',
+    /*---------------LISTS------------------*/
+    Route::match(['get', 'post'], '/products', 'Front\homeController@productsList')->name('front.productsList');
+    Route::match(['get', 'post'], '/products/{list}/{slug}', 'Front\homeController@list')->where([
+        'list' => '[A-za-z]+',
 //    'slug' => '[A-Za-z0-9]+'
-])->name('front.lists');
+    ])->name('front.lists');
 
-/*---------------CART------------------*/
-Route::resource('/cart', 'Front\cartController')->except(['create', 'edit', 'update']);
-Route::post('/cart/edit', 'Front\cartController@update')->name('cart.update');
-Route::get('/carts/clear', 'Front\cartController@clear')->name('cart.clear');
+    /*---------------CART------------------*/
+    Route::resource('/cart', 'Front\cartController')->except(['create', 'edit', 'update']);
+    Route::post('/cart/edit', 'Front\cartController@update')->name('cart.update');
+    Route::get('/carts/clear', 'Front\cartController@clear')->name('cart.clear');
 
 
-/*---------------SEARCh------------------*/
-Route::get('/search/{query}', 'Front\homeController@search')->name('front.search')->where(
-    ['query' => '[A-za-z]+']);
+    /*---------------SEARCh------------------*/
+    Route::get('/search', 'Front\homeController@search')->name('front.search');
+    Route::get('/auto-complete', 'Front\homeController@autoComplete')->name('front.search.autoComplete');
 
+
+    Auth::routes();
+    /*---------------GOOGLE------------------*/
+    Route::get('auth/google', 'Auth\GoogleController@redirectToGoogle')->name('auth.google');
+    Route::get('auth/google/callback', 'Auth\GoogleController@handleGoogleCallback');
+});
 
 /*------------------------------FRONT AUTH ROUTES------------------*/
+Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
 
-/*---------------ACCOUNT------------------*/
-Route::get('/profile', 'Front\accountController@profile')->name('front.profile');
-Route::get('/my-orders', 'Front\accountController@myOrders')->name('front.myOrders');
-Route::put('/my-orders','Front\accountController@cancelOrder')->name('front.cancel.order');
-Route::get('/edit-address', 'Front\accountController@editAddress')->name('front.address.edit');
-Route::put('/edit-address/{id}', 'Front\accountController@updateAddress')->name('front.address.update');
-Route::get('/edit-order-address/{id}', 'Front\accountController@editOrderAddress')->name('front.order.address.edit');
+    /*---------------ACCOUNT------------------*/
+    Route::get('/profile', 'Front\accountController@profile')->name('front.profile');
+    Route::get('/my-orders', 'Front\accountController@myOrders')->name('front.myOrders');
+    Route::put('/my-orders', 'Front\accountController@cancelOrder')->name('front.cancel.order');
+    Route::get('/edit-address', 'Front\accountController@editAddress')->name('front.address.edit');
+    Route::put('/edit-address/{id}', 'Front\accountController@updateAddress')->name('front.address.update');
+    Route::get('/edit-order-address/{id}', 'Front\accountController@editOrderAddress')->name('front.order.address.edit');
 
+    /*---------------COMMENTS------------------*/
+    Route::post('comments', 'Admin\myCommentController@store')->name('comment.store');
+    Route::match(['put', 'post'], 'comments/{comment}', '\Laravelista\Comments\CommentController@update');
+//    Route::post('comments/{comment}', '\Laravelista\Comments\CommentController@reply');
 
+    /*---------------GIFT CARD------------------*/
+    Route::post('/checkout/check-discount', 'Front\checkOutController@checkDiscount')->name('front.checkout.checkDiscount');
 
-
-
+});
 
 /*---------------***************ADMIN ROUTES******************------------------*/
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'checkRole'], function () {
 
     Route::get('/cat', function () {
         return view('admin.category.index');
     })->name('cat');
 
     /*---------------USERS------------------*/
-    Route::resource('/user','Admin\userController');
-    Route::get('/user-address/{id}','Admin\userController@editAddress')->name('admin.address.edit');
-    Route::put('/user-address/{id}','Admin\userController@updateAddress')->name('admin.address.update');
+    Route::resource('/user', 'Admin\userController');
+    Route::get('/user-address/{id}', 'Admin\userController@editAddress')->name('admin.address.edit');
+    Route::put('/user-address/{id}', 'Admin\userController@updateAddress')->name('admin.address.update');
+
+    /*---------------ROLES------------------*/
+    Route::resource('roles', 'Admin\roleController');
+
 
     /*---------------SEARCH------------------*/
     Route::post('/search', 'Admin\dashboardController@search')->name('admin.search');
@@ -151,8 +156,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('product/tags/{tag}', 'Admin\productController@productTags')->name('products.tags');
 
     /*---------------ATTRIBUTES ROUTES------------------*/
-    Route::resource('attribute','Admin\attributeController')->except(['index','show']);
-    Route::delete('attribute/value/{id}','Admin\attributeController@deleteValue')->name('attribute.deleteValue');
+    Route::resource('attribute', 'Admin\attributeController')->except(['index', 'show']);
+    Route::delete('attribute/value/{id}', 'Admin\attributeController@deleteValue')->name('attribute.deleteValue');
     //when create new attribute calling from show product
     Route::get('/attribute/createNew/{id}', 'Admin\attributeController@createNew')->name('attribute.createNew');
 
@@ -178,15 +183,11 @@ Route::group(['prefix' => 'admin'], function () {
 //    Route::post('orders','Admin\orderController@sent')->name('order.sent');
 
     /*---------------****COMMENTS****------------------*/
-    Route::get('comments', '\Laravelista\Comments\CommentController@index')->name('comments.index');
-    Route::get('comments/new', '\Laravelista\Comments\CommentController@new')->name('comments.new');
-    Route::get('comments/{comment}', '\Laravelista\Comments\CommentController@approve')->name('comment.approve');
-    Route::delete('comments/{comment}', '\Laravelista\Comments\CommentController@destroy');
-
+    Route::get('/comments', 'Admin\myCommentController@index')->name('comments.index');
+    Route::get('/comments/new', 'Admin\myCommentController@newComments')->name('comments.new');
+    Route::post('/comments/{id}', 'Admin\myCommentController@approve')->name('comment.approve');
+    Route::delete('/comments/{id}', 'Admin\myCommentController@destroy');
+//    Route::delete('/comments/{comment}', '\Laravelista\Comments\CommentController@destroy');
 
 });
 
-Auth::routes();
-/*---------------GOOGLE------------------*/
-Route::get('auth/google', 'Auth\GoogleController@redirectToGoogle')->name('auth.google');
-Route::get('auth/google/callback', 'Auth\GoogleController@handleGoogleCallback');

@@ -28,29 +28,28 @@
                @csrf
                <!-- SET THIS EMPTY INPUT FORM MORE SECURITY  -->
                   <input type="hidden" name="input" value="">
-               <div class="form-group">
-                  <div class="input-group">
+               <div class="form-group ">
+                  <div class="input-group @error('email') has-error @enderror">
                      <span class="input-group-addon">
                         <span class="icon icon-person_outline"></span>
                      </span>
-                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Email" autofocus>
+                     <input id="email" type="email" class="form-control " name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Email" autofocus>
                      @error('email')
-                     <span class="invalid-feedback btn-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                     <span class="form-control-hint" role="alert">
+                        <strong>{{ $message }}</strong</span>
                      @enderror
                   </div>
                </div>
-               <div class="form-group">
+               <div class="form-group @error('password') is-invalid @enderror">
                   <div class="input-group">
                      <span class="input-group-addon">
                         <span class="icon icon-lock_outline"></span>
                      </span>
 
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Password" required autocomplete="current-password">
+                        <input id="password" type="password" class="form-control " name="password" placeholder="Password" required autocomplete="current-password">
 
                         @error('password')
-                        <span class="invalid-feedback btn-danger" role="alert">
+                        <span class="form-control-hint" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                         @enderror

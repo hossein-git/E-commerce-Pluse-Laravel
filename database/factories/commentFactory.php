@@ -7,8 +7,8 @@ use Faker\Generator as Faker;
 
 $factory->define(\Laravelista\Comments\Comment::class, function (Faker $faker) {
     return [
-        'guest_name' => $faker->name,
-        'guest_email' => $faker->email,
+        'commenter_id' => array_rand(\App\User::pluck('user_id','user_id')->toArray()),
+        'commenter_type' => \App\User::class,
         'commentable_type' => \App\Models\Product::class,
         'commentable_id' => random_int(1,10),
         'comment' => $faker->realText(50),

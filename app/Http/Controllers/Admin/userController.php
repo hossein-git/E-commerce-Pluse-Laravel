@@ -8,6 +8,7 @@ use App\Http\Requests\userRequest;
 use App\Models\Role;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -19,6 +20,7 @@ class userController extends Controller
 
     public function __construct()
     {
+        $this->middleware('checkRole');
         $this->user = new User();
         $this->paginate = 15;
     }
@@ -41,7 +43,7 @@ class userController extends Controller
      */
     public function create()
     {
-        $roles = Role::all(['role_id', 'name']);
+        $roles = Role::all(['id', 'name']);
         return view('admin.user.create', compact('roles'));
     }
 
@@ -54,11 +56,10 @@ class userController extends Controller
     public function store(userRequest $request)
     {
         $input = $request->except('_token');
-        $input['password'] = Hash::$input['password'];
-        $this->user->create($input);
-        return env('APP_AJAX')
-            ? response()->json(['success' => 'ok'])
-            : redirect()->route('user.index')->with(['success' => 'user has been created successfully']);
+        $input['password'] = Hash::make($input['password']);
+        $user = $this->user->create($input);
+        $user->assignRole($request->input('roles'));
+        return redirect()->route('user.index')->with(['success' => 'user has been created successfully']);
     }
 
     /**
@@ -86,9 +87,37 @@ class userController extends Controller
     public function edit($id)
     {
         if (ctype_digit($id)) {
-            $user = $this->user->findOrFail($id, ['user_id', 'name', 'email', 'role_id']);
-            $roles = Role::all(['role_id', 'name']);
-            return view('admin.user.edit', compact('user', 'roles'));
+            $user = $this->user->findOrFail($id, ['user_id', 'name', 'email']);
+            $roles = Role::select('id', 'name')->get();
+            $userRole = $user->roles->pluck('id')->toArray();
+            return view('admin.user.edit', compact('user', 'roles', 'userRole'));
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required|string|max:200|min:4',
+            'email' => ['required', 'email',
+                Rule::unique('users', 'email')->whereNot('user_id', $id)
+            ],
+        ]);
+        if (ctype_digit($id)) {
+            $user = $this->user->findOrFail($id)->fill($request->except('_token'));
+            $user->save();
+            $tableName = config('permission.table_names')['model_has_roles'];
+            $columnName = config('permission.column_names')['model_morph_key'];
+            DB::table("$tableName")->where("$columnName", $id)->delete();
+            $user->assignRole($request->input('roles'));
+
+            return redirect()->route('user.index')->with(['success' => 'user has been updated successfully']);
         }
     }
 
@@ -119,37 +148,10 @@ class userController extends Controller
         if (ctype_digit($id)) {
             $user = $this->user->findOrFail($id)->address->fill($request->except('_token'));
             $user->save();
-            return !env('APP_AJAX')
-                ? redirect()->route('user.show', $id)->with(['success' => 'address has updated successfully'])
-                : response()->json(['success' => 'ok']);
+            return  redirect()->route('user.show', $id)->with(['success' => 'address has updated successfully']);
         }
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $this->validate($request, [
-            'name' => 'required|string|max:200|min:4',
-            'email' => ['required', 'email',
-                Rule::unique('users', 'email')->whereNot('user_id', $id)
-            ],
-        ]);
-        if (ctype_digit($id)) {
-            $user = $this->user->findOrFail($id)->fill($request->except('_token'));
-            $user->save();
-
-            return env('APP_AJAX')
-                ? response()->json(['success' => 'ok'])
-                : redirect()->route('user.index')->with(['success' => 'user has been updated successfully']);
-        }
-    }
 
     /**
      * Remove the specified resource from storage.

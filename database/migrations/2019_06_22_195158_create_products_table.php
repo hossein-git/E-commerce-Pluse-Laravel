@@ -34,7 +34,7 @@ class CreateProductsTable extends Migration
             $table->string('made_in')->nullable();
             $table->decimal('weight')->nullable();
             $table->text('description');
-            $table->string('cover',255)->nullable();
+            $table->string('cover',255);
             $table->softDeletes();
             $table->timestamps();
         });

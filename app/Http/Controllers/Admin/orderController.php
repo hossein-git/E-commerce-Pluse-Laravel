@@ -14,6 +14,11 @@ class orderController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permission:order-list|order-create|order-edit|order-delete', ['only' => ['index','notSent','show']]);
+//        $this->middleware('permission:order-create', ['only' => ['create','store']]);
+        $this->middleware('permission:order-edit', ['only' => ['edit','update','status']]);
+        $this->middleware('permission:order-delete', ['only' => ['destroy','detailDestroy','status']]);
+        
         $this->order = new Order();
     }
     /**
@@ -27,6 +32,11 @@ class orderController extends Controller
         return view('admin.orders.index',compact('orders'));
     }
 
+    /**
+     * Display a new orders.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function notSent()
     {
         $orders = $this->order->where('order_status',0)->with(['address','giftCard','users'])->paginate(5);

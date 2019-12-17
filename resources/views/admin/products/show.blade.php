@@ -46,16 +46,23 @@
                <div class="space-6"></div>
             </div>
             <div class="hr hr12 dotted"></div>
-            <div class="clearfix w3-display-container">
-               @foreach($product->photos as $key => $photo)
-                  <a href="{{$photo->src}}" target="_blank">
-                     <img class="mySlides" src="{{ $photo->thumbnail }}"
-                          alt="{{ $photo->photo_name }}" style="width:100%">
-                  </a>
-               @endforeach
-               <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
-               <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
-            </div>
+            @if ($product->photos->count() > 0)
+               <div class="clearfix w3-display-container">
+                  @foreach($product->photos as $key => $photo)
+                     <a href="{{$photo->src}}" target="_blank">
+                        <img class="mySlides" src="{{ $photo->thumbnail }}"
+                             alt="{{ $photo->photo_name }}" style="width:100%">
+                     </a>
+                  @endforeach
+                  <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+                  <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+               </div>
+               @else
+               <div class="clearfix">
+                  <h2 class="text-danger bolder">WITHOUT PHOTO</h2>
+               </div>
+            @endif
+
             <div class="clearfix">
                <div class="grid2">
                   <span class="bigger-175 blue">25</span>
@@ -69,25 +76,23 @@
                   Following
                </div>
             </div>
-
-            <div class="hr hr16 dotted"></div>
-            <div class="profile-contact-links align-left ">
-               <a href="{{route('product.edit',$product->product_id)}}" data-id="{{ $product->product_id }}"
-                  class="btn btn-link edit_me">
-                  <i class="ace-icon fa fa-plus-circle bigger-120 warning"></i>
-                  Edit product
-               </a>
-            </div>
-
-            <div class="space-2"></div>
+            @can('product-edit')
+               <div class="hr hr16 dotted"></div>
                <div class="profile-contact-links align-left ">
-                  <a href="{{ route('attribute.edit',$product->product_id) }}" data-id="{{ $product->product_id }}"
-                     class="btn btn-link edit_attr">
+                  <a href="{{route('product.edit',$product->product_id)}}" class="btn btn-link click_me">
+                     <i class="ace-icon fa fa-plus-circle bigger-120 warning"></i>
+                     Edit product
+                  </a>
+               </div>
+
+               <div class="space-2"></div>
+               <div class="profile-contact-links align-left ">
+                  <a href="{{ route('attribute.edit',$product->product_id) }}" class="btn btn-link">
                      <i class="ace-icon fa fa-plus-circle bigger-120 green"></i>
                      Edit Attributes
                   </a>
                </div>
-
+            @endcan
          </div>
 
          <div class="col-xs-12 col-sm-9">
@@ -234,7 +239,7 @@
                            @foreach($attribute->attributeValues as $value)
                               <span class='label label-default'>{{ $value->value }}</span>
                            @endforeach
-                           @empty
+                        @empty
                            <b>NO ATTRIBUTES</b>
                         @endforelse
                      </span>
@@ -282,20 +287,6 @@
    </div>
 @endsection
 @section('extra_js')
-   @if (env('APP_AJAX'))
-      <script>
-          jQuery(".edit_me").bind('click', function (e) {
-              e.preventDefault();
-              var route = $(this).attr('href');
-              var pjax = new Pjax({
-                  selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
-              });
-              pjax.loadUrl(route);
-          });
-
-      </script>
-   @endif
-
    <!-- FOR IMAGE SLIDER -->
    <script type="text/javascript">
        var slideIndex = 1;

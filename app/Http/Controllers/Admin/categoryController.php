@@ -14,6 +14,11 @@ class categoryController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permission:product-list|product-create|product-edit|product-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:product-create', ['only' => ['create','store']]);
+        $this->middleware('permission:product-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:product-delete', ['only' => ['destroy']]);
+
         $this->category = new Category();
         $this->cachKey = 'categories';
     }
@@ -25,8 +30,8 @@ class categoryController extends Controller
      */
     public function index()
     {
-        $admin_categories = $this->category->whereIsRoot()->paginate(7);
-        return view('admin.category.index', compact('admin_categories'));
+        $main_categories = $this->category->whereIsRoot()->paginate(7);
+        return view('admin.category.index', compact('main_categories'));
     }
 
     /**

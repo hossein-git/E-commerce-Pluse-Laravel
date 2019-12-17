@@ -314,7 +314,6 @@
    <script type="text/javascript">
        jQuery(document).ready(function () {
            jQuery(function ($) {
-
                $("#product_form").validate({
                    errorElement: 'div',
                    errorClass: 'help-block',

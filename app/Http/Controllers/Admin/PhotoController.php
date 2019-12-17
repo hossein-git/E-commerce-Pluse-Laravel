@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\File;
 
 class PhotoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:product-delete', ['only' => 'destroy' ]);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -26,7 +26,9 @@ class DatabaseSeeder extends Seeder
         $this->call(orderSeeder::class);
         $this->call(commentSeeder::class);
         $this->call(ratingSeeder::class);
+        $this->call(PermissionTableSeeder::class);
         $this->call(roleSeeder::class);
+        $this->call(CreateAdminUserSeeder::class);
         \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
     }
 }

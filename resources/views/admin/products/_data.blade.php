@@ -62,30 +62,32 @@
       <td>
          <div class="hidden-sm hidden-xs btn-group">
             <form>
-               <button class="btn btn-xs btn-danger delete_me" data-id="{{ $product->product_id }}">
-                  <i class="ace-icon fa fa-trash-o bigger-120"></i>
-               </button>
-               @if(isset($index_categories))
-                  <a class="btn btn-warning btn-xs edit_me" title="Edit"
-                     href="{{route('product.edit',$product->product_id)}}" data-id="{{ $product->product_id }}">
-                     <i class="ace-icon fa fa-pencil bigger-120"></i></a>
-               @else
-                  <button class="btn btn-success btn-xs restore_me" title="Restore"
-                          data-id="{{route('product.restore',$product->product_id)}}"><i
-                             class="ace-icon fa fa-check bigger-120"></i>
+               @can('product-delete')
+                  <button class="btn btn-xs btn-danger delete_me" data-id="{{ $product->product_id }}">
+                     <i class="ace-icon fa fa-trash-o bigger-120"></i>
                   </button>
+               @endcan
+               @if(isset($index_categories))
+                  @can('product-edit')
+                     <a class="btn btn-warning btn-xs click_me" title="Edit"
+                        href="{{route('product.edit',$product->product_id)}}" data-id="{{ $product->product_id }}">
+                        <i class="ace-icon fa fa-pencil bigger-120"></i></a>
+                  @endcan
+               @else
+                  @can('product-delete')
+                     <button class="btn btn-success btn-xs restore_me" title="Restore"
+                             data-id="{{route('product.restore',$product->product_id)}}"><i
+                                class="ace-icon fa fa-check bigger-120"></i>
+                     </button>
+                  @endcan
                @endif
             </form>
-            <a class=" btn btn-xs btn-info click_me bolder" data-path="/admin/product/{{$product->product_id}}"
+            <a class="btn btn-xs btn-info click_me bolder"
                title="show product"
                href="{{ route('product.show',$product->product_id) }}"><i
                        class="ace-icon fa fa-eye bigger-120"></i>
             </a>
          </div>
-      </td>
-      <td>
-
-
       </td>
    </tr>
 @empty

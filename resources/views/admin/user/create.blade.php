@@ -5,6 +5,7 @@
 @section('extra_css')
 @endsection
 @section('content')
+   @include('layout.errors.notifications')
    <form id="user_form" action="{{ route('user.store') }}" method="post" enctype="multipart/form-data" >
       {{ csrf_field() }}
 
@@ -21,19 +22,19 @@
                 value="{{old('email')}}" required class="form-control">
          <span class="text-danger">{{ $errors->first('email') }}</span>
       </div>
-
-      <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
-         <label class="bolder bigger-110" for="role">Role:</label>
-         <select class="form-control select2" name="role_id" id="role">
-            <option value="" selected>NORMAL USER</option>
-            @forelse($roles as $role)
-               <option value="{{ $role->role_id }}" {{ $role->role_id == old('role') ? 'selected' : '' }}>{{ $role->name }}</option>
-               @empty
-            @endforelse
-         </select>
-         <span class="text-danger">{{ $errors->first('role') }}</span>
-      </div>
-
+      @can('role-create')
+         <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
+            <label class="bolder bigger-110" for="role">Role:</label>
+            <select class="form-control select2" name="roles" id="role" multiple>
+               <option value="" selected>NORMAL USER</option>
+               @forelse($roles as $role)
+                  <option value="{{ $role->id }}" {{ $role->id == old('role') ? 'selected' : '' }}>{{ $role->name }}</option>
+                  @empty
+               @endforelse
+            </select>
+            <span class="text-danger">{{ $errors->first('role') }}</span>
+         </div>
+      @endcan
 {{--      <div class="form-group {{ $errors->has('brand_image') ? 'has-error' : '' }}">--}}
 {{--         <label class="bolder bigger-110" for="brand_image">Brand Image</label>--}}
 

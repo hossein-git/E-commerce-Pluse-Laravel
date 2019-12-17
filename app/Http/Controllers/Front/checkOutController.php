@@ -24,6 +24,9 @@ class checkOutController extends Controller
 
     public function __construct()
     {
+        $this->middleware('web', ['except' => 'checkDiscount']);
+        $this->middleware('auth', ['only' => 'checkDiscount']);
+
         $this->order = new Order;
         //SAVE USER_ID IF USER IS LOGED IN
         if (auth()->check()) {
@@ -35,10 +38,10 @@ class checkOutController extends Controller
     public function index()
     {
         //IF AUTH AND USER HAS SAVED ADDRESS THEN SHOW THEM IN THE FORM FIELD
-        if (auth()->check()){
+        if (auth()->check()) {
             $address = User::findOrFail(auth()->id())->address;
-            if ($address){
-               return view('Front.account.checkout',compact('address'));
+            if ($address) {
+                return view('Front.account.checkout', compact('address'));
             }
         }
         return view('Front.account.checkout');
@@ -53,7 +56,7 @@ class checkOutController extends Controller
     public function store(Request $request)
     {
         //this input must be empty and if not means filled it with bots
-        if($request->input('input')){
+        if ($request->input('input')) {
             return false;
         }
         // ID CART IS EMPTY
@@ -73,7 +76,7 @@ class checkOutController extends Controller
         //IF USER HAS APPLIED GIFT CARD
         if (session()->has('gift_id')) {
             $input['gift_id'] = session()->pull('gift_id');
-            $giftAmount = GiftCard::findOrFail($input['gift_id'],['gift_amount'])->gift_amount;
+            $giftAmount = GiftCard::findOrFail($input['gift_id'], ['gift_amount'])->gift_amount;
             session(['gift_price' => $giftAmount]);
         }
         //GENERATE 8 N CODE
@@ -81,19 +84,19 @@ class checkOutController extends Controller
         //delete last '.00' and ',' char from subTotal
         $input['total_price'] = substr(str_replace(',', '', Cart::total()), 0, -3) - $giftAmount;
         $order = Order::create($input);
-        session()->put(['order_id' => $order->order_id ], Carbon::now()->addMinutes(5));
+        session()->put(['order_id' => $order->order_id], Carbon::now()->addMinutes(5));
         return response()->json(['success' => 'ok']);
     }
 
     //save address
-    public function saveAddress(Request $request)
+    public function saveAddress(addressRequest $request)
     {
         //this input must be empy and if not means filled it with bots
-        if($request->input('input')){
+        if ($request->input('input')) {
             return false;
         }
         $input = $request->except('_token');
-        if (!session()->has('order_id')){
+        if (!session()->has('order_id')) {
             return \response()->json(['error' => 'your session time has expired , pls try again']);
         }
 
@@ -116,7 +119,7 @@ class checkOutController extends Controller
     public function saveOrderStatus()
     {
 
-        if (!session()->has('order_id')){
+        if (!session()->has('order_id')) {
             return \response()->json(['error' => 'your session time has expired , pls try again']);
         }
         $input = [];
@@ -146,16 +149,16 @@ class checkOutController extends Controller
     public function savePayments(Request $request)
     {
         //this input must be empy and if not means filled it with bots
-        if($request->input('input')){
+        if ($request->input('input')) {
             return false;
         }
-        if (!session()->has('order_id')){
+        if (!session()->has('order_id')) {
             return \response()->json(['error' => 'your session time has expired , pls try again']);
         }
         //SAVE GIFT ID AND USER_ID IN checkGIFT
         //----//
         //change order status
-        $this->order->findOrFail(session()->pull('order_id'))->update(['status' => 1 ]);
+        $this->order->findOrFail(session()->pull('order_id'))->update(['status' => 1]);
 
     }
 
@@ -171,7 +174,7 @@ class checkOutController extends Controller
         ]);
 
         // ONLY LETTERS AND NUMBERS
-        if (!ctype_alnum($request->giftCode)){
+        if (!ctype_alnum($request->giftCode)) {
             return response()->json(['error' => 'only numbers and letters']);
         }
         $input = strtolower($request->giftCode);
@@ -189,7 +192,7 @@ class checkOutController extends Controller
         }
 
         //SAVE ORDER_ID TO USE IT TO SAVE ADDRESS , ORDER_DETAILS AND PAYMENTS
-        session()->put('gift_id' , $code->gift_id,Carbon::now()->addMinutes(5));
+        session()->put('gift_id', $code->gift_id, Carbon::now()->addMinutes(5));
         return response()->json(['success' => 'true']);
 
     }

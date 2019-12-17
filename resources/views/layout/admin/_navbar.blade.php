@@ -21,7 +21,7 @@
 
       <div class="navbar-buttons navbar-header pull-right" role="navigation">
          <ul class="nav ace-nav">
-            <li class="grey dropdown-modal">
+           {{-- <li class="grey dropdown-modal">
                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                   <i class="ace-icon fa fa-tasks"></i>
                   <span class="badge badge-grey">4</span>
@@ -206,29 +206,23 @@
                      </a>
                   </li>
                </ul>
-            </li>
+            </li>--}}
 
             <li class="light-blue dropdown-modal">
                <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                  <img class="nav-user-photo" src="assets/images/avatars/user.jpg" alt="Jason's Photo"/>
+{{--                  <img class="nav-user-photo" src="assets/images/avatars/user.jpg" alt="Jason's Photo"/>--}}
                   <span class="user-info">
-									<small>Welcome,</small>
-									Jason
-								</span>
+                     <small>Welcome,</small>
+                     {{ auth()->user()->name }}
+                  </span>
 
                   <i class="ace-icon fa fa-caret-down"></i>
                </a>
 
                <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                  <li>
-                     <a href="#">
-                        <i class="ace-icon fa fa-cog"></i>
-                        Settings
-                     </a>
-                  </li>
 
                   <li>
-                     <a href="profile.html">
+                     <a href="{{ route("user.show",auth()->id()) }}">
                         <i class="ace-icon fa fa-user"></i>
                         Profile
                      </a>
@@ -237,10 +231,14 @@
                   <li class="divider"></li>
 
                   <li>
-                     <a href="#">
-                        <i class="ace-icon fa fa-power-off"></i>
-                        Logout
+                     <a href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                        <span class="glyphicon glyphicon-log-out"></span>{{ __('Logout') }}
                      </a>
+                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                     </form>
                   </li>
                </ul>
             </li>

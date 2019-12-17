@@ -45,17 +45,17 @@ function upload_ajax(url, data, formId = null, rules = null, msg) {
             },
             success: function (label, element) {
                 // Add the span element, if doesn't exists, and apply the icon classes to it.
-                /* if ( !$( element ).next( "span" )[ 0 ] ) {
-                     $( "<span class='glyphicon glyphicon-ok form-control-feedback'></span>" ).insertAfter( $( element ) );
-                 }*/
+                 if ( !$( element ).next( "span" )[ 0 ] ) {
+                     $( '<span class="form-control-feedback icon icon-check"></span>' ).insertAfter( $( element ) );
+                 }
             },
             highlight: function (element, errorClass, validClass) {
                 $(element).parents(".form-group").addClass("has-error").removeClass("has-success");
-                // $( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
+                $( element ).next( "span" ).addClass( "icon-clear" ).removeClass( "icon-check" );
             },
             unhighlight: function (element, errorClass, validClass) {
                 $(element).parents(".form-group").addClass("has-success").removeClass("has-error");
-                // $( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
+                $( element ).next( "span" ).addClass( "icon-check" ).removeClass( "icon-clear" );
             }
         });
 
@@ -80,13 +80,15 @@ function upload_ajax(url, data, formId = null, rules = null, msg) {
             $(".ajax-load").show();
         },
         success: function (result) {
-            // alert(result.success);
+            if (msg){
+                 alert(result.success);
+            }
             bool = true;
             $(".ajax-load").hide();
         },
         error: function (request, status, error) {
             alert('server not responding....' + error);
-            console.log(error);
+            console.log(error,request,status);
         }
     });
 

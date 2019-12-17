@@ -13,6 +13,11 @@ class GiftCardController extends Controller
 
     public function __construct()
     {
+        $this->middleware('permission:gift-list|gift-create|gift-edit|gift-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:gift-create', ['only' => ['create','store']]);
+        $this->middleware('permission:gift-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:gift-delete', ['only' => ['destroy']]);
+        
         $this->gift = new GiftCard();
     }
     /**

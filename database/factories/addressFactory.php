@@ -18,7 +18,7 @@ $factory->define(\App\Models\Address::class, function (Faker $faker) {
         'postal_code' => $faker->postcode,
         'number' => $faker->numberBetween(1,99),
 //        'addressable_id' => array_rand(\App\Models\Order::select('order_id')->get()->toArray()),
-        'addressable_id' => (array_rand([1, 2, 3, 4, 5, 6, 7, 8, 9])),
+        'addressable_id' => random_int(1,10),
         'addressable_type' => \App\Models\Order::class
     ];
 });

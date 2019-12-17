@@ -30,6 +30,7 @@ class userRequest extends FormRequest
                 Rule::unique('users','email')->whereNot('user_id',$this->user)
             ],
             'password' => 'required|min:8|max:20|confirmed',
+
         ];
     }
 }

@@ -6,7 +6,7 @@ Edit User
 @endsection
 @section('content')
    @include('layout.errors.notifications')
-   <form  action="{{ route('user.update',$user->user_id) }}" method="post" >
+   <form id="user_edit_form" action="{{ route('user.update',$user->user_id) }}" method="post" >
       {{ csrf_field() }}
       {{ method_field('put') }}
 
@@ -23,20 +23,21 @@ Edit User
                 value="{{isset($user->email) ? $user->email : old('email')}}" required class="form-control">
          <span class="text-danger">{{ $errors->first('email') }}</span>
       </div>
+      @can('role-create','role-edit')
+         <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
+            <label class="bolder bigger-110" for="role">Role:</label>
+            <select class="form-control" name="roles[]" id="role" multiple>
+               <option value="" {{ $user->getRoleNames()->count() == 0 ? 'selected' : '' }}>NORMAL USER</option>
+               @forelse($roles as $key=> $role)
+                  <option value="{{ $role->id }}" {{ in_array($role->id,$userRole) ? 'selected' : ''}} >
+                     {{ $role->name }}</option>
+               @empty
 
-      <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
-         <label class="bolder bigger-110" for="role">Role:</label>
-         <select class="form-control" name="role_id" id="role">
-            <option value="" {{ $user->roles ? '' : 'selected' }}>NORMAL USER</option>
-            @forelse($roles as $role)
-               <option value="{{ $role->role_id }}" {{ isset($user->roles) && $user->roles->role_id == $role->role_id ? 'selected' : 'n'}} >
-                  {{ $role->name }}</option>
-            @empty
-            @endforelse
-         </select>
-         <span class="text-danger">{{ $errors->first('role') }}</span>
-      </div>
-
+               @endforelse
+            </select>
+            <span class="text-danger">{{ $errors->first('role') }}</span>
+         </div>
+      @endcan
       <div class="form-group">
          <div class="btn-group btn-group-justified">
             <div class="btn-group">

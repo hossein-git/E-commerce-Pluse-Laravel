@@ -10,6 +10,7 @@ use App\Models\GiftCard;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
+use App\User;
 use Illuminate\Contracts\View\View;
 use Laravelista\Comments\Comment;
 
@@ -30,6 +31,7 @@ class adminComposer
                 'orders' => Order::count(),
                 'payments' => Payment::count(),
                 'comments' => Comment::count(),
+                'users' => User::count(),
                 'products' => Product::count(),
                 'categories_count' => Category::count(),
                 'brands' => brand::count(),

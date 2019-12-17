@@ -10,10 +10,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Cache;
 use Laravelista\Comments\Commenter;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use Notifiable ,Commenter ;
+    use Notifiable ,Commenter ,HasRoles;
     /**
      * The primary key.
      *
@@ -58,15 +59,6 @@ class User extends Authenticatable
         return $this->hasMany(Order::class,'user_id')->with('detailsOrder','address');
     }
 
-    /**
-     * ROLES REL ONE-toMany
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
-     */
-    public function roles()
-    {
-        return $this->belongsTo(Role::class,'role_id');
-    }
 
     /**
      * CHECK USER ACTIVITY WITH MIDDLEWARE ADN THIS FUNC

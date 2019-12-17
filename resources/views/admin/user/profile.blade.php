@@ -7,7 +7,7 @@
 @section('content')
    @include('layout.errors.notifications')
    <!-- if user has roles background color will change -->
-   <div @if ($user->roles) style="background-color: lightgoldenrodyellow" @endif >
+   <div @if ($user->getRoleNames()->count()) style="background-color: lightgoldenrodyellow" @endif >
       <div id="user-profile-2" class="user-profile">
          <div class="tabbable">
             <div class="tab-content no-border padding-24">
@@ -37,9 +37,15 @@
                         <h4 class="blue">
                            <span class="middle">{{ $user->name }}</span>
 
-                           <span class="label @if ($user->roles) label-danger @endif arrowed-in-right">
+                           <span class="label @if ($user->getRoleNames()->count() > 0) label-danger @endif arrowed-in-right">
                               <i class="ace-icon fa fa-circle smaller-80 align-middle"></i>
-                              {{ $user->roles ? $user->roles->name : 'Normal User'  }}
+                               @if($user->getRoleNames()->count() > 0)
+                                 @foreach($user->getRoleNames() as $role)
+                                    {{ $role }}
+                                 @endforeach
+                              @else
+                                 Normal user>
+                              @endif
                            </span>
 
                            @if ($user->isOnline())
@@ -65,16 +71,6 @@
                            </div>
 
                            <div class="profile-info-row">
-                              <div class="profile-info-name"> Address</div>
-
-                              <div class="profile-info-value">
-                                 <i class="fa fa-map-marker light-orange bigger-110"></i>
-                                 <span>...</span>
-                              </div>
-                           </div>
-
-
-                           <div class="profile-info-row">
                               <div class="profile-info-name"> Joined</div>
 
                               <div class="profile-info-value">
@@ -92,6 +88,7 @@
 
                            <div class="profile-info-row">
                               <div class="profile-info-name"> Default Address </div>
+
                               @if ($address = $user->address)
                                  <div class="row">
                                     <div class="col-sm-4">
@@ -125,7 +122,8 @@
                                  </div>
                               @else
                                  <div class="profile-info-value">
-                                    <span>WITHOUT SAVED ADDRESS</span>
+                                    <i class="fa fa-map-marker light-orange bigger-110"></i>
+                                    <b>WITHOUT SAVED ADDRESS</b>
                                  </div>
                               @endif
 

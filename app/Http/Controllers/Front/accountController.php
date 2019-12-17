@@ -15,7 +15,7 @@ class accountController extends Controller
 
     public function __construct()
     {
-//        $this->middleware('auth');
+        $this->middleware('auth');
         $this->user = new User();
         $this->order = new Order();
     }
@@ -81,23 +81,27 @@ class accountController extends Controller
      * @param  addressRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function updateAddress(addressRequest $request,int $id)
+    public function updateAddress(addressRequest $request, $id)
     {
         if (ctype_digit($id)) {
-            if ($order_id = $request->input('order_id')){
+            if ($order_id = $request->has('order_id')){
                 $order = $this->order->findOrFail($order_id,['order_id','user_id']);
                 $this->checkOrderUserId($order->user_id);
 //                $order->address()->updateOrCreate($request->except('_token','_method'));
                 //if order has address then update it if not create
                 if ($order->address){
-                    $order->address->fill($request->except('_token'));
-                    $order->save();
+                    $order->address->fill($request->except('_token'))->save();
                 }else{
                     $order->address()->create($request->except('_token'));
                 }
             }else{
-                $user = $this->user->findOrFail($id)->address->fill($request->except('_token'));
-                $user->save();
+                $user = $this->user->findOrFail($id);
+                //if user has address update it if not create new
+                if ($user->address){
+                    $user->address->fill($request->except('_token'))->save();
+                }else{
+                    $user->address()->create($request->except('_token'));
+                }
             }
 
             return response()->json(['success' => 'ok']);
@@ -128,7 +132,7 @@ class accountController extends Controller
      * @param int $user_id = $order->user_id
      * @return boolean
      */
-    private function checkOrderUserId(int $user_id)
+    private function checkOrderUserId($user_id)
     {
         if ($user_id !== auth()->id() ){
             return abort(404);

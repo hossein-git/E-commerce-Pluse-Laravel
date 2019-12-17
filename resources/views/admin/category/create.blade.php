@@ -28,7 +28,9 @@
             @else
                <option value="">Parent Category</option>
                @foreach($allCategories as $Category)
-                  <option value="{{ old('category_id',$Category->category_id) }}">{{ $Category->parent_id == null ? '--'.$Category->category_name : $Category->category_name }}</option>
+                  <option value="{{ old('category_id',$Category->category_id) }}">
+                     {{ !$Category->parent_id ? '--'.$Category->category_name : $Category->category_name }}
+                  </option>
                @endforeach
             @endif
          </select>
