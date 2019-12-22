@@ -23,8 +23,6 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('employee_id')->nullable();
 //            $table->unsignedInteger('payment_id');
 
-//            $table->unsignedBigInteger('addr_id');
-//            $table->foreign('addr_id')->references('addr_id')->on('addresses')->onDelete('cascade');
 
             $table->unsignedBigInteger('gift_id')->nullable();
             $table->foreign('gift_id')->references('gift_id')->on('gift_cards')->onDelete('set null');
@@ -33,6 +31,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('track_code')->unique();
             $table->string('client_name');
             $table->string('client_phone');
+            $table->string('client_email');
             $table->integer('total_price');
             $table->text('details')->nullable();
             $table->timestamps();

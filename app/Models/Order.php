@@ -10,7 +10,7 @@ class Order extends Model
     protected $primaryKey = 'order_id';
 
     protected $fillable = [
-        'user_id', 'employee_id', 'gift_id', 'order_status','client_phone',
+        'user_id', 'employee_id', 'gift_id', 'order_status','client_phone','client_email',
         'track_code', 'client_name', 'total_price', 'details','user_id'
     ];
 

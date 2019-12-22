@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Front;
 
 use App\Models\brand;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cookie;
 use PhpParser\Comment;
 
 class homeController extends Controller
@@ -39,17 +42,30 @@ class homeController extends Controller
         return view('Front.home', compact('products'));
     }
 
+
     public function show($slug)
     {
-        $product = $this->product->with(['photos:src,photo_id', 'brands', 'attributes'])->where('product_slug', "$slug")->first();
-        return view('front.product.show', compact('product'));
+        $product = $this->product->where('product_slug', "$slug")->first();
+        //GET RELATED TAGS
+        $tag_slugs = $product->tags()->get(['tag_slug']);
+        //PUSH TAGS INTO ONE ARRAY
+        $slugs = [];
+        foreach ($tag_slugs as $tag_slug) {
+            array_push($slugs, $tag_slug->tag_slug);
+        }
+        //GET PRODUCTS WHICH HAS SAME TAG
+        $related_products = $this->product->whereHas('tags', function ($query) use ($slugs) {
+            return $query->whereIn('tag_slug', array_unique($slugs));
+        })->get(['product_slug', 'product_name', 'status',
+            'data_available', 'is_off', 'off_price', 'cover', 'sale_price', 'created_at'])->take(6);
+
+        return view('front.product.show', compact('product','related_products'));
     }
 
     //get all products with filters
     public function productsList(Request $request)
     {
         $this->inputs($request);
-
         $products = $this->product->orderBy("$request->sort", "$request->dcs")
             ->whereBetween('sale_price', [$request->priceMin, $request->priceMax])
             ->select(['product_slug', 'product_name', 'description', 'status',
@@ -117,8 +133,7 @@ class homeController extends Controller
                 ->Where('product_name', 'like', '%' . $query . '%')
                 ->select(['product_slug', 'product_name', 'status',
                     'data_available', 'is_off', 'off_price', 'cover', 'sale_price', 'created_at'])
-                ->paginate(6);
-            ;
+                ->paginate(6);;
         }
 //        if (\request()->ajax()) {
 //            $view = view('Front.listing._data', compact('products'))->render();
@@ -130,7 +145,7 @@ class homeController extends Controller
 
     public function autoComplete(Request $request)
     {
-        $this->validate($request,['query' => 'string']);
+        $this->validate($request, ['query' => 'string']);
         $products = $this->product->select(['product_name'])
             ->Where('product_name', 'LIKE', '%' . $request->input('query') . '%')->get();
         $data = [];
@@ -138,6 +153,52 @@ class homeController extends Controller
             $data[] = $product->product_name;
         }
         return response()->json($data);
+    }
+
+    public function trackOrder(Request $request)
+    {
+        if ($request->input('input')){
+            abort(404);
+        }
+        if (ctype_digit($request->input('code'))){
+            $this->validate($request,['code'=> 'required|numeric|digits_between:8,8']);
+            $orders = Order::where('track_code' , 'LIKE' , '%' . $request->input('code') .'%')->get();
+            return view('Front.account.myOrders',compact('orders'))->with(['track' => true]);
+        }
+    }
+
+    public function compare(Request $request)
+    {
+        $p_1 = null;
+        $p_2 = null;
+
+        if ($id1 = $request->cookie('P_compare_1')){
+            $p_1 = $this->product->findOrFail($id1,['product_slug','brand_id', 'product_name', 'description', 'status',
+                'data_available', 'is_off', 'off_price', 'cover', 'sale_price', 'created_at']);
+        }
+        if ($id2 = $request->cookie('P_compare_2')){
+            $p_2 = $this->product->findOrFail($id2,['product_slug','brand_id', 'product_name', 'description', 'status',
+                'data_available', 'is_off', 'off_price', 'cover', 'sale_price', 'created_at']);
+        }
+        return view('Front.product.compare',compact('p_1','p_2'));
+    }
+
+    public function compareProduct(Request $request)
+    {
+        $id = $request->input('id');
+        if (ctype_digit($id)){
+            $name = 'P_compare_1';
+            if ($request->cookie('P_compare_1')){
+                $name = 'P_compare_2';
+            }
+            return response()->json()->withCookie($name,$id,10);
+        }
+    }
+
+    public function removeCompare($name)
+    {
+        return response()->json(['success' => 'compare product has removed'])->withCookie(Cookie::forget("$name"));
+
     }
 
     //use for lists

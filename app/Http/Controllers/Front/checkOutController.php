@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Requests\addressRequest;
+use App\Mail\PaymentMail;
 use App\Models\Address;
 use App\Models\CheckGift;
 use App\Models\GiftCard;
@@ -14,6 +15,7 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class checkOutController extends Controller
@@ -59,13 +61,14 @@ class checkOutController extends Controller
         if ($request->input('input')) {
             return false;
         }
-        // ID CART IS EMPTY
+        // If CART IS EMPTY
         if (!Cart::count() > 0) {
             return response()->json(['success' => 'your card is empty']);
         }
         $this->validate($request, [
             'client_name' => 'string|required|regex:^[a-zA-Z]^',
             'client_phone' => 'string|required',
+            'client_email' => 'email|required',
             'details' => 'string|nullable',
         ]);
 
@@ -82,7 +85,8 @@ class checkOutController extends Controller
         //GENERATE 8 N CODE
         $input['track_code'] = random_int(10000000, 99999999);
         //delete last '.00' and ',' char from subTotal
-        $input['total_price'] = substr(str_replace(',', '', Cart::total()), 0, -3) - $giftAmount;
+        $subTotal = (substr(str_replace(',', '', Cart::subtotal()), 0, -3));
+        $input['total_price'] = $subTotal - $giftAmount;
         $order = Order::create($input);
         session()->put(['order_id' => $order->order_id], Carbon::now()->addMinutes(5));
         return response()->json(['success' => 'ok']);
@@ -134,11 +138,13 @@ class checkOutController extends Controller
                     'quantity' => $cart->qty,
                     'size' => $cart->options->size,
                     'color' => $cart->options->color,
-                    'order_id' => $order_id
+                    'order_id' => $order_id,
+                    'created_at' => Carbon::now()
                 ]
             );
         }
         $query = DB::table('details_orders')->insert($input);
+        Cart::destroy();
         return $query
             ? response()->json(['success' => 'order status ok'])
             : response()->json(['error' => 'system not response']);
@@ -157,8 +163,15 @@ class checkOutController extends Controller
         }
         //SAVE GIFT ID AND USER_ID IN checkGIFT
         //----//
+        $order = $this->order->findOrFail(session()->pull('order_id'));
+
+        //send email
+        $payment_email = ['track' => $order->track_code, 'payment_status' => '???'];
+        Mail::to($order->client_email)->send(new PaymentMail($payment_email));
+
+
         //change order status
-        $this->order->findOrFail(session()->pull('order_id'))->update(['status' => 1]);
+        $order->update(['status' => 1]);
 
     }
 

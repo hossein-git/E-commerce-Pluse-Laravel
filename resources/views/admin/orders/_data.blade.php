@@ -36,7 +36,11 @@
          @endif
       </td>
       <td class="center">{{ $order->client_name }}</td>
-      <td class="center">{{ $order->employee }}</td>
+      <td class="center">
+         <span>{{ $order->client_phone }}</span>
+         <strong>{{ $order->client_email }}</strong>
+      </td>
+{{--      <td class="center">{{ $order->employee }}</td>--}}
       <td class="center">{{ $order->payment_id }}</td>
       <td class="bolder">{{ number_format($order->total_price) }}</td>
       <td CLASS="center">

@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\Address;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Role;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -77,5 +78,15 @@ class User extends Authenticatable
     public function address()
     {
         return $this->morphOne(Address::class,'addressable');
+    }
+
+    /**
+     * favorite REL belongsToMany
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
+    public function favorites()
+    {
+        return $this->belongsToMany(Product::class,'favorites','user_id','product_id');
     }
 }

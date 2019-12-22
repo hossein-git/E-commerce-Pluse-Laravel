@@ -31,22 +31,26 @@
                <a class="dropdown-toggle" data-toggle="dropdown"><span class="icon icon-person "></span></a>
                <div class="dropdown-label hidden-sm hidden-xs">My Account</div>
                <ul class="dropdown-menu">
+                  <li><a href="{{ route('front.compare') }}"><span class="fa fa-balance-scale"></span>Compare</a></li>
+                  <li><a href="#" data-toggle="modal" data-target="#modalTrackOrder"><span class="icon icon-track_changes"></span>Track My Order</a></li>
                   @auth
+                     {{--                           <li>Welcome <b>{{ auth()->user()->name }}</b></li>--}}
                      <li><a href="{{ route('front.profile') }}"><span class="icon icon-person"></span>My Account</a></li>
                      <li><a href="wishlist.html"><span class="icon icon-favorite_border"></span>My Wishlist</a></li>
+                     <li><a href="{{ route('front.myOrders') }}"><span class="icon icon-list"></span>My Orders</a></li>
                      <li>
                         <a href="{{ route('logout') }}"
                            onclick="event.preventDefault();
-                                document.getElementById('logout-form-m').submit();">
+                                                     document.getElementById('logout-form').submit();">
                            <span class="glyphicon glyphicon-log-out"></span>{{ __('Logout') }}
                         </a>
-                        <form id="logout-form-m" action="{{ route('logout') }}" method="POST" style="display: none;">
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                            @csrf
                         </form>
                      </li>
-
-                  @elseauth
-                     <li><a href="{{ route('login') }}" data-toggle="modal" data-target="#modalLoginForm"><span class="icon icon-lock_outline"></span>Log In</a></li>
+                  @else
+                     <li><a href="{{ route('login') }}"  ><span class="icon icon-lock_outline"></span>Log In</a></li>
                      <li><a href="{{ route('register') }}"><span class="icon icon-person_add"></span>Create an account</a></li>
                   @endauth
                </ul>
@@ -60,7 +64,7 @@
       <div class="container-fluid text-center">
          <!-- logo -->
          <div class="logo">
-            <a href="{{ route('home') }}" class="load_page"><img src="{{ asset('front-assets/images/logo-mobile.png') }}" alt=""/></a>
+            <a href="{{ route('home') }}" class="load_page"><img src="{{ $setting->src }}" alt="logo"></a>
          </div>
          <!-- /logo -->
       </div>
@@ -159,7 +163,7 @@
                <div class="col-md-4">
                   <!-- logo -->
                   <div class="logo">
-                     <a href="{{ route('home') }}" class="load_page"><img src="{{ asset('front-assets/images/logo-mobile.png') }}" alt=""/></a>
+                     <a href="{{ route('home') }}" class="load_page"><img src="{{ $setting->src }}" alt="logo"></a>
                   </div>
                   <!-- /logo -->
                </div>
@@ -188,12 +192,13 @@
                         <span class="dropdown-label hidden-sm hidden-xs">My Account</span>
                      </a>
                      <ul class="dropdown-menu">
-                        <li><a href="compare.html"><span class="fa fa-balance-scale"></span>Compare</a></li>
-                        @auth
-                           <li>Welcome <b>{{ auth()->user()->name }}</b></li>
+                        <li><a href="{{ route('front.compare') }}"><span class="fa fa-balance-scale"></span>Compare</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#modalTrackOrder"><span class="icon icon-track_changes"></span>Track My Order</a></li>
+                     @auth
+{{--                           <li>Welcome <b>{{ auth()->user()->name }}</b></li>--}}
                            <li><a href="{{ route('front.profile') }}"><span class="icon icon-person"></span>My Account</a></li>
                            <li><a href="wishlist.html"><span class="icon icon-favorite_border"></span>My Wishlist</a></li>
-                           <li><a href="{{ route('front.myOrders') }}"><span class="icon icon-favorite_border"></span>My Orders</a></li>
+                           <li><a href="{{ route('front.myOrders') }}"><span class="icon icon-list"></span>My Orders</a></li>
                            <li>
                               <a href="{{ route('logout') }}"
                                  onclick="event.preventDefault();

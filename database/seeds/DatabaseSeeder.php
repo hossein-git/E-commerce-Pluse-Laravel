@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionTableSeeder::class);
         $this->call(roleSeeder::class);
         $this->call(CreateAdminUserSeeder::class);
+        $this->call(settingSeeder::class);
         \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
     }
 }

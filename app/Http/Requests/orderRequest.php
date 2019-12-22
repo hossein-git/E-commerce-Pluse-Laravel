@@ -29,7 +29,8 @@ class orderRequest extends FormRequest
             , 'gift_id'     => ['nullable', 'numeric']
             , 'order_status'=> ['nullable', 'numeric']
             , 'track_code'  => ['string']
-            , 'client_name' => ['string', 'regex:[A-z]']
+            , 'client_name' => ['string', 'regex:[A-z]','required']
+            , 'client_email' => ['email', 'required']
             , 'total_price' => ['numeric']
             , 'details'     => ['string']
         ];

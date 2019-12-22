@@ -69,7 +69,7 @@
                @endcan
                @if(isset($index_categories))
                   @can('product-edit')
-                     <a class="btn btn-warning btn-xs click_me" title="Edit"
+                     <a class="btn btn-warning btn-xs" title="Edit"
                         href="{{route('product.edit',$product->product_id)}}" data-id="{{ $product->product_id }}">
                         <i class="ace-icon fa fa-pencil bigger-120"></i></a>
                   @endcan
@@ -82,7 +82,7 @@
                   @endcan
                @endif
             </form>
-            <a class="btn btn-xs btn-info click_me bolder"
+            <a class="btn btn-xs btn-info bolder"
                title="show product"
                href="{{ route('product.show',$product->product_id) }}"><i
                        class="ace-icon fa fa-eye bigger-120"></i>

@@ -8,7 +8,7 @@
          <div class="product_inside">
             <div class="image-box">
                <a href="{{ route('front.show',$product->product_slug) }}" class="load_page">
-                  <img src="{{ $product->thumbnail }}" alt="">
+                  <img src="{{ $product->thumbnail }}" alt="product image" class="img-thumbnail">
                   @if($product->is_off == 1)
                      <div class="label-sale ">Sale<br>{{ $product->off }}% Off</div>
                   @endif
@@ -70,6 +70,7 @@
 @endforelse
 <div class="container">
    <div class="pagination">
+
       {{ $products->links() }}
    </div>
 </div>

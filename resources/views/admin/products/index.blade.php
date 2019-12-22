@@ -54,48 +54,48 @@
          </a>
       </div>
       <div class="pull-right">
-
-         <form method="post" action="{{ route('admin.search') }}" id="form-search">
+         <form method="post" action="{{ route('admin.search') }}" id="form-search"
+               onsubmit="event.preventDefault()">
             @csrf
             <span><i>search by <b>name</b> and exact <b>SKU</b></i></span>
             <input type="hidden" value="products" name="search_kind">
             <span class="input-icon">
-         <input type="text" placeholder="Search ..." class="nav-search-input"
-                autocomplete="off" name="search"/>
-         <i class="ace-icon fa fa-search nav-search-icon"></i>
-         <button type="submit" class="btn btn-sm">
-            <span class="fa fa-search"></span>
-         </button>
-      </span>
+               <input type="text" placeholder="Search ..." class="nav-search-input"
+                      autocomplete="off" name="search"/>
+               <i class="ace-icon fa fa-search nav-search-icon"></i>
+               <button type="submit" class="btn btn-sm">
+                  <span class="fa fa-search"></span>
+               </button>
+            </span>
          </form>
       </div>
    @endif
    <div class="col-sm-12 col-lg-12 col-xs-12">
       <table id="simple-table" class="table table-bordered table-hover table-responsive">
-      <thead>
-      <tr>
-         <th>#</th>
-         <th>Product Name</th>
-         <th class="center">SKU</th>
-         <th>Buy Price</th>
-         <th>Sell Price (after OFF)</th>
-         <th>Status</th>
-         {{--         <th>Available Date</th>--}}
-         <th class="center">Discount?</th>
-         {{--         <th class="smaller-80">Price Of Off</th>--}}
-         <th class="smaller-80">Category</th>
-         <th class="smaller-80">Colors</th>
-         {{--         <th class="smaller-80">Made In</th>--}}
-         <th class="smaller-80">Description</th>
-         <th>Cover Photo</th>
-         <th class="smaller-80">Created Date</th>
-         <th>Operations</th>
-      </tr>
-      </thead>
-      <tbody id="table_body" class="table_data">
-      @include('admin.products._data')
-      </tbody>
-   </table>
+         <thead>
+         <tr>
+            <th>#</th>
+            <th>Product Name</th>
+            <th class="center">SKU</th>
+            <th>Buy Price</th>
+            <th>Sell Price (after OFF)</th>
+            <th>Status</th>
+            {{--         <th>Available Date</th>--}}
+            <th class="center">Discount?</th>
+            {{--         <th class="smaller-80">Price Of Off</th>--}}
+            <th class="smaller-80">Category</th>
+            <th class="smaller-80">Colors</th>
+            {{--         <th class="smaller-80">Made In</th>--}}
+            <th class="smaller-80">Description</th>
+            <th>Cover Photo</th>
+            <th class="smaller-80">Created Date</th>
+            <th>Operations</th>
+         </tr>
+         </thead>
+         <tbody id="table_body" class="table_data">
+         @include('admin.products._data')
+         </tbody>
+      </table>
    </div>
    <div class="">
       {{ $products->links() }}
@@ -103,38 +103,38 @@
 
 @endsection()
 @section('extra_js')
-   <script>
-       $(document).ready(function () {
-          @can('product-delete')
-          deleteAjax("/admin/product/", "delete_me", "product");
-           $(".restore_me").click(function (e) {
-               e.preventDefault();
-               var obj = $(this); // first store $(this) in obj
-               var id = $(this).data("id");
-               $.ajaxSetup({
-                   headers: {
-                       'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                   }
-               });
-               $.ajax({
-                   url: id,
-                   method: "GET",
-                   dataType: "Json",
-                   // data: {"id": id},
-                   success: function ($results) {
-                       alert('product has been successfully restored');
-                       $(obj).closest("tr").remove(); //delete row
-                       console.log($results);
-                   },
-                   error: function (xhr) {
-                       alert('error, product not restored');
-                       console.log(xhr.responseText);
-                   }
-               });
-           });
-          @endcan
-       });
-   </script>
+   @can('product-delete')
+      <script>
+          $(document).ready(function () {
+              deleteAjax("/admin/product/", "delete_me", "product");
+              $(".restore_me").click(function (e) {
+                  e.preventDefault();
+                  var obj = $(this); // first store $(this) in obj
+                  var id = $(this).data("id");
+                  $.ajaxSetup({
+                      headers: {
+                          'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                      }
+                  });
+                  $.ajax({
+                      url: id,
+                      method: "GET",
+                      dataType: "Json",
+                      // data: {"id": id},
+                      success: function ($results) {
+                          alert('product has been successfully restored');
+                          $(obj).closest("tr").remove(); //delete row
+                          console.log($results);
+                      },
+                      error: function (xhr) {
+                          alert('error, product not restored');
+                          console.log(xhr.responseText);
+                      }
+                  });
+              });
+          });
+      </script>
+   @endcan
    <!-- TO SORT PRODUCTS -->
    <script type="text/javascript">
        $(document).ready(function () {
@@ -173,6 +173,5 @@
                })
            });
        });
-
    </script>
 @stop

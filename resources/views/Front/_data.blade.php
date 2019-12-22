@@ -9,7 +9,7 @@
             <div class="image-box">
                <a class="promo-box zoom-in design-default load_page"
                   href="{{ route('front.show',$product->product_slug) }}">
-                  <img src="{{ $product->thumbnail }}" alt="">
+                  <img src="{{ $product->thumbnail }}" alt="product image" class="img-responsive img-thumbnail">
                   @if($product->is_off == 1)
                      <div class="label-sale ">Sale<br>{{ $product->off }}% Off</div>
                   @endif

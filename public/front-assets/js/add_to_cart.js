@@ -16,7 +16,6 @@ $(document).on('click','.add_to_cart',function (e) {
             return { attr_name: this.value };
         }).get();
     }
-    // console.log(selects);
 
     $("#p_error").hide();
     var slug = $("#p_slug").val(),
@@ -57,8 +56,8 @@ $(document).on('click','.add_to_cart',function (e) {
             $("#cart_div").load(location.href + " #cart_div");
             $('#add_to_cart').text('Added to Cart').css("background-color", "#1B6AAA");
         })
-        .fail(function (jqXHR, ajaxOptions, thrownError) {
-            // console.log(jqXHR);
+        .fail(function (jqXHR, ajaxOptions, error) {
+            console.log(jqXHR, ajaxOptions, error);
             alert('error');
         })
 });
@@ -117,7 +116,6 @@ function editCart(e){
         _token = $('#_token').val(),
         url = $(e).data('url'),
         qty = $(e).parent().find('input').val();
-    alert(url);
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')

@@ -89,6 +89,7 @@ function upload_ajax(url, data, formId = null, rules = null, msg) {
         error: function (request, status, error) {
             alert('server not responding....' + error);
             console.log(error,request,status);
+            $(".ajax-load").hide();
         }
     });
 

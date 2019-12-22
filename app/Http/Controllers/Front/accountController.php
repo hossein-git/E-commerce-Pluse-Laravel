@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\addressRequest;
 use App\Models\Order;
+use App\Models\Product;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -124,6 +125,45 @@ class accountController extends Controller
             $order->update(['order_status' => 5]);
             return response()->json(['success' => 'ok']);
         }
+    }
+
+    /**
+     * favorite post
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function favoritePost(Request $request)
+    {
+        if (ctype_digit($id = $request->input('id'))){
+            $product = Product::findOrFail($id);
+            auth()->user()->favorites()->attach($product);
+            return response()->json(['success' => 'true']);
+        }
+    }
+
+    /**
+     * un-favorite post
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function unFavoritePost(Request $request)
+    {
+        if (ctype_digit($id = $request->input('id'))){
+            $product = Product::findOrFail($id);
+            auth()->user()->favorites()->detach($product);
+            return response()->json(['success' => 'true']);
+        }
+    }
+
+    /**
+     * Get all favorite product for user
+     *
+     * @return Response
+     */
+    public function myFavorites()
+    {
+        $myFavorites =auth()->user()->favorites;
+        return view('Front.account.myWishList', compact('myFavorites'));
     }
 
     /**

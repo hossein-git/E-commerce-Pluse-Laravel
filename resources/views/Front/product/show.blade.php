@@ -71,7 +71,6 @@
                               data-zoom-image="{{ ($photo->src) }}">
                               <img src="{{ ($photo->thumbnail ) }}" alt="{{ $photo->title }}"/>
                            </a>
-                           fff
                         </li>
                      @endforeach
                   </ul>
@@ -79,8 +78,8 @@
             </div>
             <!--  BRAND -->
             <div class="wrapper">
-               <div class="brand">
-                  <img src="{{ $product->brands->src }}" alt="">
+               <div class="brand text-center">
+                  <img src="{{ $product->brands->src }}" alt="LOGO">
                </div>
                <div class="text">
                   {{ $product->brands->brand_description }}
@@ -195,6 +194,7 @@
                               </select>
                            </div>
                         @empty
+                           <input type="hidden" name="select-inline">
 
                         @endforelse
                      </div>
@@ -218,15 +218,34 @@
 
                   <ul class="product_inside_info_link">
                      <li class="text-right">
-                        <a href="#">
-                           <span class="fa fa-heart-o"></span>
-                           <span class="text">ADD TO WISHLIST</span>
-                        </a>
+                        @auth()
+                           @if($product->favorited())
+                              <a href="#" id="unfavorites" data-id="{{ $product->product_id }}">
+                                 <span id="dislike_span" class="fa fa-heart"></span>
+                                 <span class="text">Delete from WISHLIST</span>
+                              </a>
+                           @else
+                              <a href="#" id="favorite" data-id="{{ $product->product_id }}">
+                                 <span id="like_span" class="fa fa-heart-o"></span>
+                                 <span class="text">ADD TO WISHLIST</span>
+                              </a>
+                           @endif
+                        @else
+                           <i>for wish List please<a href="{{ route('login') }}">login</a></i>
+                        @endauth
                      </li>
                      <li class="text-left">
-                        <a href="#" class="compare-link">
+                        <a data-id="{{ $product->product_id }}" class="compare-link">
                            <span class="fa fa-balance-scale"></span>
-                           <span class="text">ADD TO COMPARE</span>
+                           <span id="compare_text" class="text">
+                              {{--@if (request()->cookie('P_compare_1') == $product->product_id
+                                    or request()->cookie('P_compare_2') == $product->product_id )
+                                  already in compare list
+                                 @else
+                                 ADD TO COMPARE
+                              @endif--}}
+                              ADD TO COMPARE
+                           </span>
                         </a>
                      </li>
                   </ul>
@@ -244,6 +263,12 @@
          </div>
       </div>
    </div>
+   <input type="hidden" id="p_color">
+   <input type="hidden" id="p_size">
+   <input type="hidden" id="p_slug" value="{{ $product->product_slug }}">
+   <input type="hidden" id="p_id" value="{{ $product->product_id }}">
+   <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}">
+   <input type="hidden" id="_url" value="{{ route('cart.store')}}">
    <div id="review1">
       <div class="tt-product-page__tabs tt-tabs">
          <div class="tt-tabs__head">
@@ -343,8 +368,9 @@
                   <h5 class="tab-title">TAGS</h5>
                   <ul>
                      @forelse($product->tags as $tag)
-                        <li >
-                           <a class="badge-primary" href="{{ route('front.lists',['list' => 'tags','slug' => "$tag->tag_slug", ]) }}">{{ $tag->tag_name }}</a>
+                        <li>
+                           <a class="badge-01 badge-primary"
+                              href="{{ route('front.lists',['list' => 'tags','slug' => "$tag->tag_slug", ]) }}">{{ $tag->tag_name }}</a>
                         </li>
                      @empty
                         <b>NO TAG</b>
@@ -370,104 +396,45 @@
       </div>
    </div>
    <div class="divider"></div>
+
    <div class="">
       <h3 class="block-title small">YOU MAY ALSO BE INTERESTED IN THE FOLLOWING PRODUCT(S)</h3>
       <div class="row">
          <div class="carousel-products-2 carouselTab slick-arrow-top slick-arrow-top2">
-            <div>
-               <div class="product">
-                  <div class="product_inside">
-                     <div class="image-box">
-                        <a href="product.html">
-                           <img src="{{ asset('front-assets/images/product/product-04.jpg') }}" alt="">
-                        </a>
-                        <a href="#" data-toggle="modal" data-target="#ModalquickView" class="quick-view">
-										<span>
-										<span class="icon icon-visibility"></span>QUICK VIEW
-										</span>
-                        </a>
-                     </div>
-                     <div class="title">
-                        <a href="product.html">Leg Avenue Tights With All Over Vintage Bows</a>
-                     </div>
-                     <div class="price">
-                        $20
-                     </div>
-                     <div class="description">
-                        Silver, metallic-blue and metallic-lavender silk-blend jacquard, graphic pattern, pleated ruffle
-                        along collar, long sleeves with button-fastening cuffs, buckle-fastening silver skinny belt,
-                        large pleated rosettes at hips. Dry clean. Zip and hook fastening at back. 100% silk. Specialist
-                        clean
-                     </div>
-                     <div class="product_inside_hover">
-                        <div class="product_inside_info">
-                           <ul class="options-swatch options-swatch-color">
-                              <li>
-                                 <a href="#">
-                                    <span class="swatch-label color-dark-grey"></span>
-                                 </a>
-                              </li>
-                              <li class="active">
-                                 <a href="#">
-                                    <span class="swatch-label color-pale-gold"></span>
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="#">
-                                    <span class="swatch-label color-white border-bg"></span>
-                                 </a>
-                              </li>
-                           </ul>
-                           <div class="rating">
-                              <span class="icon-star"></span>
-                              <span class="icon-star"></span>
-                              <span class="icon-star"></span>
-                              <span class="icon-star"></span>
-                              <span class="icon-star empty-star"></span>
-                           </div>
-                           <a class="btn btn-product_addtocart" href="#" data-toggle="modal"
-                              data-target="#modalAddToCartProduct">
-                              <span class="icon icon-shopping_basket"></span>ADD TO CART
+            @forelse($related_products as $product)
+               <div>
+                  <div class="product">
+                     <div class="product_inside">
+                        <div class="image-box">
+                           <a href="{{ route('front.show',$product->product_slug) }}">
+                              <img src="{{ $product->cover }}" alt="product image" class="img-thumbnail">
                            </a>
-                           <a href="#" class="quick-view btn" data-toggle="modal" data-target="#ModalquickView">
-                              <span>
-                                 <span class="icon icon-visibility"></span>QUICK VIEW
-                              </span>
-                           </a>
-                           <ul class="product_inside_info_link">
-                              <li class="text-right">
-                                 <a href="#" class="wishlist-link">
-                                    <span class="fa fa-heart-o"></span>
-                                    <span class="text">Add to wishlist</span>
-                                 </a>
-                              </li>
-                              <li class="text-left">
-                                 <a href="#" class="compare-link">
-                                    <span class="fa fa-balance-scale"></span>
-                                    <span class="text">Add to compare</span>
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="#" data-toggle="modal" data-target="#ModalquickView" class="quick-view">
-                                    <span class="icon icon-visibility"></span>
-                                 </a>
-                              </li>
-                           </ul>
+                           @if($product->is_off)
+                              <div class="label-sale">Sale<br>{{ $product->off }}% Off</div>
+                           @endif
+                        </div>
+                        <div class="title">
+                           <a href="{{ route('front.show',$product->product_slug) }}">{{ $product->product_name }}</a>
+                        </div>
+                        <div class="price">
+                           @if($product->is_off == 1)
+                              <span class="new-price">{{ number_format($product->sale_price) }}</span>
+                              <span class="old-price">{{ $product->price }}</span>
+                           @else
+                              <span class="price view">{{ $product->price }}</span>
+                           @endif
                         </div>
                      </div>
                   </div>
                </div>
-            </div>
+            @empty
+            @endforelse
+
          </div>
       </div>
    </div>
 
-   <input type="hidden" id="p_color">
-   <input type="hidden" id="p_size">
-   <input type="hidden" id="p_slug" value="{{ $product->product_slug }}">
-   <input type="hidden" id="p_id" value="{{ $product->product_id }}">
-   <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}">
-   <input type="hidden" id="_url" value="{{ route('cart.store')}}">
+
 @endsection
 @section('extra_js')
    <script src="{{ asset('front-assets/external/isotope/isotope.pkgd.min.js') }}"></script>
@@ -481,6 +448,7 @@
        }
 
        $(document).ready(function () {
+           //submit comment
            $('#comment_form').submit(function (e) {
                e.preventDefault();
                var data = {
@@ -493,6 +461,41 @@
                    $('#comment_answer').addClass('text-center badge-success').text('your comment has uploaded successfully')
                }
            });
+           //add favorite
+           jQuery('#favorite').click(function (e) {
+               e.preventDefault();
+               var data = {
+                   id: jQuery('#favorite').attr('data-id')
+               };
+               if (upload_ajax("{{ route('favorite') }}", data)) {
+                   $('#favorite').empty().append('<span class="fa fa-heart"></span><span class="text">Delete From WISHLIST</span>');
+                   $(this).attr('id','unfavorites');
+               }
+           });
+
+           //remove favorite
+           jQuery('#unfavorites').click(function (e) {
+               e.preventDefault();
+               var data = {
+                   id: jQuery('#unfavorites').attr('data-id')
+               };
+               if (upload_ajax("{{ route('unfavorite') }}", data)) {
+                   $('#unfavorites').empty().append('<span class="fa fa-heart-o"></span><span class="text">ADD TO WISHLIST</span>');
+               }
+           });
+
+           //add To Compare
+           jQuery('.compare-link').click(function (e) {
+               e.preventDefault();
+               var data = {
+                   id: jQuery(this).attr('data-id')
+               };
+               if (upload_ajax("{{ route('front.productsCompare') }}", data)) {
+                   $('#compare_text').empty().text('added to Compare list');
+               }
+           });
+
+
        });
    </script>
 @endsection

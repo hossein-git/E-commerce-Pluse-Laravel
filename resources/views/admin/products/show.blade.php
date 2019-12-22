@@ -1,5 +1,9 @@
 @extends('layout.admin.index')
 @section('extra_css')
+   <!-- the script in this page wont work with pjax so i hava to reload it  -->
+   @if (env('APP_AJAX'))
+       @php(redirect()->route('product.show',$product->product_id))
+   @endif
    <link rel="stylesheet" href="{{ asset('admin-assets/css/w3.css') }}">
 @endsection
 @section('content')
@@ -79,7 +83,7 @@
             @can('product-edit')
                <div class="hr hr16 dotted"></div>
                <div class="profile-contact-links align-left ">
-                  <a href="{{route('product.edit',$product->product_id)}}" class="btn btn-link click_me">
+                  <a href="{{route('product.edit',$product->product_id)}}" class="btn btn-link">
                      <i class="ace-icon fa fa-plus-circle bigger-120 warning"></i>
                      Edit product
                   </a>

@@ -5,7 +5,7 @@
 @section('extra_css')
 @endsection
 @section('content')
-   <h4>Order History</h4>
+   <center><h2>{{ isset($track) ? "Tracking Order" : 'Order History ' }}</h2></center>
    <table class="table-order-history">
       <thead>
       <tr>
@@ -83,7 +83,8 @@
                   onclick="event.preventDefault();show_order_details(this)">
                   <i class="icon icon-open_in_browser"></i>
                </a>
-               @if ($order->order_status == 0)
+               @auth()
+                  @if ($order->order_status == 0)
                   <div class="_operations">
                      <a class="btn btn-xs bg-orange" title="edit address"
                         href="{{ route('front.order.address.edit',$order->order_id) }}">
@@ -97,6 +98,7 @@
                      </a>
                   </div>
                @endif
+               @endauth
 
             </td>
             <td style="display: none">
@@ -143,6 +145,7 @@
             </td>
          </tr>
          <tr>
+            @auth()
             @if ($order->giftCard)
                <div class="modal fade" id="{{ "gift$order->order_id" }}" tabindex="-1" role="dialog"
                     aria-label="myModalLabel" aria-hidden="true" style="display: none;">
@@ -172,6 +175,7 @@
                   </div>
                </div>
             @endif
+            @endauth
             <div class="modal fade" id="{{ "ModalquickView$order->order_id" }}" tabindex="-1" role="dialog"
                  aria-label="myModalLabel" aria-hidden="true" style="display: none;">
                <div class="modal-dialog modal-lg">
@@ -230,10 +234,9 @@
 
          </tr>
       @empty
-         <tr>
-            <td colspan="6">You haven't placed any orders yet.</td>
+         <tr class="text-center">
+            <td colspan="6" class="text-center center "><span class="font-weight-bolder">Nothing Found</span></td>
          </tr>
-
       @endforelse
       </tbody>
    </table>

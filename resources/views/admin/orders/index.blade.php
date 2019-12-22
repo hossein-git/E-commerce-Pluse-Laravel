@@ -7,7 +7,8 @@
 @section('content')
    @include('layout.errors.notifications')
 
-   <form method="post" action="{{ route('admin.search') }}" id="form-search">
+   <form method="post" action="{{ route('admin.search') }}" id="form-search"
+   onsubmit="event.preventDefault()">
       @csrf
       <input type="hidden" value="orders" name="search_kind">
       <span class="input-icon">
@@ -20,32 +21,35 @@
       </span>
       <span><i>search for <b>TRACK CODE</b></i></span>
    </form>
+   <div class="col-sm-12 col-lg-12 col-xs-12 col-xl-12 ">
+      <table id="simple-table" class="table table-bordered table-hover table-responsive">
+         <thead>
+         <tr class="info">
+            <th class="center">
+               ID
+            </th>
+            <th class="center">Order Status</th>
+            <th class="center">Track Code</th>
+            <th class="center">Address</th>
+            <th class="center">Customer User</th>
+            <th class="center">Client Name</th>
+            <th class="center">Client Phone, Email</th>
+            {{--         <th class="center">Employee Name</th>--}}
+            <th class="center">Payments</th>
+            <th class="center">Total Price</th>
+            <th class="center">Gift Card</th>
+            <th class="center">Details</th>
+            <th class="center">Date</th>
+            <th class="center">Operations</th>
+         </tr>
+         </thead>
+         <tbody class="table_data">
+         @include('admin.orders._data')
 
-   <table id="simple-table" class="table table-bordered table-hover">
-      <thead>
-      <tr class="info">
-         <th class="center">
-            ID
-         </th>
-         <th class="center">Order Status</th>
-         <th class="center">Track Code</th>
-         <th class="center">Address</th>
-         <th class="center">Customer User</th>
-         <th class="center">Client Name</th>
-         <th class="center">Employee Name</th>
-         <th class="center">Payments</th>
-         <th class="center">Total Price</th>
-         <th class="center">Gift Card</th>
-         <th class="center">Details</th>
-         <th class="center">Date</th>
-         <th class="center">Operations</th>
-      </tr>
-      </thead>
-      <tbody class="table_data">
-      @include('admin.orders._data')
+         </tbody>
+      </table>
+   </div>
 
-      </tbody>
-   </table>
 
    {{ $orders->links() }}
 
@@ -79,7 +83,7 @@
                        $(obj).closest("a").remove(); //delete icon
                        // var x = $(obj).parents('tr').load(location.href + obj); //delete icon
 
-                       // console.log($results);
+                       console.log($results);
                    },
                    error: function (xhr) {
                        alert('error,');

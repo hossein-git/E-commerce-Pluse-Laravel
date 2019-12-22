@@ -5,7 +5,7 @@
    <title>@yield('title')</title>
    <meta name="keywords" content="@yield('keywords')">
    <meta name="description" content="@yield('description')">
-   <meta name="author" content="{{ env('APP_NAME') }}">
+   <meta name="author" content="Hossein Haghparast">
    <meta name="_token" content="{{ csrf_token() }}">
 {{--   <link rel="shortcut icon" href="favicon.ico">--}}
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,6 +66,43 @@
    </div>
 </div>
 
+<!-- modalLoginForm-->
+<div class="modal  fade"  id="modalTrackOrder" tabindex="-1" role="dialog" aria-label="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-md-small">
+      <div class="modal-content ">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="icon icon-clear"></span></button>
+            <h4 class="modal-title text-center text-uppercase">Track Order</h4>
+         </div>
+
+            <div class="modal-body">
+               <!--modal-add-login-->
+               <div class="modal-login">
+                  <form action="{{ route('front.trackCode') }}" method="post">
+                     @csrf
+                     <div class="form-group">
+                        <div class="input-group">
+                        <span class="input-group-addon">
+                           <span class="icon icon-art_track"></span>
+                        </span>
+                           <input type="hidden" value="" name="input">
+                           <input type="text" maxlength="8" minlength="8" pattern="\d*"  name="code" id="track_code" class="form-control" placeholder="Tracking Code:" required>
+                        <i>ONLY NUMBERS</i>
+                        </div>
+                     </div>
+                     <button type="submit" class="btn btn-full">
+                        <span class="icon icon-track_changes"></span>
+                        Track
+                     </button>
+                  </form>
+               </div>
+               <!--/modal-add-login-->
+            </div>
+
+      </div>
+   </div>
+</div>
+<!-- /modalLoginForm-->
 @include('layout.front.partials._footer')
 
  <!-- LOAD PJAX -->
@@ -108,17 +145,6 @@
                 });
             }
         });
-
-
-        /*$("#search_from").submit(function (e) {
-            e.preventDefault();
-            var query = $('#search_input').val();
-            var pjax = new Pjax({
-                selectors: ["title","meta[name=keywords]", "#extra_css", "#content-load", "#extra_js"]
-            });
-            pjax.loadUrl("/search/" + query);
-
-        });*/
     });
 </script>
 <!-- EXTRA JS -->

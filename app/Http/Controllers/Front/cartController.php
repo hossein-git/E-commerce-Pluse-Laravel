@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 class cartController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('web');
+    }
+
     //show the shopping cart
     public function index()
     {

@@ -59,6 +59,7 @@ class Product extends Model
     {
         return $this->morphMany(Photo::class, 'products', 'photoable_type', 'photoable_id');
     }
+    
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
@@ -74,6 +75,17 @@ class Product extends Model
     {
         return $this->hasMany(Attribute::class,'product_id', 'product_id')->with('attributeValues');
     }
+
+    /**
+     * @return boolean
+     */
+    public function favorited()
+    {
+        return (bool) Favorite::where('user_id', auth()->id())
+            ->where('product_id', $this->product_id)
+            ->first();
+    }
+    
 
     //get created at in diffForHumans format
     public function getCreatedAtAttribute($date)

@@ -12,21 +12,17 @@
 */
 
 
-use App\Models\Attribute;
-use App\Models\brand;
-use App\Models\CheckGift;
-use App\Models\Color;
-use App\Models\GiftCard;
-use App\Models\Tag;
-use Carbon\Carbon;
-use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Support\Facades\Cache;
+use App\Models\DetailsOrder;
+use App\Models\Product;
+use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
 
+    $order = ['name' => 'order_test' , 'code' => '12345' , 'status' => 'sent'];
 
-    dd(auth()->user()->getRoleNames()->count());
+    Mail::to('hossein.droid@gmail.com')->send(new \App\Mail\OrderMail($order));
 
 //    return view('admin.test');
 })->name('test');
@@ -36,29 +32,14 @@ Route::get('/query', function () {
 
     \Illuminate\Support\Facades\DB::enableQueryLog();
 
-    $comments  = \Laravelista\Comments\Comment::with('commenter','commentable')->get();
-    foreach ($comments as $order) {
-        echo($order->commentable->product_name);
-//        echo($order->commenter);
-
-    }
+    $popular_product = DetailsOrder::select('product_id')->orderBy('product_id','desc')->distinct()->pluck('product_id')->take(5);
+    $popular_products = Product::findOrFail($popular_product,
+        ['status','product_id','product_name','sale_price','off_price','is_off']);
 
     $query = \Illuminate\Support\Facades\DB::getQueryLog();
     dd($query);
 
 })->name('test');
-
-Route::get('/w0', function () {
-
-    if (session()->has('order_id')) {
-        $x = substr(str_replace(',', '', Cart::total()), 0, -2);
-        dd($x);
-    }
-})->name('login');
-
-Route::get('/w', function () {
-    return view('admin.log-in');
-})->name('w');
 
 
 Route::group(['middleware' => 'web'], function () {
@@ -68,9 +49,6 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/', 'Front\homeController@home')->name('home');
     Route::get('/home', 'Front\homeController@home');
     Route::get('/show/{slug}', 'Front\homeController@show')->name('front.show');
-
-
-
 
 
     /*---------------CHECKOUT------------------*/
@@ -98,12 +76,22 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/search', 'Front\homeController@search')->name('front.search');
     Route::get('/auto-complete', 'Front\homeController@autoComplete')->name('front.search.autoComplete');
 
+    /*---------------TRACK ORDER------------------*/
+    Route::post('/track-order', 'Front\homeController@trackOrder')->name('front.trackCode');
+
+    /*---------------COMPARE------------------*/
+    Route::get('/compare','Front\homeController@compare')->name('front.compare');
+    Route::post('/compare-product','Front\homeController@compareProduct')->name('front.productsCompare');
+    Route::delete('/compare/{name}','Front\homeController@removeCompare')->name('front.removeCompare');
 
     Auth::routes();
     /*---------------GOOGLE------------------*/
     Route::get('auth/google', 'Auth\GoogleController@redirectToGoogle')->name('auth.google');
     Route::get('auth/google/callback', 'Auth\GoogleController@handleGoogleCallback');
+
+
 });
+
 
 /*------------------------------FRONT AUTH ROUTES------------------*/
 Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
@@ -120,6 +108,11 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
     Route::post('comments', 'Admin\myCommentController@store')->name('comment.store');
     Route::match(['put', 'post'], 'comments/{comment}', '\Laravelista\Comments\CommentController@update');
 //    Route::post('comments/{comment}', '\Laravelista\Comments\CommentController@reply');
+
+    /*---------------FAVORITES------------------*/
+    Route::post('/favorite', 'Front\accountController@favoritePost')->name('favorite');
+    Route::post('/un-favorite', 'Front\accountController@unFavoritePost')->name('unfavorite');
+    Route::get('/my-wish-list', 'Front\accountController@myFavorites')->name('my_favorites');
 
     /*---------------GIFT CARD------------------*/
     Route::post('/checkout/check-discount', 'Front\checkOutController@checkDiscount')->name('front.checkout.checkDiscount');
@@ -188,6 +181,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'checkRole'], function () {
     Route::post('/comments/{id}', 'Admin\myCommentController@approve')->name('comment.approve');
     Route::delete('/comments/{id}', 'Admin\myCommentController@destroy');
 //    Route::delete('/comments/{comment}', '\Laravelista\Comments\CommentController@destroy');
+
+    /*---------------SITE SETTINGS------------------*/
+    Route::resource('/settings', 'Admin\settingController')->except([
+        'create', 'show', 'edit', 'destroy'
+    ]);
 
 });
 

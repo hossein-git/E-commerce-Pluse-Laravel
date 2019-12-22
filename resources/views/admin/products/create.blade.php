@@ -414,8 +414,7 @@
                           $("#error_result").empty();
                           json = $.parseJSON(request.responseText);
                           $.each(json.errors, function (key, value) {
-                              $('.alert-danger').show();
-                              $('.alert-danger').append('<p>' + value + '</p>');
+                              $('.alert-danger').show().append('<p>' + value + '</p>');
                           });
                           $('html, body').animate(
                               {

@@ -10,6 +10,6 @@ $factory->define(\App\Models\GiftCard::class, function (Faker $faker) {
         'gift_name' => $faker->streetName,
         'gift_code' => $faker->randomNumber(8),
         'status' => $faker->numberBetween(0,1),
-        'gift_amount' => $faker->randomNumber()
+        'gift_amount' => random_int(50,1000)
     ];
 });

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Mail\OrderMail;
 use App\Models\DetailsOrder;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class orderController extends Controller
 {
@@ -114,11 +116,15 @@ class orderController extends Controller
     {
         if (ctype_digit($id)){
             $order = $this->order->findOrFail($id);
+            $email = $order->client_email;
             if ($status == 'sent'){
                 $s = $order->update(['order_status' => 2]);
+                $order = ['code' => "$order->track_code" , 'status' => 'sent '];
             }elseif($status == 'delivered'){
                 $s = $order->update(['order_status' => 3]);
+                $order = ['code' => "$order->track_code" , 'status' => 'posted'];
             }
+            Mail::to($email)->send(new OrderMail($order));
             return $s
                 ? response()->json(['success' => $order])
                 : response()->json(['error' => 'error']);

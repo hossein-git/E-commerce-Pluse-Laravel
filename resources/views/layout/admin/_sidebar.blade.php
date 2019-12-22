@@ -55,7 +55,7 @@
       @include('layout.admin._menu',
       ['menu_name' => 'Payments', 'number' => 'payments' ,'gate' => 'order','icon' => 'fa-credit-card',
       'subMenu' => 'Failed Payment','secondSubMenu' => 'All Payment',
-      'route_create' => 'admin.dashboard' ,'route_list' => 'w'])
+      'route_create' => 'admin.dashboard' ,'route_list' => 'home'])
 
       @include('layout.admin._menu',
       ['menu_name' => 'Comments', 'number' => 'comments' ,'gate' => '-','icon' => 'fa-comment',
@@ -103,7 +103,7 @@
 
       @can('role-list')
          <li class="">
-            <a class="click_me" data-path="/admin/dashboard" href="{{ route('admin.dashboard') }}">
+            <a class="click_me" href="{{ route('settings.index') }}">
                <i class="menu-icon fa fa-cogs"></i>
                <span class="menu-text"> Settings </span>
             </a>

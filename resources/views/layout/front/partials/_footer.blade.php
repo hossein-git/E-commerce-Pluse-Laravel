@@ -58,7 +58,7 @@
                <div class="row">
                   <div class="col-sm-4 col-md-12">
                      <div class="footer-logo">
-                        <a href="index.html"><img src="images/logo-transparent.png" alt=""></a>
+                        <a href="{{ route('home') }}"><img src="{{ $setting->src }}" alt="logo"></a>
                      </div>
                   </div>
                   <div class="col-sm-8 col-md-12">
@@ -115,11 +115,15 @@
                   <div class="mobile-collapse_content">
                      <div class="v-links-list ">
                         <ul>
-                           <li><a href="#">Sign In</a></li>
+                           <li><a href="#" data-toggle="modal" data-target="#modalTrackOrder"><span class="icon icon-lock_outline"></span>Track My Order</a></li>
                            <li><a href="#">View Cart</a></li>
-                           <li><a href="#">My Wishlist</a></li>
-                           <li><a href="#">Track My Order</a></li>
-                           <li><a href="#">Help</a></li>
+                           @auth()
+                              <li><a href="#">My Wishlist</a></li>
+                              <li><a href="{{ route('front.profile') }}">Profile</a></li>
+                           @else
+                           <li><a href="{{ route('login') }}">Sign In</a></li>
+                           <li><a href="{{ route('register') }}">Register</a></li>
+                           @endauth
                         </ul>
                      </div>
                   </div>
@@ -131,11 +135,10 @@
                   <div class="mobile-collapse_content">
                      <div class="list-info">
                         <ul>
-                           <li>Address: 7563 St. Vicent Place, Glasgow</li>
-                           <li>Phone: +777 2345 7885</li>
-                           <li>Fax: +777 2345 7886</li>
-                           <li>Hours: 7 Days a week from 10:00 am</li>
-                           <li>E-mail: <a href="mailto:info@mydomain.com">info@mydomain.com</a></li>
+                           <li>Address: {{ $setting->site_address }}</li>
+                           <li>Phone: {{ $setting->site_phone }}</li>
+                           <li>Fax: {{ $setting->site_fax }}</li>
+                           <li>E-mail: <a href="mailto:{{ $setting->site_email }}">{{ $setting->site_email }}</a></li>
                         </ul>
                      </div>
                   </div>
@@ -172,7 +175,7 @@
          </div>
          <div class="pull-left">
             <div class="box-copyright">
-               <a href="index.html">MyShop</a> &copy; 2017. <span>All Rights Reserved.</span>
+               <a href="http://www.findhossein.ir/">{{ $setting->site_title }} &copy; 2019. <span>By Hossein Haghparast.</span></a>
             </div>
          </div>
       </div>
