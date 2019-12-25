@@ -4,6 +4,11 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -29,7 +34,7 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param \Exception $exception
      * @return void
      */
     public function report(Exception $exception)
@@ -40,14 +45,41 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param \Illuminate\Http\Request $request
+     * @param \Exception $exception
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
     {
+
         if ($exception instanceof \Spatie\Permission\Exceptions\UnauthorizedException) {
-            return response()->json(['User have not permission for this page access.']);
+            return response()->view('admin.errors.error', [
+                'error' => 'accessing the page or resource you were trying to reach is forbidden for some reason',
+                'code' => '403'
+            ], 403);
+        }
+        if ($exception instanceof NotFoundHttpException) {
+
+            return (Str::contains($request->url(), '/admin/'))
+                ? response()->view('admin.errors.error', [
+                    'error' => ' Ooops, we cannot find what you are looking for. Please try again.',
+                    'code' => '404'
+                ], 404)
+                : response()->view('Front.errors.404');
+
+        } elseif ($exception instanceof HttpException && $exception->getStatusCode() == 403) {
+            return response()->view(
+                'front.errors.403');
+
+        } elseif ($exception instanceof HttpException) {
+            Log::info($exception->getMessage());
+            return (Str::contains($request->url(), '/admin/'))
+                ? response()->view('admin.errors.403', [
+                    'error' => ' Ooops, server error occurred Please check again later.',
+                    'code' => '500'
+                ], 500)
+                : response()->view('Front.errors.500');
+
         }
         return parent::render($request, $exception);
     }

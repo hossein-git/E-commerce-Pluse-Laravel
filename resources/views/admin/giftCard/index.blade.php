@@ -16,8 +16,7 @@
          <th class="center">Status</th>
          <th class="center">Amount</th>
          <th class="center">Code</th>
-         <th class="hidden-480">operations</th>
-         <th></th>
+         <th class="center">operations</th>
       </tr>
       </thead>
       <tbody>
@@ -49,7 +48,7 @@
             <td class="">{{ number_format($gift->gift_amount) }}</td>
             <td class="bolder">{{ $gift->gift_code }}</td>
             <td class="center">
-               <div class="hidden-sm hidden-xs btn-group">
+               <div class="btn-group">
                   <form>
                      @can('gift-delete')
                         <button class="btn btn-xs btn-danger delete_me" data-id="{{ $gift->gift_id }}">

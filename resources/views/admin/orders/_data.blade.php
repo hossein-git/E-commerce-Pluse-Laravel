@@ -56,7 +56,56 @@
          {{ Str::limit($order->details,50) }}</td>
       <td>{{ $order->created_at }}
       </td>
+
       <td class="center">
+
+         <div class="hidden-md hidden-lg">
+            <div class="inline pos-rel">
+               <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                  <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+               </button>
+
+               <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                 <li>
+                    <a class="btn btn-info2 btn-xs click_me" title="Show Details"
+                         href="{{ route('order.show',$order->order_id) }}">
+                       <i class="ace-icon fa fa-eye bigger-120"></i>
+                    </a>
+                 </li>
+                  @can('order-edit')
+                     {{--<li><a class="btn btn-warning btn-xs click_me" title="Edit"
+                            href="" data-id="{{ $order->order_id }}">
+                           <i class="ace-icon fa fa-pencil bigger-120"></i>
+                        </a></li>--}}
+                     @if($order->order_status == 2 )
+                        <li>
+                           <a class="btn btn-success btn-xs sent_me" title="Delivered"
+                                href="{{ route('order.status',[$order->order_id,'delivered']) }}" data-status="delivered">
+                              <i class="ace-icon fa fa-thumbs-up bigger-120"></i>
+                           </a>
+                        </li>
+
+                     @endif
+                     @if($order->order_status == 1 )
+                        <li>
+                           <a class="btn btn-info btn-xs sent_me" title="Sent"
+                               href="{{ route('order.status',[$order->order_id,'sent']) }}" data-status="sent">
+                              <i class="ace-icon fa fa-send-o bigger-120"></i>
+                           </a>
+                        </li>
+                     @endif
+                  @endcan
+                  @can('order-delete')
+                     <li>
+                        <a class="btn btn-sm btn-danger delete_me" title="Delete" data-id="{{ $order->order_id }}">
+                           <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                        </a>
+                     </li>
+                  @endcan
+               </ul>
+            </div>
+         </div>
+
          <div class="hidden-sm hidden-xs btn-group">
             <form>
                <a class="btn btn-info2 btn-xs click_me" title="Show Details"
@@ -89,6 +138,7 @@
                @endcan
             </form>
          </div>
+
       </td>
    </tr>
    <!--***POP UP MODELS*** -->

@@ -141,11 +141,15 @@ class productController extends Controller
 //        dd($input);
 //        return response()->json(['success' => $input ] );
 
-        if ($request->status) {
+        if ($request->input('status')) {
             $input['status'] = 1;
+        }else{
+            $input['status'] = 0;
         }
-        if ($request->is_off) {
+        if ($request->input('is_off')) {
             $input['is_off'] = 1;
+        }else{
+            $input['is_off'] = 0;
         }
 
         //generate 12 digit code
@@ -226,15 +230,18 @@ class productController extends Controller
             File::makeDirectory($path, 0777, true, true);
         }
         $input = $request->except('_token');
-//        dd($input);
-//        return response()->json(['success' => $input] );
-        if ($request->status) {
-            $input['status'] = 1;
-        }
-        if ($request->is_off) {
-            $input['is_off'] = 1;
-        }
 
+//        return response()->json(['success' => $input] );
+        if ($request->input('status')) {
+            $input['status'] = 1;
+        }else{
+            $input['status'] = 0;
+        }
+        if ($request->input('is_off')) {
+            $input['is_off'] = 1;
+        }else{
+            $input['is_off'] = 0;
+        }
         $product = $this->product->findOrFail($id);
         $product->fill($input);
         //Update colors

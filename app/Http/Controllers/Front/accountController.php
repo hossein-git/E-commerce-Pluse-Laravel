@@ -30,7 +30,7 @@ class accountController extends Controller
     {
         $user = $this->user->findOrFail(auth()->id());
         $address = $user->address;
-        return view('Front.account.profilePanel',compact('user','address'));
+        return view('Front.account.profilePanel', compact('user', 'address'));
     }
 
     /**
@@ -42,7 +42,7 @@ class accountController extends Controller
     {
         $user = $this->user->findOrFail(auth()->id());
         $orders = $user->orders;
-        return view('Front.account.myOrders',compact('orders'));
+        return view('Front.account.myOrders', compact('orders'));
     }
 
     /**
@@ -53,7 +53,7 @@ class accountController extends Controller
     public function editAddress()
     {
         $address = $this->user->findOrFail(auth()->id())->address;
-        return view('Front.account.editAddress',compact('address'));
+        return view('Front.account.editAddress', compact('address'));
     }
 
     /**
@@ -65,50 +65,48 @@ class accountController extends Controller
      */
     public function editOrderAddress($id)
     {
-        if (ctype_digit($id)){
-            $order = $this->order->findOrFail($id,['order_id','user_id']);
+        if (ctype_digit($id)) {
+            $order = $this->order->findOrFail($id, ['order_id', 'user_id']);
             //check that the order is own to auth user
             $this->checkOrderUserId($order->user_id);
             $address = $order->address;
             $order_id = $order->order_id;
-            return view('Front.account.editAddress',compact('address','order_id'));
+            return view('Front.account.editAddress', compact('address', 'order_id'));
         }
     }
 
     /**
      *  updating user Address and order address.
      *
-     * @param int $id
-     * @param  addressRequest $request
+     * @param addressRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function updateAddress(addressRequest $request, $id)
+    public function updateAddress(addressRequest $request)
     {
-        if (ctype_digit($id)) {
-            if ($order_id = $request->has('order_id')){
-                $order = $this->order->findOrFail($order_id,['order_id','user_id']);
-                $this->checkOrderUserId($order->user_id);
+
+        if (ctype_digit($order_id = $request->input('order_id'))) {
+            $order = $this->order->findOrFail($order_id, ['order_id', 'user_id']);
+            $this->checkOrderUserId($order->user_id);
 //                $order->address()->updateOrCreate($request->except('_token','_method'));
-                //if order has address then update it if not create
-                if ($order->address){
-                    $order->address->fill($request->except('_token'))->save();
-                }else{
-                    $order->address()->create($request->except('_token'));
-                }
-            }else{
-                $user = $this->user->findOrFail($id);
-                //if user has address update it if not create new
-                if ($user->address){
-                    $user->address->fill($request->except('_token'))->save();
-                }else{
-                    $user->address()->create($request->except('_token'));
-                }
+            //if order has address then update it if not create
+            if ($order->address) {
+                $order->address->fill($request->except('_token'))->save();
+            } else {
+                $order->address()->create($request->except('_token'));
             }
-
-            return response()->json(['success' => 'ok']);
+        } else {
+            $user = $this->user->findOrFail(auth()->id());
+            //if user has address update it if not create new
+            if ($user->address) {
+                $user->address->fill($request->except('_token'))->save();
+            } else {
+                $user->address()->create($request->except('_token'));
+            }
         }
-    }
 
+        return response()->json(['success' => 'ok']);
+
+    }
 
     /**
      *  cancel order from user panel.
@@ -119,8 +117,8 @@ class accountController extends Controller
      */
     public function cancelOrder(Request $request)
     {
-        if (ctype_digit($id = $request->input('order_id'))){
-            $order = $this->order->findOrFail($id,['order_id','user_id']);
+        if (ctype_digit($id = $request->input('order_id'))) {
+            $order = $this->order->findOrFail($id, ['order_id', 'user_id']);
             $this->checkOrderUserId($order->user_id);
             $order->update(['order_status' => 5]);
             return response()->json(['success' => 'ok']);
@@ -134,7 +132,7 @@ class accountController extends Controller
      */
     public function favoritePost(Request $request)
     {
-        if (ctype_digit($id = $request->input('id'))){
+        if (ctype_digit($id = $request->input('id'))) {
             $product = Product::findOrFail($id);
             auth()->user()->favorites()->attach($product);
             return response()->json(['success' => 'true']);
@@ -148,7 +146,7 @@ class accountController extends Controller
      */
     public function unFavoritePost(Request $request)
     {
-        if (ctype_digit($id = $request->input('id'))){
+        if (ctype_digit($id = $request->input('id'))) {
             $product = Product::findOrFail($id);
             auth()->user()->favorites()->detach($product);
             return response()->json(['success' => 'true']);
@@ -162,7 +160,7 @@ class accountController extends Controller
      */
     public function myFavorites()
     {
-        $myFavorites =auth()->user()->favorites;
+        $myFavorites = auth()->user()->favorites;
         return view('Front.account.myWishList', compact('myFavorites'));
     }
 
@@ -174,11 +172,10 @@ class accountController extends Controller
      */
     private function checkOrderUserId($user_id)
     {
-        if ($user_id !== auth()->id() ){
-            return abort(404);
+        if ($user_id !== auth()->id()) {
+            return response()->view('Front.errors.404');
         }
     }
-
 
 
 }

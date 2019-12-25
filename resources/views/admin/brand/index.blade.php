@@ -16,8 +16,7 @@
          <th class="center">Slug</th>
          <th class="center">Photo</th>
          <th class="center">Description</th>
-         <th class="hidden-480">operations</th>
-         <th></th>
+         <th class="center">operations</th>
       </tr>
       </thead>
       <tbody>
@@ -37,7 +36,7 @@
             </td>
             <td class="">{{ $brand->brand_description }}</td>
             <td class="center">
-               <div class="hidden-sm hidden-xs btn-group">
+               <div class="btn-group">
                   <form>
                      @can('product-delete')
                         <button class="btn btn-xs btn-danger delete_me" data-id="{{ $brand->brand_id }}">

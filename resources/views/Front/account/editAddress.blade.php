@@ -8,7 +8,7 @@
    @include('layout.errors.notifications')
 
    <form id="front_address_edit"
-           {{--         method="post" action="{{ route('front.address.update',auth()->id()) }}"--}}
+           {{--                    method="post" action="{{ route('front.address.update',auth()->id()) }}"--}}
    >
       @csrf
       @method('put')
@@ -42,6 +42,8 @@
                <input type="text" class="form-control" value="{{ $address ? $address->postal_code : ''  }}"
                       name="postal_code" id="postal_code" required>
             </div>
+            <button class="btn btn-primary btn-lg pull-left" id="edit_address" type="submit">EDIT ADDRESS</button>
+
          </div>
          <div class="col-sm-6">
             <div class="form-group required">
@@ -74,7 +76,6 @@
                       class="form-control" id="phone_number" required>
             </div>
 
-            <button class="btn btn-primary btn-lg pull-left" id="edit_address" type="button">EDIT ADDRESS</button>
          </div>
       </div>
    </form>
@@ -129,11 +130,10 @@
                        phone: true
                    },
                };
-           var upload = upload_ajax("{{ route('front.address.update',auth()->id())}}", data, "front_address_edit", rules);
-           if (upload) {
+           if (upload_ajax("{{ route('front.address.update')}}", data, "front_address_edit", rules)) {
                alert('update successfully');
                var pjax = new Pjax({
-                   selectors: ["title","meta[name=keywords]", "#extra_css", "#content-load", "#extra_js"]
+                   selectors: ["title", "meta[name=keywords]", "#extra_css", "#content-load", "#extra_js"]
                });
                pjax.loadUrl("{{ route('front.profile') }}");
 

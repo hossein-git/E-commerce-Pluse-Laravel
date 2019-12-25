@@ -29,11 +29,10 @@ class frontComposer
 
 
         $special_offers = Cache::rememberForever('special_offers', function () {
-            return Product::where('is_off', 1)->take(5)
+            return Product::where('is_off', 1)->orderBy('off_price','desc')->take(5)
                 ->get(['product_slug', 'product_name', 'status',
                     'data_available', 'is_off', 'off_price', 'cover', 'sale_price', 'created_at']);
         });
-
 
         $popular_products = Cache::rememberForever('popular_products', function () {
             $popular_ids = DetailsOrder::select('product_id')->orderBy('product_id', 'desc')->distinct()->pluck('product_id')->take(5);

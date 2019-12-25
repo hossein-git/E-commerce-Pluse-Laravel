@@ -1,18 +1,11 @@
-@foreach($subs as $sub)
-   <ul>
-      <li class="font-weight-bold">
-         -- <b>{{$sub->category_name }}</b>
-         @can('product-delete')
-            <button class="delete_it btn btn-danger btn-xs" data-id="{{ $sub->category_id }}">
-               -
-               <i class="ace-icon fa fa-trash-o bigger-140"></i>
-            </button>
-         @endcan
+<ul>
+   @foreach($subs as $sub)
+      <li data-id="{{ $sub->category_id }}" data-jstree='{"icon":"ace-icon fa fa-trash-o"}'>{{$sub->category_name }}
          @if($sub->children->count())
-            @include('admin.category._indexSub2', ['subs' => $sub->children])
+            @include('admin.category._indexSub', ['subs' => $sub->children])
          @endif
       </li>
-   </ul>
+   @endforeach
+</ul>
 
-@endforeach
 

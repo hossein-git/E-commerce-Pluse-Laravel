@@ -21,7 +21,7 @@
       </span>
       <span><i>search for <b>TRACK CODE</b></i></span>
    </form>
-   <div class="col-sm-12 col-lg-12 col-xs-12 col-xl-12 ">
+   <div class="">
       <table id="simple-table" class="table table-bordered table-hover table-responsive">
          <thead>
          <tr class="info">

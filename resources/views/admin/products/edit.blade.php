@@ -419,8 +419,9 @@
           });
       </script>
    @endif
-   <!-- show selected images -->
+
    <script type="text/javascript">
+       <!-- show selected images -->
        $(document).ready(function () {
            $(function () {
                // Multiple images preview in browser

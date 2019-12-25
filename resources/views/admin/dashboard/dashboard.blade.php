@@ -83,17 +83,6 @@
                      {{--                        </div>--}}
                   </div>
 
-                  <div class="infobox infobox-green">
-                     <div class="infobox-icon">
-                        <i class="ace-icon fa fa-thumbs-up"></i>
-                     </div>
-
-                     <div class="infobox-data">
-                        <span class="infobox-data-number">{{ $order_delivered }}</span>
-                        <div class="infobox-content">Delivered</div>
-                     </div>
-                     {{--                        <div class="stat stat-important">4%</div>--}}
-                  </div>
 
                   <div class="infobox infobox-red">
                      <div class="infobox-icon">
@@ -104,6 +93,18 @@
                         <span class="infobox-data-number">{{$order_news}}</span>
                         <div class="infobox-content">New Orders</div>
                      </div>
+                  </div>
+
+                  <div class="infobox infobox-purple2">
+                     <div class="infobox-icon">
+                        <i class="ace-icon fa fa-thumbs-o-down"></i>
+                     </div>
+
+                     <div class="infobox-data">
+                        <span class="infobox-data-number">{{ $order_not_complete }}</span>
+                        <div class="infobox-content">Not Complete </div>
+                     </div>
+                     {{--                        <div class="stat stat-important">4%</div>--}}
                   </div>
 
                   <div class="space-10"></div>
@@ -351,44 +352,6 @@
 
                      <div class="space-6"></div>
 
-                     <div class="infobox infobox-green infobox-small infobox-dark">
-                        <div class="infobox-progress">
-                           <div class="easy-pie-chart percentage" data-percent="61" data-size="39"
-                                style="height: 39px; width: 39px; line-height: 38px;">
-                              <span class="percent">61</span>%
-                              <canvas height="48" width="48" style="height: 39px; width: 39px;"></canvas>
-                           </div>
-                        </div>
-
-                        <div class="infobox-data">
-                           <div class="infobox-content">Product</div>
-                           <div class="infobox-content">availability</div>
-                        </div>
-                     </div>
-
-                     <div class="infobox infobox-blue infobox-small infobox-dark">
-                        <div class="infobox-chart">
-                           <span class="sparkline" data-values="3,4,2,3,4,4,2,2">
-                              <canvas width="39" height="19"
-                                      style="display: inline-block; width: 39px; height: 19px; vertical-align: top;"></canvas></span>
-                        </div>
-
-                        <div class="infobox-data">
-                           <div class="infobox-content small">????</div>
-                           <div class="infobox-content">$32,000</div>
-                        </div>
-                     </div>
-
-                     <div class="infobox infobox-grey infobox-small infobox-dark">
-                        <div class="infobox-icon">
-                           <i class="ace-icon fa fa-download"></i>
-                        </div>
-
-                        <div class="infobox-data">
-                           <div class="infobox-content">?????</div>
-                           <div class="infobox-content">1,205</div>
-                        </div>
-                     </div>
                   </div>
                </div><!-- /.widget-main -->
             </div><!-- /.widget-body -->

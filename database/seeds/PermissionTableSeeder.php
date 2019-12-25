@@ -17,7 +17,7 @@ class PermissionTableSeeder extends Seeder
          * @return void
          */
         $permissions = [
-            'watch-panel',
+            'see-dashboard',
 
             'role-list',
             'role-create',

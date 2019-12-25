@@ -14,32 +14,32 @@
 
 use App\Models\DetailsOrder;
 use App\Models\Product;
-use Illuminate\Mail\Message;
-use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
 
-    $order = ['name' => 'order_test' , 'code' => '12345' , 'status' => 'sent'];
 
-    Mail::to('hossein.droid@gmail.com')->send(new \App\Mail\OrderMail($order));
 
-//    return view('admin.test');
+    foreach ($colors as $color => $code) {
+        dd($color);
+
+    }
+
+
+
+//    return view('test');
 })->name('test');
 
 
 Route::get('/query', function () {
-
     \Illuminate\Support\Facades\DB::enableQueryLog();
 
-    $popular_product = DetailsOrder::select('product_id')->orderBy('product_id','desc')->distinct()->pluck('product_id')->take(5);
-    $popular_products = Product::findOrFail($popular_product,
-        ['status','product_id','product_name','sale_price','off_price','is_off']);
+
 
     $query = \Illuminate\Support\Facades\DB::getQueryLog();
     dd($query);
-
-})->name('test');
+})->name('query0');
 
 
 Route::group(['middleware' => 'web'], function () {
@@ -48,7 +48,8 @@ Route::group(['middleware' => 'web'], function () {
     /********************---------------FRONT ROUTES------------------************************/
     Route::get('/', 'Front\homeController@home')->name('home');
     Route::get('/home', 'Front\homeController@home');
-    Route::get('/show/{slug}', 'Front\homeController@show')->name('front.show');
+    Route::get('/show/{slug}', 'Front\homeController@show')->name('front.show')
+        ->where(['slug' => '[-A-Za-z0-9]+']);
 
 
     /*---------------CHECKOUT------------------*/
@@ -63,14 +64,14 @@ Route::group(['middleware' => 'web'], function () {
     Route::match(['get', 'post'], '/products', 'Front\homeController@productsList')->name('front.productsList');
     Route::match(['get', 'post'], '/products/{list}/{slug}', 'Front\homeController@list')->where([
         'list' => '[A-za-z]+',
-//    'slug' => '[A-Za-z0-9]+'
+        'slug' => '[-A-Za-z0-9]+'
     ])->name('front.lists');
 
     /*---------------CART------------------*/
     Route::resource('/cart', 'Front\cartController')->except(['create', 'edit', 'update']);
     Route::post('/cart/edit', 'Front\cartController@update')->name('cart.update');
     Route::get('/carts/clear', 'Front\cartController@clear')->name('cart.clear');
-
+    Route::view('/empty-shopping-cart','Front.check-out.empty-cart')->name('cart.empty');
 
     /*---------------SEARCh------------------*/
     Route::get('/search', 'Front\homeController@search')->name('front.search');
@@ -80,11 +81,13 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/track-order', 'Front\homeController@trackOrder')->name('front.trackCode');
 
     /*---------------COMPARE------------------*/
-    Route::get('/compare','Front\homeController@compare')->name('front.compare');
-    Route::post('/compare-product','Front\homeController@compareProduct')->name('front.productsCompare');
-    Route::delete('/compare/{name}','Front\homeController@removeCompare')->name('front.removeCompare');
+    Route::get('/compare', 'Front\homeController@compare')->name('front.compare');
+    Route::post('/compare-product', 'Front\homeController@compareProduct')->name('front.productsCompare');
+    Route::delete('/compare/{name}', 'Front\homeController@removeCompare')->name('front.removeCompare');
 
+    /*---------------AUTH------------------*/
     Auth::routes();
+
     /*---------------GOOGLE------------------*/
     Route::get('auth/google', 'Auth\GoogleController@redirectToGoogle')->name('auth.google');
     Route::get('auth/google/callback', 'Auth\GoogleController@handleGoogleCallback');
@@ -101,7 +104,7 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
     Route::get('/my-orders', 'Front\accountController@myOrders')->name('front.myOrders');
     Route::put('/my-orders', 'Front\accountController@cancelOrder')->name('front.cancel.order');
     Route::get('/edit-address', 'Front\accountController@editAddress')->name('front.address.edit');
-    Route::put('/edit-address/{id}', 'Front\accountController@updateAddress')->name('front.address.update');
+    Route::put('/edit-address', 'Front\accountController@updateAddress')->name('front.address.update');
     Route::get('/edit-order-address/{id}', 'Front\accountController@editOrderAddress')->name('front.order.address.edit');
 
     /*---------------COMMENTS------------------*/
@@ -121,10 +124,6 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
 
 /*---------------***************ADMIN ROUTES******************------------------*/
 Route::group(['prefix' => 'admin', 'middleware' => 'checkRole'], function () {
-
-    Route::get('/cat', function () {
-        return view('admin.category.index');
-    })->name('cat');
 
     /*---------------USERS------------------*/
     Route::resource('/user', 'Admin\userController');

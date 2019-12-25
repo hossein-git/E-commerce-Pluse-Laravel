@@ -3,9 +3,8 @@
    {{ $product->product_name }}
 @endsection
 @section('extra_css')
-   <link rel="stylesheet" href="{{ asset('front-assets/external/magnific-popup/magnific-popup.css') }}">
+   <link rel="stylesheet" href="{{ asset('front-assets/css/easyzoom.css') }}">
    <style type="text/css">
-      /*@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);*/
       /****** Style Star rating0 Widget *****/
       .rating0 {
          border: none;
@@ -51,193 +50,195 @@
    </style>
 @endsection
 @section('content')
-   <div class="">
-      <div class="row">
-         <!-- IMAGE -->
-         <div class="col-md-6 hidden-xs">
-            <div class="product-col-image">
-               <div class="product-main-image">
-                  <div class="product-main-image-item">
-                     <img class="zoom-product" id="p_src" src='{{ ($product->cover) }}'
-                          data-zoom-image="{{ ($product->cover) }}" alt="product image"/>
-                  </div>
-               </div>
-               <div class="product-images-carousel-vertical">
-                  <ul id="smallGallery">
-                     @foreach($product->photos as $photo)
-                        <li>
-                           <a class="zoomGalleryActive" href="#"
-                              data-image="{{ ($photo->src) }}"
-                              data-zoom-image="{{ ($photo->src) }}">
-                              <img src="{{ ($photo->thumbnail ) }}" alt="{{ $photo->title }}"/>
-                           </a>
-                        </li>
-                     @endforeach
-                  </ul>
-               </div>
-            </div>
-            <!--  BRAND -->
-            <div class="wrapper">
-               <div class="brand text-center">
-                  <img src="{{ $product->brands->src }}" alt="LOGO">
-               </div>
-               <div class="text">
-                  {{ $product->brands->brand_description }}
-               </div>
-            </div>
 
-            <hr>
-            <!--  /BRAND -->
-         </div>
-         <!-- /IMAGE -->
-         <div class="col-md-6">
-            <div class="visible-xs">
-               <div class="clearfix"></div>
-               <ul class="mobileGallery-product">
-                  @forelse($product->photos as $photo)
-                     <li><img src="{{ $photo->src }}" alt=""/></li>
-                  @empty
-                     <li><img src="{{ asset('front-assets/images/product/product-big-2.jpg') }}" alt=""/></li>
-                  @endforelse
-               </ul>
+   <div class="row">
+      <!-- IMAGE -->
+      <div class="col-md-6 hidden-xs">
+         <div class="col-sm-3">
+            <div class="thumbnails ">
+               @foreach($product->photos as $photo)
+                  <a href="{{ $photo->src }}" data-standard="{{ $photo->src }}">
+                     <img  src="{{ ($photo->thumbnail ) }}" alt="product photo" class="img-thumbnail"/>
+                  </a>
+               @endforeach
             </div>
-            <div class="product-info product-info1">
-               <div class="add-info">
-                  <div class="pull-left">
-                     <div class="sku">
-                        <span class="font-weight-medium color-defaulttext2">SKU:</span> {{ $product->sku }}
-                     </div>
-                  </div>
-                  <div class="pull-left">
-                     <div class="availability">
-                        <span class="font-weight-medium color-defaulttext2">Availability:</span>
-                        @if($product->status == 1)
-                           <span class="color-base">In stock</span>
-                        @else
-                           <span class="color-red">Out stock</span>
-                           <span class="btn-info">Coming On :{{ $product->data_available }}</span>
-                        @endif
-                     </div>
+         </div>
+         <div class="col-sm-9">
+            <div class="easyzoom easyzoom--overlay easyzoom--with-thumbnails product-main-image-item">
+               <a href="{{ ($product->cover) }}">
+                  <img id="p_src" src="{{ $product->cover }}" alt="" width="330" height="490"/>
+               </a>
+            </div>
+         </div>
+         <!--  BRAND -->
+         <div class="wrapper">
+            <div class="brand text-center">
+               <img src="{{ $product->brands->src }}" alt="LOGO">
+            </div>
+            <div class="text">
+               {{ $product->brands->brand_description }}
+            </div>
+         </div>
+
+         <hr>
+         <!--  /BRAND -->
+      </div>
+      <!-- /IMAGE -->
+      <div class="col-md-6">
+         <div class="visible-xs">
+            <div class="clearfix"></div>
+            <ul class="mobileGallery-product">
+               @forelse($product->photos as $photo)
+                  <li><img src="{{ $photo->src }}" alt="?" class="img-thumbnail"/></li>
+               @empty
+               @endforelse
+            </ul>
+            <!--  BRAND -->
+            <div class="brand text-center">
+               <img src="{{ $product->brands->src }}" alt="LOGO">
+            </div>
+            <div class="text">
+               {{ $product->brands->brand_description }}
+            </div>
+            <br>
+         </div>
+         <div class="product-info product-info1">
+            <div class="add-info">
+               <div class="pull-left">
+                  <div class="sku">
+                     <span class="font-weight-medium color-defaulttext2">SKU:</span> {{ $product->sku }}
                   </div>
                </div>
-               <h1 class="title" id="p_name">{{ $product->product_name }}</h1>
-               <div class="price">
-                  @if($product->is_off == 1)
-                     <span class="old-price">{{ number_format($product->sale_price) }}</span>
-                     <span class="new-price" id="p_price">{{ $product->price }}</span>
-                  @else
-                     <span class="price" id="p_price">{{ $product->price }}</span>
-                  @endif
+               <div class="pull-left">
+                  <div class="availability">
+                     <span class="font-weight-medium color-defaulttext2">Availability:</span>
+                     @if($product->status == 1)
+                        <span class="color-base">In stock</span>
+                     @else
+                        <span class="color-red">Out stock</span>
+                        <span class="btn-info">Coming On :{{ $product->data_available }}</span>
+                     @endif
+                  </div>
                </div>
-               <!-- RATING -->
-               <div class="review">
-                  @for( $i = 0 ; $i < round($product->averageRating) ; $i++)
-                     <span class="fa fa-stack" style="color: gold">
+            </div>
+            <h1 class="title" id="p_name">{{ $product->product_name }}</h1>
+            <div class="price">
+               @if($product->is_off == 1)
+                  <span class="new-price" id="p_price">{{ $product->price }}</span>
+                  <span class="old-price">{{ number_format($product->sale_price) }}</span>
+               @else
+                  <span class="price" id="p_price">{{ $product->price }}</span>
+               @endif
+            </div>
+            <!-- RATING -->
+            <div class="review">
+               @for( $i = 0 ; $i < round($product->averageRating) ; $i++)
+                  <span class="fa fa-stack" style="color: gold">
                         <i class="fa fa-star fa-stack-2x"></i>
                         <i class="fa fa-star-o fa-stack-2x"></i>
                      </span>
-                  @endfor
-                  @for( $i = 5 ; $i > round($product->averageRating) ; $i--)
-                     <span class="fa fa-stack" style="color: gold">
+               @endfor
+               @for( $i = 5 ; $i > round($product->averageRating) ; $i--)
+                  <span class="fa fa-stack" style="color: gold">
                         <i class="fa fa-star-o fa-stack-2x"></i>
                      </span>
-                  @endfor
-                  <a href="#review1">{{ $product->comments->count() }} Review(s)</a>
-                  <a href="#review1">Add Your Review</a>
-               </div>
-               <!-- /RATING -->
-               <div class="row">
-                  <form>
-                     <div class="col-sm-6">
-                        <!-- COLOR -->
-                        <div class="wrapper">
-                           <div class="title-options">
-                              COLOR<span class="color-required">*</span>
-                           </div>
-                           <ul class="options-swatch-color">
-                              @foreach($product->colors()->get(['color_code','color_name']) as $color)
-                                 <li class="">
-                                    <a href="#" class="p_color" data-id="{{ $color->color_name }}">
+               @endfor
+               <a href="#review1">{{ $product->comments->count() }} Review(s)</a>
+               <a href="#review1">Add Your Review</a>
+            </div>
+            <!-- /RATING -->
+            <div class="row">
+               <form>
+                  <div class="col-sm-6">
+                     <!-- COLOR -->
+                     <div class="wrapper">
+                        <div class="title-options">
+                           COLOR<span class="color-required">*</span>
+                        </div>
+                        <ul class="options-swatch-color">
+                           @foreach($product->colors()->get(['color_code','color_name']) as $color)
+                              <li class="">
+                                 <a class="p_color" href="#" data-id="{{ $color->color_name }}">
                                     <span class="swatch-label color-orange active"
                                           style="background: {{ $color->color_code }}">
                                     </span>
-                                    </a>
-                                 </li>
-                              @endforeach
-                              <span class="tab swatch-label color-orange"></span>
-                           </ul>
-                        </div>
-                        <!-- SIZE -->
-                        <div class="wrapper">
-                           <div class="title-options">SIZE<span class="color-required">*</span></div>
-                           <ul class="tags-list _size">
-                              <li><a href="#" size="XS">XS</a></li>
-                              <li><a href="#" size="S">S</a></li>
-                              <li><a href="#" size="M">M</a></li>
-                              <li><a href="#" size="L">L</a></li>
-                           </ul>
-                        </div>
+                                 </a>
+                              </li>
+                           @endforeach
+                           <span class="tab swatch-label color-orange"></span>
+                        </ul>
                      </div>
-
-                     <!-- ATTRIBUTES -->
-                     <div class="col-sm-6">
-                        @forelse($product->attributes as $attribute)
-                           <div class="wrapper">
-                              <label class="title-options" for="{{ $attribute->attr_name }}"><span
-                                         class="color-required">*</span>{{ $attribute->attr_name }}:</label>
-                              <select name="attr_name[]" class="form-control select-inline"
-                                      id="{{ $attribute->attr_name }}" required>
-                                 @forelse($attribute->attributeValues as $value)
-                                    <option value="{{$attribute->attr_name.':'.$value->value.'-' }}">{{ $value->value }}</option>
-                                 @empty
-                                 @endforelse
-                              </select>
-                           </div>
-                        @empty
-                           <input type="hidden" name="select-inline">
-
-                        @endforelse
+                     <!-- SIZE -->
+                     <div class="wrapper">
+                        <div class="title-options">SIZE<span class="color-required">*</span></div>
+                        <ul class="tags-list _size">
+                           <li><a href="#" size="XS">XS</a></li>
+                           <li><a href="#" size="S">S</a></li>
+                           <li><a href="#" size="M">M</a></li>
+                           <li><a href="#" size="L">L</a></li>
+                        </ul>
                      </div>
-                  </form>
-               </div>
-               <b id="p_error" style="display: none;color: red;">ddd</b>
-               <div class="wrapper">
-                  <div class="pull-left"><label class="qty-label">QTY</label></div>
-                  <div class="pull-left">
-                     <div class="style-2 input-counter">
-                        <span class="minus-btn"></span>
-                        <input type="text" value="1" size="10" id="p_qty"/>
-                        <span class="plus-btn"></span>
-                     </div>
-                     <a href="#" id="add_to_cart" class="btn btn-lg btn-addtocart add_to_cart" style="">
-                        <span class="icon icon-shopping_basket"></span>SHOP
-                        NOW!
-                     </a>
                   </div>
 
+                  <!-- ATTRIBUTES -->
+                  <div class="col-sm-6">
+                     @forelse($product->attributes as $attribute)
+                        <div class="wrapper">
+                           <label class="title-options" for="{{ $attribute->attr_name }}"><span
+                                      class="color-required">*</span>{{ $attribute->attr_name }}:</label>
+                           <select name="attr_name[]" class="form-control select-inline"
+                                   id="{{ $attribute->attr_name }}" required>
+                              @forelse($attribute->attributeValues as $value)
+                                 <option value="{{$attribute->attr_name.':'.$value->value.'-' }}">{{ $value->value }}</option>
+                              @empty
+                              @endforelse
+                           </select>
+                        </div>
+                     @empty
+                        <input type="hidden" name="select-inline">
 
-                  <ul class="product_inside_info_link">
-                     <li class="text-right">
-                        @auth()
-                           @if($product->favorited())
-                              <a href="#" id="unfavorites" data-id="{{ $product->product_id }}">
-                                 <span id="dislike_span" class="fa fa-heart"></span>
-                                 <span class="text">Delete from WISHLIST</span>
-                              </a>
-                           @else
-                              <a href="#" id="favorite" data-id="{{ $product->product_id }}">
-                                 <span id="like_span" class="fa fa-heart-o"></span>
-                                 <span class="text">ADD TO WISHLIST</span>
-                              </a>
-                           @endif
+                     @endforelse
+                  </div>
+               </form>
+            </div>
+            <b id="p_error" style="display: none;color: red;">ddd</b>
+            <div class="wrapper">
+               <div class="pull-left"><label class="qty-label">QTY</label></div>
+               <div class="pull-left">
+                  <div class="style-2 input-counter">
+                     <span class="minus-btn"></span>
+                     <input type="text" value="1" size="10" id="p_qty"/>
+                     <span class="plus-btn"></span>
+                  </div>
+                  <a href="#" id="add_to_cart" class="btn btn-lg btn-addtocart add_to_cart" style="">
+                     <span class="icon icon-shopping_basket"></span>SHOP
+                     NOW!
+                  </a>
+               </div>
+
+
+               <ul class="product_inside_info_link">
+                  <li class="text-right">
+                     @auth()
+                        @if($product->favorited())
+                           <a href="#" id="unfavorites" data-id="{{ $product->product_id }}">
+                              <span id="dislike_span" class="fa fa-heart"></span>
+                              <span class="text">Delete from WISHLIST</span>
+                           </a>
                         @else
-                           <i>for wish List please<a href="{{ route('login') }}">login</a></i>
-                        @endauth
-                     </li>
-                     <li class="text-left">
-                        <a data-id="{{ $product->product_id }}" class="compare-link">
-                           <span class="fa fa-balance-scale"></span>
-                           <span id="compare_text" class="text">
+                           <a href="#" id="favorite" data-id="{{ $product->product_id }}">
+                              <span id="like_span" class="fa fa-heart-o"></span>
+                              <span class="text">ADD TO WISHLIST</span>
+                           </a>
+                        @endif
+                     @else
+                        <i>for wish List please<a href="{{ route('login') }}">login</a></i>
+                     @endauth
+                  </li>
+                  <li class="text-left">
+                     <a data-id="{{ $product->product_id }}" class="compare-link">
+                        <span class="fa fa-balance-scale"></span>
+                        <span id="compare_text" class="text">
                               {{--@if (request()->cookie('P_compare_1') == $product->product_id
                                     or request()->cookie('P_compare_2') == $product->product_id )
                                   already in compare list
@@ -246,20 +247,19 @@
                               @endif--}}
                               ADD TO COMPARE
                            </span>
-                        </a>
-                     </li>
-                  </ul>
-               </div>
-               <!-- SOCIALS -->
-            {{--<ul class="social-icon-square">
-               <li><a class="icon-01" href="#"></a></li>
-               <li><a class="icon-02" href="#"></a></li>
-               <li><a class="icon-03" href="#"></a></li>
-               <li><a class="icon-04" href="#"></a></li>
-               <li><a class="icon-05" href="#"></a></li>
-            </ul>--}}
-            <!-- /SOCIALS -->
+                     </a>
+                  </li>
+               </ul>
             </div>
+            <!-- SOCIALS -->
+         {{--<ul class="social-icon-square">
+            <li><a class="icon-01" href="#"></a></li>
+            <li><a class="icon-02" href="#"></a></li>
+            <li><a class="icon-03" href="#"></a></li>
+            <li><a class="icon-04" href="#"></a></li>
+            <li><a class="icon-05" href="#"></a></li>
+         </ul>--}}
+         <!-- /SOCIALS -->
          </div>
       </div>
    </div>
@@ -437,8 +437,21 @@
 
 @endsection
 @section('extra_js')
-   <script src="{{ asset('front-assets/external/isotope/isotope.pkgd.min.js') }}"></script>
-   <script src="{{ asset('front-assets/external/elevatezoom/jquery.elevatezoom.js') }}"></script>
+   <script src="{{ asset('front-assets/js/easyzoom.js') }}"></script>
+
+   <script type="text/javascript">
+       var $easyzoom = $('.easyzoom').easyZoom();
+       // Setup thumbnails example
+       var api1 = $easyzoom.filter('.easyzoom--with-thumbnails').data('easyZoom');
+       $('.thumbnails').on('click', 'a', function (e) {
+           var $this = $(this);
+
+           e.preventDefault();
+
+           // Use EasyZoom's `swap` method
+           api1.swap($this.data('standard'), $this.attr('href'));
+       });
+   </script>
    <!-- to load uploadAjax function -->
    <script src="{{ asset('front-assets/js/checkOut.js') }}"></script>
    <!-- FOR CREATE COMMENT WITH AJAX  -->
@@ -458,7 +471,8 @@
                    message: $('#comment_message').val(),
                };
                if (upload_ajax("{{ route('comment.store') }}", data)) {
-                   $('#comment_answer').addClass('text-center badge-success').text('your comment has uploaded successfully')
+                   $('#comment_answer').addClass('text-center badge-success').text('your comment has uploaded successfully');
+                   $('#comment_form').remove();
                }
            });
            //add favorite
@@ -469,7 +483,7 @@
                };
                if (upload_ajax("{{ route('favorite') }}", data)) {
                    $('#favorite').empty().append('<span class="fa fa-heart"></span><span class="text">Delete From WISHLIST</span>');
-                   $(this).attr('id','unfavorites');
+                   $(this).attr('id', 'unfavorites');
                }
            });
 

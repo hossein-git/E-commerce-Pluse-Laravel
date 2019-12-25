@@ -14,7 +14,7 @@
       </td>
       <td class="center">{{ $user->created_at }}</td>
       <td class="center">
-         <div class="hidden-sm hidden-xs btn-group">
+         <div class=" btn-group">
             <form>
                <a class="btn btn-info2 btn-xs click_me" title="Show Profile"
                   href="{{ route('user.show',$user->user_id) }}" >

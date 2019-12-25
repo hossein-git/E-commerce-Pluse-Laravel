@@ -12,7 +12,7 @@
          <div class="row indent-col-none">
             <div class="col-extra-400 col-xs-6 col-md-6">
                <a href="listing-left-column.html" class="promo-box zoom-in design-14">
-                  <img src="{{asset('front-assets/images/custom/promo-img-42.jpg')}}" alt="">
+                  <img src="{{asset('images/promo-img-42.jpg')}}" alt="">
                   <div class="description point-left">
                      <div class="block-table">
                         <div class="block-table-cell">
@@ -25,7 +25,7 @@
             </div>
             <div class="col-extra-400 col-xs-6 col-md-6">
                <a href="listing-left-column.html" class="promo-box zoom-in design-14">
-                  <img src="{{asset('front-assets/images/custom/promo-img-43.jpg')}}" alt="">
+                  <img src="{{asset('images/promo-img-43.jpg')}}" alt="">
                   <div class="description point-left">
                      <div class="block-table">
                         <div class="block-table-cell">
@@ -40,7 +40,7 @@
          <div class="row indent-col-none">
             <div class="col-extra-400 col-xs-6 col-md-6">
                <a href="listing-left-column.html" class="promo-box zoom-in design-14">
-                  <img src="{{asset('front-assets/images/custom/promo-img-42.jpg')}}" alt="">
+                  <img src="{{asset('images/promo-img-42.jpg')}}" alt="">
                   <div class="description point-left">
                      <div class="block-table">
                         <div class="block-table-cell">
@@ -53,7 +53,7 @@
             </div>
             <div class="col-extra-400 col-xs-6 col-md-6">
                <a href="listing-left-column.html" class="promo-box zoom-in design-14">
-                  <img src="{{asset('front-assets/images/custom/promo-img-43.jpg')}}" alt="">
+                  <img src="{{asset('images/promo-img-43.jpg')}}" alt="">
                   <div class="description point-left">
                      <div class="block-table">
                         <div class="block-table-cell">
@@ -68,7 +68,7 @@
       </div>
       <div class="col-sm-6">
          <a href="listing-left-column.html" class="promo-box zoom-in design-08">
-            <img src="{{ asset('front-assets/images/custom/promo-img-37.jpg') }}" alt="">
+            <img src="{{ asset('images/promo-img-37.jpg') }}" alt="">
             <div class="description">
                <div class="block-table">
                   <div class="block-table-cell">
@@ -90,7 +90,8 @@
          <div class="carousel-brands">
             @forelse($brands as $brand)
                <div>
-                  <a href="{{ route('front.lists', ['list' => 'brands' , 'slug' => $brand->brand_slug ]) }}" class="load_page">
+                  <a href="{{ route('front.lists', ['list' => 'brands' , 'slug' => $brand->brand_slug ]) }}"
+                     class="load_page">
                      <img src="{{ $brand->src }}" alt="{{ $brand->brand_name }}">
                   </a>
                </div>
@@ -124,7 +125,7 @@
 
       <div class="item-large">
          <a href="#" class="promo-box zoom-in design-default">
-            <img src="{{ asset('front-assets/images/custom/promo-img-03.jpg') }}" alt="">
+            <img src="{{ asset('images/promo-img-03.jpg') }}" alt="">
             <div class="description point-center-vertical point-left left-offset text-center">
                <div class="block-table">
                   <div class="block-table-cell">
@@ -140,7 +141,7 @@
       </div>
       <div class="item-small">
          <a href="listing-left-column.html" class="promo-box zoom-in design-default">
-            <img src="{{ asset('front-assets/images/custom/promo-img-04.jpg') }}" alt="">
+            <img src="{{ asset('images/promo-img-04.jpg') }}" alt="">
             <div class="description">
                <div class="block-table">
                   <div class="block-table-cell">
@@ -160,10 +161,10 @@
        var page = 1;
        $(window).scroll(function () {
            if ($(window).scrollTop() +
-               ($('#product_data').height() + $('#footer').height() + 900 ) >= $(document).height()) {
+               ($('#product_data').height() + $('#footer').height() + 900) >= $(document).height()) {
                page++;
                //this will avoid send more request when all data has loaded
-               if (page > $("#lastPage").val()){
+               if (page > $("#lastPage").val()) {
                    $('.ajax-load').hidden;
                    $('#load').show();
                    return;
@@ -171,8 +172,11 @@
                // console.log(page);
                loadMoreData(page);
            }
-
            function loadMoreData(page) {
+               //avoid to show more than 4 page
+               if (page === 4){
+                   return;
+               }
                $.ajax(
                    {
                        url: '/?page=' + page,
@@ -181,7 +185,6 @@
                            $('.ajax-load').show();
                        }
                    })
-
                    .done(function (data) {
                        if (data.html == " ") {
                            $('.ajax-load').attr('src', '');

@@ -65,8 +65,17 @@
       </div>
    </div>
 @empty
-   <br><br>
-   <h1 class="text-center">NOTHING FOUND</h1>
+   <center>
+      <div class="offset-80">
+         <div class="on-duty-box">
+            <img src="{{ asset('front-assets/empty-category-icon.png') }}" alt="">
+            <h1 class="block-title large">Empty Category</h1>
+            <div class="description">
+               There are no products matching the selection.
+            </div>
+         </div>
+      </div>
+   </center>
 @endforelse
 <div class="container">
    <div class="pagination">

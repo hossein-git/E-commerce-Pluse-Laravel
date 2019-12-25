@@ -88,6 +88,49 @@
                        class="ace-icon fa fa-eye bigger-120"></i>
             </a>
          </div>
+
+         <div class="hidden-md hidden-lg">
+            <div class="inline pos-rel">
+               <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                  <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+               </button>
+
+               <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                  @can('product-delete')
+                     <li><a class="btn btn-xs btn-danger delete_me" data-id="{{ $product->product_id }}">
+                           <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                        </a></li>
+                  @endcan
+                  @if(isset($index_categories))
+                     @can('product-edit')
+                        <li><a class="btn btn-warning btn-xs" title="Edit"
+                               href="{{route('product.edit',$product->product_id)}}"
+                               data-id="{{ $product->product_id }}">
+                              <i class="ace-icon fa fa-pencil bigger-120"></i></a></li>
+                     @endcan
+                  @else
+                     @can('product-delete')
+                        <li>
+                           <a class="btn btn-success btn-xs restore_me" title="Restore"
+                              data-id="{{route('product.restore',$product->product_id)}}"><i
+                                      class="ace-icon fa fa-check bigger-120"></i>
+                           </a>
+                        </li>
+                     @endcan
+                  @endif
+                  <li>
+                     <a class="btn btn-xs btn-info bolder"
+                        title="show product"
+                        href="{{ route('product.show',$product->product_id) }}"><i
+                                class="ace-icon fa fa-eye bigger-120"></i>
+                     </a>
+                  </li>
+
+               </ul>
+            </div>
+         </div>
+
+
       </td>
    </tr>
 @empty

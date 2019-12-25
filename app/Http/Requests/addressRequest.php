@@ -24,15 +24,15 @@ class addressRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/']
-            , 'surname' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/']
-            , 'state' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/']
-            , 'city' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/']
-            , 'area' => ['string', 'nullable'  , 'regex:/^([a-zA-Z\' ]+)$/']
-            , 'avenue' => ['string', 'nullable' , 'regex:/^([a-zA-Z\' ]+)$/']
-            , 'street' => ['string', 'nullable' , 'regex:/^([a-zA-Z\' ]+)$/']
-            , 'phone_number' => ['required' , 'string']
-            , 'postal_code' => ['required', 'numeric' , 'regex:^[0-9]^']
+            'name' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/', 'max:15']
+            , 'surname' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/', 'max:20']
+            , 'state' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/', 'max:20']
+            , 'city' => ['required', 'string', 'regex:/^([a-zA-Z\' ]+)$/', 'max:20']
+            , 'area' => ['string', 'nullable', 'regex:/^([a-zA-Z\' ]+)$/', 'max:20']
+            , 'avenue' => ['string', 'nullable', 'regex:/^([a-zA-Z\' ]+)$/', 'max:20']
+            , 'street' => ['string', 'nullable', 'regex:/^([a-zA-Z\' ]+)$/']
+            , 'phone_number' => ['required', 'string']
+            , 'postal_code' => ['required', 'numeric', 'regex:^[0-9]^']
             , 'number' => ['required', 'numeric']
 
         ];

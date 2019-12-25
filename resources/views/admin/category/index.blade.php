@@ -1,70 +1,81 @@
+@if (env('APP_AJAX'))
+   @php(redirect()->route('category.index'))
+@endif
 @extends('layout.admin.index' )
 @section('title')
    Category List
 @stop
 @section('extra_css')
+   <link rel="stylesheet" href="{{ asset('admin-assets/css/treeview/style.min.css') }}"/>
 @stop
 @section('content')
-   <div class="col-xs-6 col-lg-6">
-      <form action="">
+
+   <div class="space-20"></div>
+   <div class="container-fluid">
+      <div class="jstree" id="html1">
          <ul>
             @foreach($main_categories as $category)
-               <li class="bolder bigger-120">
-                  <i class="menu-icon fa fa-square"></i>
-                  {{ $category->category_name }}
-                  <b class="arrow"></b>
-                  @can('product-delete')
-                     <button class="delete_it btn btn-danger btn-xs" data-id="{{ $category->category_id }}">
-                        <i class="ace-icon fa fa-trash-o bigger-140"></i>
-                     </button>
-                  @endcan
+               <li data-id="{{ $category->category_id }}"><b>{{ $category->category_name }}</b>
                   @if($category->children->count())
                      @include('admin.category._indexSub', ['subs' => $category->children])
                   @endif
                </li>
-               -------------------------------
             @endforeach
          </ul>
-      </form>
+      </div>
+      {{ $main_categories->links() }}
    </div>
-   {{ $main_categories->links() }}
-
 @endsection()
 @section('extra_js')
+   <!-- TREE VIEW -->
+   <script src="{{ asset('admin-assets/js/jstree.min.js') }}"></script>
    <!-- DELETE WITH AJAX -->
    @can('product-delete')
-      <script>
-          $(document).ready(function () {
-              // deleteAjax("/admin/category/","delete_it","category");
-              $(".delete_it").click(function (e) {
-                  e.preventDefault();
-                  if (!confirm('Are you Sure?')) {
-                      return false;
+      <script type="text/javascript">
+          $('.jstree').jstree({
+              "core": {
+                  "themes": {
+                      "variant": "large",
+
+                  },
+                  "core": {
+                      "multiple": false,
+                      "animation": 1,
                   }
-                  var obj = $(this); // first store $(this) in obj
-                  var id = $(this).data("id");
-                  $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                      }
-                  });
-                  $.ajax({
-                      url: "/admin/category/" + id,
-                      method: "DELETE",
-                      dataType: "Json",
-                      data: {"id": id},
-                      success: function ($results) {
-                          alert('category has been successfully deleted');
-                          $(obj).parent().remove(); //delete row
-                          console.log($results);
-                      },
-                      error: function (xhr) {
-                          alert('error, category not deleted');
-                          console.log(xhr.responseText);
-                      }
-                  });
+              },
+          }).on('changed.jstree', function (e, data) {
+              var i, j, r = [];
+              for (i = 0, j = data.selected.length; i < j; i++) {
+                  r.push(data.instance.get_node(data.selected[i]).li_attr['data-id']);
+              }
+              if (!confirm('Are you Sure?')) {
+                  return false;
+              }
+              var id = r.join(', ');
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                  }
               });
+              $.ajax({
+                  url: "/admin/category/" + id,
+                  method: "DELETE",
+                  dataType: "Json",
+                  data: {"id": id},
+                  success: function ($results) {
+                      alert('category has been successfully deleted');
+                        location.reload();
+                      // console.log($results);
+                  },
+                  error: function (xhr) {
+                      alert('error, category not deleted');
+                      console.log(xhr.responseText);
+                  }
+              });
+
           });
       </script>
    @endcan
+
+
 @stop

@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 class categoryController extends Controller
 {
     private $category;
-    private $cachKey;
+    private $cacheKey;
 
     public function __construct()
     {
@@ -20,7 +20,7 @@ class categoryController extends Controller
         $this->middleware('permission:product-delete', ['only' => ['destroy']]);
 
         $this->category = new Category();
-        $this->cachKey = 'categories';
+        $this->cacheKey = 'categories';
     }
 
     /**
@@ -30,7 +30,7 @@ class categoryController extends Controller
      */
     public function index()
     {
-        $main_categories = $this->category->whereIsRoot()->paginate(7);
+        $main_categories = $this->category->whereIsRoot()->paginate(10);
         return view('admin.category.index', compact('main_categories'));
     }
 
@@ -64,7 +64,7 @@ class categoryController extends Controller
         }else{
             $category = $this->category->create($input);
         }
-        Cache::forget($this->cachKey);
+        Cache::forget($this->cacheKey);
 
         return env('APP_AJAX')
             ? response()->json(['success' => $category])
@@ -86,7 +86,7 @@ class categoryController extends Controller
         $category = $this->category->findOrFail($id);
         $category->products()->detach();
         $category->delete();
-        Cache::forget($this->cachKey);
+        Cache::forget($this->cacheKey);
         return $category
             ? response()->json(['success' => $category])
             : response()->json(['error' => 'error']);

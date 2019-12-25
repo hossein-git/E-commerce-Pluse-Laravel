@@ -6,9 +6,6 @@
             {{--            <h2 class="title-submenu">LAYOUT</h2>--}}
             <div class="row custom-layout-02 menu-list-col">
                <div class="col-sm-4">
-                  {{--                  <a class="title-underline" href="listing-left-column.html">--}}
-                  {{--                     <span>STORE INFO PAGES</span>--}}
-                  {{--                  </a>--}}
                   <div class="row" style="margin-top: -3rem ">
                      <div class="col-sm-6 justify-content-around">
                         <ul class="megamenu-submenu">
@@ -52,34 +49,36 @@
                      </div>
                   </div>
                </div>
-
             </div>
          </div>
       </li>
-      <li class="dropdown megamenu">
+      <li class="dropdown">
          <a href="{{ route('front.productsList') }}">SPECIAL OFFERS</a>
          <div class="dropdown-menu">
             <div class="row custom-layout-02">
                <div class="col-sm-12">
-                  <div class="carousel-menu-1 header-menu-product carouselTab slick-arrow-top">
+                  <div class="header-menu-product slick-arrow-top row">
                      @forelse($special_offers as $product)
-                        <div class="product">
-                           <div class="product_inside">
-                              <a href="{{ route('front.show',$product->product_slug) }}">
-                                 <div class="image-box">
-                                    <img src="{{ $product->thumbnail }}" class="img-thumbnail" alt="photo">
-                                    <div class="label-sale left">Sale</div>
-                                 </div>
-                                 <h2 class="title">
-                                    {{ $product->product_name }}
-                                 </h2>
-                                 <div class="price">
-                                    <span class="new-price">{{ $product->price }}</span>
-                                    <span class="old-price">{{ $product->sale_price }}</span>
-                                 </div>
-                              </a>
+                        <div class="col-sm-2">
+                           <div class="product">
+                              <div class="product_inside">
+                                 <a href="{{ route('front.show',$product->product_slug) }}">
+                                    <div class="image-box">
+                                       <img src="{{ $product->thumbnail }}" class="img-thumbnail" alt="photo">
+                                       <div class="label-sale ">Sale<br>{{ $product->off }}% Off</div>
+                                    </div>
+                                    <h2 class="title">
+                                       {{ $product->product_name }}
+                                    </h2>
+                                    <div class="price">
+                                       <span class="new-price">{{ $product->price }}</span>
+                                       <span class="old-price">{{ $product->sale_price }}</span>
+                                    </div>
+                                 </a>
+                              </div>
                            </div>
                         </div>
+
                      @empty
                      @endforelse
                   </div>
@@ -92,46 +91,56 @@
          <div class="dropdown-menu">
             <div class="row custom-layout-02">
                <div class="col-sm-12">
-                  <div class="carousel-menu-1 header-menu-product carouselTab slick-arrow-top">
-                     @forelse($popular_products as $product)
-                        <div class="product">
-                           <div class="product_inside">
-                              <a href="{{ route('front.show',$product->product_slug) }}">
-                                 <div class="image-box">
-                                    <img src="{{ $product->thumbnail }}" class="img-thumbnail" alt="photo">
-                                    <div class="label-sale left">Sale</div>
+                  <div class="header-menu-product  slick-arrow-top">
+                     <div class="row">
+                        @forelse($popular_products as $product)
+                           <div class="col-sm-2">
+                              <div class="product">
+                                 <div class="product_inside">
+                                    <a href="{{ route('front.show',$product->product_slug) }}">
+                                       <div class="image-box">
+                                          <img src="{{ $product->thumbnail }}" class="img-thumbnail" alt="photo">
+                                          <div class="label-sale left">Sale</div>
+                                       </div>
+                                       <h2 class="title">
+                                          {{ $product->product_name }}
+                                       </h2>
+                                       <div class="price">
+                                          <span class="new-price">{{ $product->price }}</span>
+                                          <span class="old-price">{{ $product->sale_price }}</span>
+                                       </div>
+                                    </a>
                                  </div>
-                                 <h2 class="title">
-                                    {{ $product->product_name }}
-                                 </h2>
-                                 <div class="price">
-                                    <span class="new-price">{{ $product->price }}</span>
-                                    <span class="old-price">{{ $product->sale_price }}</span>
-                                 </div>
-                              </a>
+                              </div>
                            </div>
-                        </div>
-                     @empty
-                     @endforelse
+
+                        @empty
+                        @endforelse
+
+                     </div>
+
                   </div>
                </div>
             </div>
          </div>
       </li>
 
-      <li class="dropdown megamenu">
+      <li class="dropdown">
          <a>BRANDS</a>
          <div class="dropdown-menu">
             <div class="row custom-layout-02">
                <div class="col-sm-12">
-                  <div class="carousel-menu-2 header-menu-product">
+                  <div class=" header-menu-product">
                      @forelse($brands as $brand)
-                        <a href="{{ route('front.lists', ['list' => 'brands' , 'slug' => $brand->brand_slug ]) }}"
-                           class="load_page">
-                           <div class="image-box">
-                              <img src="{{ $brand->src }}" class="img" width="100" height="200" alt="{{ $brand->brand_name }}">
-                           </div>
-                        </a>
+                        <div class="col-sm-3">
+                           <a href="{{ route('front.lists', ['list' => 'brands' , 'slug' => $brand->brand_slug ]) }}"
+                              class="load_page">
+                              <div class="image-box">
+                                 <img src="{{ $brand->src }}" class="img" width="100" height="200" alt="{{ $brand->brand_name }}">
+                              </div>
+                           </a>
+                        </div>
+
                      @empty
                         NO BRANDS
                      @endforelse

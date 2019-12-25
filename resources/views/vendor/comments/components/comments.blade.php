@@ -16,7 +16,7 @@
           @include('comments::_form')
       @elseif(config('comments.guest_commenting') == true)
           @include('comments::_form', [
-              'guest_commenting' => true
+              'guest_commenting' => false
           ])
       @else
           <div class="card">

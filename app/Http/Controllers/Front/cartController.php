@@ -116,6 +116,6 @@ class cartController extends Controller
     public function clear()
     {
         Cart::destroy();
-        return back();
+        return redirect()->back();
     }
 }

@@ -16,12 +16,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 
 class checkOutController extends Controller
 {
     private $order;
-//    private $order_id;
     private $user_id;
 
     public function __construct()
@@ -37,34 +37,48 @@ class checkOutController extends Controller
 
     }
 
+    /**
+     *  show check out from when auth is true
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
+        $this->checkCart();
         //IF AUTH AND USER HAS SAVED ADDRESS THEN SHOW THEM IN THE FORM FIELD
         if (auth()->check()) {
             $address = User::findOrFail(auth()->id())->address;
             if ($address) {
-                return view('Front.account.checkout', compact('address'));
+                return view('Front.check-out.checkout', compact('address'));
             }
         }
-        return view('Front.account.checkout');
+        return view('Front.check-out.checkout');
     }
 
+    /**
+     *  show check out from when auth is false
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function interCheckOut()
     {
-        return view('Front.account.before_CH');
+        $this->checkCart();
+        return view('Front.check-out.before_CH');
     }
 
-    //save order
+    /**
+     * Store a newly created order.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         //this input must be empty and if not means filled it with bots
         if ($request->input('input')) {
             return false;
         }
-        // If CART IS EMPTY
-        if (!Cart::count() > 0) {
-            return response()->json(['success' => 'your card is empty']);
-        }
+        $this->checkCart();
         $this->validate($request, [
             'client_name' => 'string|required|regex:^[a-zA-Z]^',
             'client_phone' => 'string|required',
@@ -92,10 +106,16 @@ class checkOutController extends Controller
         return response()->json(['success' => 'ok']);
     }
 
-    //save address
+    /**
+     * Store  address of order.
+     *
+     * @param App\Http\Requests\addressRequest $request
+     * @return \Illuminate\Http\Response
+     * @return boolean
+     */
     public function saveAddress(addressRequest $request)
     {
-        //this input must be empy and if not means filled it with bots
+        //this input must be empty and if not means filled it with bots
         if ($request->input('input')) {
             return false;
         }
@@ -119,7 +139,11 @@ class checkOutController extends Controller
 
     }
 
-
+    /**
+     * save products in order_status table.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function saveOrderStatus()
     {
 
@@ -151,7 +175,12 @@ class checkOutController extends Controller
 
     }
 
-    //save PAYMENTS
+    /**
+     * Store  address of order.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function savePayments(Request $request)
     {
         //this input must be empy and if not means filled it with bots
@@ -175,7 +204,12 @@ class checkOutController extends Controller
 
     }
 
-    //CHECK THE DISCOUNT CODE AND ALSO IF USER USED IT BEFORE
+    /**
+     * CHECK THE DISCOUNT CODE AND ALSO IF USER USED IT BEFORE
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function checkDiscount(Request $request)
     {
         if (!$request->giftCode) {
@@ -209,5 +243,18 @@ class checkOutController extends Controller
         return response()->json(['success' => 'true']);
 
     }
+
+    /**
+     * if cart is empty show error page.
+     *
+     * @return \Illuminate\Support\Facades\Response
+     */
+    public function checkCart()
+    {
+        if (Cart::count() === 0) {
+            return Redirect::route('cart.empty')->send();
+        }
+    }
+
 
 }

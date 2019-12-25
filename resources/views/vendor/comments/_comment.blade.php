@@ -14,9 +14,9 @@
 {{--            @can('reply-to-comment', $comment)--}}
 {{--                <button data-toggle="modal" data-target="#reply-modal-{{ $comment->id }}" class="btn btn-sm btn-link text-uppercase">Reply</button>--}}
 {{--            @endcan--}}
-            @can('edit-comment', $comment)
+            {{--@can('edit-comment', $comment)
                 <button data-toggle="modal" data-target="#comment-modal-{{ $comment->id }}" class="btn btn-sm btn-link text-uppercase">Edit</button>
-            @endcan
+            @endcan--}}
             @can('delete-comment', $comment)
                 <a href="{{ url('comments/' . $comment->id) }}" onclick="event.preventDefault();document.getElementById('comment-delete-form-{{ $comment->id }}').submit();" class="btn btn-sm btn-link text-danger text-uppercase">Delete</a>
                 <form id="comment-delete-form-{{ $comment->id }}" action="{{ url('comments/' . $comment->id) }}" method="POST" style="display: none;">
@@ -26,7 +26,7 @@
             @endcan
         </div>
 
-        @can('edit-comment', $comment)
+       {{-- @can('edit-comment', $comment)
             <div class="modal fade" id="comment-modal-{{ $comment->id }}" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -83,7 +83,7 @@
                     </div>
                 </div>
             </div>
-        @endcan
+        @endcan--}}
 
         <br />{{-- Margin bottom --}}
 

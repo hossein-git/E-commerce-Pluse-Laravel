@@ -19,7 +19,6 @@
       </thead>
       <tbody>
       @forelse($comments as $key => $comment)
-
 {{--         @php($product . $key = $comment->commentable->first(['product_id','product_name']))--}}
          <tr>
             <td class="center">{{ $comment->comment }}</td>
@@ -54,7 +53,7 @@
             </td>--}}
             <td class="center">{{ $comment->created_at }}</td>
             <td class="center">
-               <div class="hidden-sm hidden-xs btn-group">
+               <div class="btn-group">
                   <form>
                      <button class="btn btn-xs btn-danger delete_me" data-id="{{ $comment->id }}">
                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
