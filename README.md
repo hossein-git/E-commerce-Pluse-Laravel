@@ -53,6 +53,10 @@ guest checkout system also supported!
 - Apply gift card for Auth user
 - Receive emails after payment 
 
+#### Authentication
+- Laravel authentication with customized view
+- Google Log-in is ready to use
+
 #### Categories
 - Parent-child categories for 
 
@@ -116,3 +120,4 @@ coming soon!
 
 
 
+`__`
