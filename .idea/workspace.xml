@@ -6,127 +6,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e0fa048-c88a-4733-a549-9570990d2c76" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Exceptions/SessionExpiredException.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/PaymentController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Front/PayPalController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config/paypal.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/factories/PaymentFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/factories/attributeFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/factories/attributeValueFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeds/PaymentSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/setting_e.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/setting_eplus.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/Front/account/show_order.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/Front/check-out/cancel_payment.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/Front/check-out/error_payment.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/Front/check-out/success_payment.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/Front/errors/440.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/admin/payments/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/laravel_admin_panel.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/laravel_admin_panel.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/laravel_admin_panel.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/E-commerce-Pluse-Laravel.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/GiftCardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/GiftCardController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/brandController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/brandController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/dashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/dashboardController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/orderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/orderController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/productController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/productController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/settingController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/settingController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Front/accountController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Front/accountController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Front/checkOutController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Front/checkOutController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/orderRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/orderRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/productRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/productRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Attribute.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Attribute.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Category.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Category.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/CheckGift.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/CheckGift.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Color.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Color.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/DetailsOrder.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DetailsOrder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/GiftCard.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/GiftCard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Order.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Payment.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Payment.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Photo.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Photo.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Product.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Product.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Setting.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Setting.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Tag.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Tag.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/brand.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/brand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/view/composer/adminComposer.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/view/composer/adminComposer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/view/composer/frontComposer.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/view/composer/frontComposer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/ProductFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/ProductFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/orderFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/orderFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/photoModelFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/photoModelFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/ratingFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/ratingFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/factories/settingFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/settingFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_06_22_195158_create_products_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_06_22_195158_create_products_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_08_29_171350_create_gift_cards_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_08_29_171350_create_gift_cards_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_09_01_170005_create_payments_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_12_26_081413_create_payments_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_12_17_195443_create_settings_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_12_17_195443_create_settings_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/DatabaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/PermissionTableSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/PermissionTableSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/attributeSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/attributeSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/attributeValueSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/attributeValueSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/categorySeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/categorySeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/photoSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/photoSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/productSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/productSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/ratingSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/ratingSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/settingSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/settingSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/0,2019_12_17_16,48,22.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/0,2019_12_20_22,02,35.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/0,2019_12_23_18,37,43.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/1,2019_12_23_18,37,46.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/2,2019_12_23_18,37,47.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/3,2019_12_23_18,37,47.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/NEW,2019_12_16_19,26,32.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/sample-pr.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/sample-pr.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/site_logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/thumbnails/T0,2019_12_17_16,48,22.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/thumbnails/T0,2019_12_20_22,02,35.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/thumbnails/T0,2019_12_23_18,37,43.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/thumbnails/T1,2019_12_23_18,37,46.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/thumbnails/T2,2019_12_23_18,37,47.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/thumbnails/T3,2019_12_23_18,37,47.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/thumbnails/Tsample-pr.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/thumbnails/Tsample-pr.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Front/_data.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Front/_data.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Front/account/myOrders.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Front/account/myOrders.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Front/check-out/checkOut.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Front/check-out/checkOut.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Front/errors/500.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Front/errors/500.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Front/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Front/home.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Front/listing/_data.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Front/listing/_data.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Front/listing/_leftMenu.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Front/listing/_leftMenu.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Front/listing/list.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Front/listing/list.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/Front/product/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/Front/product/show.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/brand/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/brand/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/dashboard/dashboard.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/dashboard/dashboard.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/giftCard/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/giftCard/edit.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/orders/_data.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/orders/_data.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/orders/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/orders/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/orders/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/orders/show.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/products/_data.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/products/_data.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/products/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/products/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/products/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/products/edit.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/products/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/products/show.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/roles/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/roles/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/setting/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/setting/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/user/profile.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/user/profile.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/emails/payment.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/payment.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/emails/welcome.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/welcome.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layout/admin/_header.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/admin/_header.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layout/admin/_navbar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/admin/_navbar.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layout/admin/_sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/admin/_sidebar.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layout/admin/components.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layout/admin/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/admin/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layout/front/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/front/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layout/front/partials/_footer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/front/partials/_footer.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layout/front/partials/_mobil-nav.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/front/partials/_mobil-nav.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layout/front/partials/_nav.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/front/partials/_nav.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/test.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/test.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/welcome.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -141,26 +28,7 @@
     <favorites_list name="laravel_admin_panel" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/database/factories/ratingFactory.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="14" column="3" lean-forward="true" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/database/seeds/ratingSeeder.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -243,7 +111,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/database/migrations/2019_08_29_171350_create_gift_cards_table.php" />
         <option value="$PROJECT_DIR$/app/Http/Requests/productRequest.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/GiftCardController.php" />
         <option value="$PROJECT_DIR$/resources/views/Front/product/show.blade.php" />
@@ -294,6 +161,7 @@
         <option value="$PROJECT_DIR$/resources/views/layout/front/partials/_footer.blade.php" />
         <option value="$PROJECT_DIR$/database/factories/ratingFactory.php" />
         <option value="$PROJECT_DIR$/database/seeds/ratingSeeder.php" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -423,19 +291,8 @@
         <subPane>
           <expand>
             <path>
-              <item name="laravel_admin_panel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="E-commerce-Pluse-Laravel" type="b2602c69:ProjectViewProjectNode" />
               <item name="laravel_admin_panel" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_admin_panel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_admin_panel" type="462c0819:PsiDirectoryNode" />
-              <item name="database" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_admin_panel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_admin_panel" type="462c0819:PsiDirectoryNode" />
-              <item name="database" type="462c0819:PsiDirectoryNode" />
-              <item name="seeds" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -452,23 +309,23 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="Laravel.SettingsForm" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="settings.editor.splitter.proportion" value="0.18407959" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\xampp\htdocs\laravel_admin_panel" />
+      <recent name="D:\xampp\htdocs\laravel_admin_panel\app\Http\Controllers\Admin" />
+      <recent name="D:\xampp\htdocs\laravel_admin_panel\resources\views\Front\check-out" />
+      <recent name="D:\xampp\htdocs\laravel_admin_panel\resources\views\admin\errors" />
+      <recent name="D:\xampp\htdocs\laravel_admin_panel\public\front-assets\js" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\xampp\htdocs\laravel_admin_panel\public\thumbnails" />
       <recent name="D:\xampp\htdocs\laravel_admin_panel\public\images" />
       <recent name="D:\xampp\htdocs\laravel_admin_panel\resources\views\Front\check-out" />
       <recent name="D:\xampp\htdocs\laravel_admin_panel\resources\views\Front\errors" />
       <recent name="D:\xampp\htdocs\laravel_admin_panel\public\front-assets" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\xampp\htdocs\laravel_admin_panel\app\Http\Controllers\Admin" />
-      <recent name="D:\xampp\htdocs\laravel_admin_panel\resources\views\Front\check-out" />
-      <recent name="D:\xampp\htdocs\laravel_admin_panel\resources\views\admin\errors" />
-      <recent name="D:\xampp\htdocs\laravel_admin_panel\public\front-assets\js" />
-      <recent name="D:\xampp\htdocs\laravel_admin_panel\public\front-assets\css" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -626,12 +483,12 @@
       <workItem from="1577561653962" duration="9773000" />
       <workItem from="1577573057581" duration="1355000" />
       <workItem from="1577611158511" duration="15316000" />
-      <workItem from="1577637156476" duration="2506000" />
+      <workItem from="1577637156476" duration="4325000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1080932000" />
+    <option name="totallyTimeSpent" value="1082751000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -644,7 +501,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1107" height="598" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48794064" visible="true" weight="0.1957914" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -674,41 +530,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/database/factories/ProductFactory.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="466">
-          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/seeds/photoSeeder.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/layout/front/partials/_nav.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="151" column="11" selection-start-line="151" selection-start-column="11" selection-end-line="151" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/layout/front/partials/_mobil-nav.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="48" column="11" selection-start-line="48" selection-start-column="11" selection-end-line="48" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/factories/photoModelFactory.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="5" column="29" lean-forward="true" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/admin/dashboard/dashboard.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="332">
@@ -924,8 +745,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/database/factories/ratingFactory.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="14" column="3" lean-forward="true" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
+        <state relative-caret-position="336">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
@@ -933,6 +754,41 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
           <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="-2016" />
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/Front/home.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-652">
+          <caret line="161" column="36" lean-forward="true" selection-start-line="161" selection-start-column="36" selection-end-line="161" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="2832">
+            <caret line="118" selection-start-line="118" selection-end-line="118" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/layout/front/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="150" column="22" lean-forward="true" selection-start-line="150" selection-start-column="22" selection-end-line="150" selection-end-column="22" />
         </state>
       </provider>
     </entry>
