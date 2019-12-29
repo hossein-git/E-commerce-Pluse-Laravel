@@ -5,10 +5,7 @@
     <bookmark url="file://$PROJECT_DIR$/app/Http/Controllers/Front/homeController.php" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e0fa048-c88a-4733-a549-9570990d2c76" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-    </list>
+    <list default="true" id="3e0fa048-c88a-4733-a549-9570990d2c76" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,10 +21,10 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/composer.json">
+        <entry file="file://$PROJECT_DIR$/composer.lock">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="24" column="42" selection-start-line="24" selection-start-column="42" selection-end-line="24" selection-end-column="42" />
+            <state relative-caret-position="1186">
+              <caret line="2850" column="14" lean-forward="true" selection-start-line="2850" selection-start-column="14" selection-end-line="2850" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -45,9 +42,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>bran</find>
-      <find>create</find>
-      <find>size</find>
       <find>sizing</find>
       <find>MORE PRODUCTA COMING SOON....</find>
       <find>$name</find>
@@ -74,7 +68,10 @@
       <find>que</find>
       <find>pay</find>
       <find>paym,</find>
+      <find>symfony/</find>
       <find>symfony</find>
+      <find>symfony</find>
+      <find>symfony/http-foundation</find>
     </findStrings>
     <replaceStrings>
       <replace>asset</replace>
@@ -115,7 +112,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/GiftCardController.php" />
         <option value="$PROJECT_DIR$/resources/views/Front/product/show.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/Front/check-out/checkOut.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/brandController.php" />
@@ -166,6 +162,7 @@
         <option value="$PROJECT_DIR$/database/seeds/ratingSeeder.php" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/composer.json" />
+        <option value="$PROJECT_DIR$/composer.lock" />
       </list>
     </option>
   </component>
@@ -488,12 +485,12 @@
       <workItem from="1577573057581" duration="1355000" />
       <workItem from="1577611158511" duration="15316000" />
       <workItem from="1577637156476" duration="4325000" />
-      <workItem from="1577653613966" duration="311000" />
+      <workItem from="1577653613966" duration="1804000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1083062000" />
+    <option name="totallyTimeSpent" value="1084555000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -505,10 +502,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1107" height="598" extended-state="6" />
+    <frame x="-7" y="-7" width="1107" height="598" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48794064" visible="true" weight="0.1957914" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48794064" weight="0.1957914" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" sideWeight="0.5009276" side_tool="true" weight="0.24611162" />
       <window_info id="Favorites" order="3" sideWeight="0.5120594" side_tool="true" weight="0.21866423" />
@@ -536,13 +533,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/dashboardController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-768">
-          <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.env.example">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
@@ -763,15 +753,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/composer.lock">
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/http-foundation/JsonResponse.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-936" />
+        <state relative-caret-position="-117">
+          <caret line="24" column="6" selection-start-line="24" selection-start-column="6" selection-end-line="24" selection-end-column="6" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/composer.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="24" column="42" selection-start-line="24" selection-start-column="42" selection-end-line="24" selection-end-column="42" />
+        <state relative-caret-position="312">
+          <caret line="31" column="34" selection-start-line="31" selection-start-column="34" selection-end-line="31" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/composer.lock">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1186">
+          <caret line="2850" column="14" lean-forward="true" selection-start-line="2850" selection-start-column="14" selection-end-line="2850" selection-end-column="14" />
         </state>
       </provider>
     </entry>
