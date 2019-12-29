@@ -24,6 +24,17 @@
       </td>
       <td><b>{{ $order->track_code }}</b></td>
       <td class="center">
+         @if ($order->payment)
+            @if ($order->payment->status )
+               <span class="label label-success label-large">VALID</span>
+            @else
+               <span class="label label-danger label-large">INVALID</span>
+            @endif
+         @else
+            <span class="label label-warning label-large">NOTHING</span>
+         @endif
+      </td>
+      <td class="center">
          <a href="#addr{{$order->order_id}}" class="bolder" data-toggle="modal">
             <b><i class="fa fa-book bigger-250"></i>Address</b>
          </a>
@@ -41,7 +52,7 @@
          <strong>{{ $order->client_email }}</strong>
       </td>
 {{--      <td class="center">{{ $order->employee }}</td>--}}
-      <td class="center">{{ $order->payment_id }}</td>
+
       <td class="bolder">{{ number_format($order->total_price) }}</td>
       <td CLASS="center">
          @if($gift)
@@ -52,8 +63,6 @@
             <i>NO GIFTCARD</i>
          @endif
       </td>
-      <td>
-         {{ Str::limit($order->details,50) }}</td>
       <td>{{ $order->created_at }}
       </td>
 
@@ -182,7 +191,7 @@
                @if(($address) )
                   <div class="row">
                      <div class="col-sm-4">
-                        <ul>
+                        <ul class="list-unstyled  spaced">
                            <li>NAME :</li>
                            <li>SURNAME:</li>
                            <li>STATE :</li>
@@ -196,7 +205,7 @@
                         </ul>
                      </div>
                      <div class="col-sm-8">
-                        <ul>
+                        <ul class=" spaced">
                            <li class="bolder">{{ $address->name }} </li>
                            <li class="bolder">{{ $address->surname }} </li>
                            <li class="bolder">{{ $address->state }} </li>

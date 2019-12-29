@@ -53,9 +53,9 @@
          'route_create' => 'order.not_sent' ,'route_list' => 'order.index'])
 
       @include('layout.admin._menu',
-      ['menu_name' => 'Payments', 'number' => 'payments' ,'gate' => 'order','icon' => 'fa-credit-card',
+      ['menu_name' => 'Payments', 'number' => 'payments' ,'gate' => 'order-edit','icon' => 'fa-credit-card',
       'subMenu' => 'Failed Payment','secondSubMenu' => 'All Payment',
-      'route_create' => 'admin.dashboard' ,'route_list' => 'home'])
+      'route_create' => 'payment.failed' ,'route_list' => 'payment.index'])
 
       @include('layout.admin._menu',
       ['menu_name' => 'Comments', 'number' => 'comments' ,'gate' => '-','icon' => 'fa-comment',

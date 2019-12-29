@@ -19,18 +19,18 @@ class productSeeder extends Seeder
         DB::table('color_product')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        factory(\App\Models\Product::class,10)->create()->each(function (\App\Models\Product $products){
+        factory(\App\Models\Product::class,20)->create()->each(function (\App\Models\Product $products){
             // add tags for products
-            $tags = \App\Models\Category::pluck('category_id')->toArray();
-            $products->tags()->attach(\App\Models\Tag::find(array_rand($tags)));
+            $tags = \App\Models\Tag::pluck('tag_id','tag_id')->toArray();
+            $products->tags()->attach((array_rand($tags)));
 
             // add category for products
-            $category = \App\Models\Category::pluck('category_id')->toArray();
-            $products->categories()->attach(\App\Models\Category::find(array_rand($category)));
+            $category = \App\Models\Category::pluck('category_id','category_id')->toArray();
+            $products->categories()->attach(array_rand($category));
 
             // add colors for products
-            $colors = \App\Models\Color::all()->pluck('color_id')->toArray();
-            $products->colors()->attach(\App\Models\Color::find(array_rand($colors)));
+            $colors = \App\Models\Color::pluck('color_id','color_id')->toArray();
+            $products->colors()->attach(array_rand($colors));
         });
     }
 }

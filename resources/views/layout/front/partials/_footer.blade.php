@@ -64,10 +64,9 @@
                   <div class="col-sm-8 col-md-12">
                      <div class="social-icon-round">
                         <ul>
-                           <li><a class="icon fa fa-facebook" href="http://www.facebook.com/"></a></li>
-                           <li><a class="icon fa fa-twitter" href="http://www.twitter.com/"></a></li>
-                           <li><a class="icon fa fa-google-plus" href="http://www.google.com/"></a></li>
-                           <li><a class="icon fa fa-instagram" href="https://instagram.com/"></a></li>
+                           <li><a class="icon fa fa-github" href="https://github.com/hossein-git"></a></li>
+                           <li><a class="icon fa fa-linkedin" href="https://www.linkedin.com/in/hossein-haghparast-88b230b4"></a></li>
+                           <li><a class="icon fa fa-instagram" href="https://www.instagram.com/hossein_hagh_parast/"></a></li>
                         </ul>
                      </div>
                   </div>
@@ -151,32 +150,15 @@
       <div class="container visible-xs">
          <div class="social-icon-round">
             <ul>
-               <li><a class="icon fa fa-facebook" href="http://www.facebook.com/"></a></li>
-               <li><a class="icon fa fa-twitter" href="http://www.twitter.com/"></a></li>
-               <li><a class="icon fa fa-google-plus" href="http://www.google.com/"></a></li>
-               <li><a class="icon fa fa-instagram" href="https://instagram.com/"></a></li>
+               <li><a class="icon fa fa-github" href="https://github.com/hossein-git"></a></li>
+               <li><a class="icon fa fa-linkedin" href="https://www.linkedin.com/in/hossein-haghparast-88b230b4"></a></li>
+               <li><a class="icon fa fa-instagram" href="https://www.instagram.com/hossein_hagh_parast/"></a></li>
             </ul>
          </div>
       </div>
-      <div class="container">
-         <div class="pull-right">
-            <div class="payment-list">
-               <ul>
-                  <li><a class="icon-01" href="#"></a></li>
-                  <li><a class="icon-02" href="#"></a></li>
-                  <li><a class="icon-03" href="#"></a></li>
-                  <li><a class="icon-04" href="#"></a></li>
-                  <li><a class="icon-05" href="#"></a></li>
-                  <li><a class="icon-06" href="#"></a></li>
-                  <li><a class="icon-07" href="#"></a></li>
-                  <li><a class="icon-08" href="#"></a></li>
-               </ul>
-            </div>
-         </div>
-         <div class="pull-left">
-            <div class="box-copyright">
-               <a href="http://www.findhossein.ir/">{{ $setting->site_title }} &copy; 2019. <span>By Hossein Haghparast.</span></a>
-            </div>
+      <div class="container text-center">
+         <div class="box-copyright">
+            <a href="http://www.findhossein.ir/">{{ $setting->site_title }} &copy; 2019. <span>By Hossein Haghparast.</span></a>
          </div>
       </div>
    </div>

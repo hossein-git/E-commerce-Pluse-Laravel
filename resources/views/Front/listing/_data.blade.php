@@ -40,8 +40,8 @@
             </h2>
             <div class="price">
                @if($product->is_off == 1)
-                  <span class="new-price">{{ number_format($product->sale_price) }}</span>
-                  <span class="old-price">{{ $product->price }}</span>
+                  <span class="new-price">{{ $product->price }}</span>
+                  <span class="old-price">{{ number_format($product->sale_price) }}</span>
                @else
                   <span class="price view">{{ $product->price }}</span>
                @endif

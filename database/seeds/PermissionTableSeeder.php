@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PermissionTableSeeder extends Seeder
 {
@@ -11,14 +12,15 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('permissions')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         /**
          * Run the database seeds.
          *
          * @return void
          */
         $permissions = [
-            'see-dashboard',
-
             'role-list',
             'role-create',
             'role-edit',
@@ -37,7 +39,9 @@ class PermissionTableSeeder extends Seeder
             'gift-list',
             'gift-create',
             'gift-edit',
-            'gift-delete'
+            'gift-delete',
+
+            'see-dashboard',
         ];
 
 

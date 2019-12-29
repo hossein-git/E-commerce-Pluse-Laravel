@@ -12,11 +12,17 @@ class DetailsOrder extends Model
     protected $guarded = ['details_order_id'];
 
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function order()
     {
         return $this->hasOne(Order::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function products()
     {
         return $this->belongsTo(Product::class,'product_id');

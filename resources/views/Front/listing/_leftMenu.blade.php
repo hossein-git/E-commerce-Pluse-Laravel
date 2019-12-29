@@ -1,5 +1,8 @@
+<div class="slide-column-close">
+   <a href="#"><span class="icon icon-close"></span>CLOSE</a>
+</div>
 <div class="col-md-3 col-lg-2 col-xl-2 aside leftColumn">
-   <div class="collapse-block  collapse-block-mobile">
+   <div class="collapse-block open collapse-block-mobile">
       <h3 class="collapse-block_title hidden">Filter:</h3>
       <div class="collapse-block_content">
          <div class="filters-mobile">
@@ -39,7 +42,7 @@
                <a href="#" class="icon icon-arrow-down active">
                </a><a href="#" class="icon icon-arrow-up"></a>
             </div>
-               <button type="submit" class="btn">FILTER</button>
+            <button type="submit" class="btn">FILTER</button>
          </div>
       </div>
       <div class="collapse-block open">

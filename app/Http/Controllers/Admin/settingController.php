@@ -43,18 +43,18 @@ class settingController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'site_title' => 'required|string',
             'site_description' => 'required|string',
             'site_logo' => 'image|mimes:jpeg,png,jpg',
+            'site_icon' => 'image|mimes:jpeg,png,jpg',
             'site_address' => 'required|string'
             , 'site_phone' => 'required|string',
             'site_email' => 'required|string',
@@ -62,15 +62,11 @@ class settingController extends Controller
         ]);
         $input = $request->except('_token');
         $setting = $this->setting->findOrFail($id);
-        if ($logo = $request->file('site_logo')) {
-            $photo_path = public_path(env("IMAGE_PATH") . $setting->site_logo);
-            if (File::exists($photo_path)) {
-                unlink($photo_path);
-            }
-            $image_type = $logo->getClientOriginalExtension();
-            $image_name = 'site_logo' . '.' . $image_type;
-            $logo->move(env('IMAGE_PATH'), $image_name);
-            $input['site_logo'] = $image_name;
+        if ($img = $request->file('site_logo')) {
+            $input['site_logo'] = $this->saveImage($setting->site_image, $img);
+        }
+        if ($img = $request->file('site_icon')) {
+            $input['site_icon'] = $this->saveImage($setting->site_image, $img);
         }
         $setting->fill($input);
 
@@ -84,5 +80,28 @@ class settingController extends Controller
         }
 
     }
+
+
+    /**
+     * save images
+     * @param null $img_name
+     * @param $img
+     * @return string
+     */
+    private function saveImage($img_name = null, $img)
+    {
+        if ($img_name) {
+            $photo_path = public_path(env("IMAGE_PATH") . $img_name);
+            if (File::exists($photo_path)) {
+                unlink($photo_path);
+            }
+        }
+        $name = $img->getClientOriginalName();
+        $image_name = 'setting_' . "$name";
+        $img->move(env('IMAGE_PATH'), $image_name);
+        return $image_name;
+
+    }
+
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Exceptions\SessionExpiredException;
 use App\Http\Requests\addressRequest;
 use App\Mail\PaymentMail;
 use App\Models\Address;
@@ -11,7 +12,6 @@ use App\Models\Order;
 use App\User;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
-use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -70,7 +70,7 @@ class checkOutController extends Controller
      * Store a newly created order.
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return bool|\Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -92,10 +92,10 @@ class checkOutController extends Controller
         $giftAmount = 0;
         //IF USER HAS APPLIED GIFT CARD
         if (session()->has('gift_id')) {
-            $input['gift_id'] = session()->pull('gift_id');
+            $input['gift_id'] = session()->get('gift_id');
             $giftAmount = GiftCard::findOrFail($input['gift_id'], ['gift_amount'])->gift_amount;
-            session(['gift_price' => $giftAmount]);
         }
+        session(['gift_price' => $giftAmount]);
         //GENERATE 8 N CODE
         $input['track_code'] = random_int(10000000, 99999999);
         //delete last '.00' and ',' char from subTotal
@@ -112,6 +112,7 @@ class checkOutController extends Controller
      * @param App\Http\Requests\addressRequest $request
      * @return \Illuminate\Http\Response
      * @return boolean
+     * @throws SessionExpiredException
      */
     public function saveAddress(addressRequest $request)
     {
@@ -121,7 +122,7 @@ class checkOutController extends Controller
         }
         $input = $request->except('_token');
         if (!session()->has('order_id')) {
-            return \response()->json(['error' => 'your session time has expired , pls try again']);
+            throw new SessionExpiredException();
         }
 
         //IF USER SAVE IT AS DEFAULT ADDRESS
@@ -143,12 +144,13 @@ class checkOutController extends Controller
      * save products in order_status table.
      *
      * @return \Illuminate\Http\Response
+     * @throws SessionExpiredException
      */
     public function saveOrderStatus()
     {
 
         if (!session()->has('order_id')) {
-            return \response()->json(['error' => 'your session time has expired , pls try again']);
+            throw new SessionExpiredException();
         }
         $input = [];
         $order_id = session('order_id');
@@ -180,6 +182,7 @@ class checkOutController extends Controller
      *
      * @param Request $request
      * @return \Illuminate\Http\Response
+     * @throws SessionExpiredException
      */
     public function savePayments(Request $request)
     {
@@ -188,7 +191,7 @@ class checkOutController extends Controller
             return false;
         }
         if (!session()->has('order_id')) {
-            return \response()->json(['error' => 'your session time has expired , pls try again']);
+            throw new SessionExpiredException();
         }
         //SAVE GIFT ID AND USER_ID IN checkGIFT
         //----//
@@ -238,7 +241,7 @@ class checkOutController extends Controller
             return response()->json(['success' => 'repeat']);
         }
 
-        //SAVE ORDER_ID TO USE IT TO SAVE ADDRESS , ORDER_DETAILS AND PAYMENTS
+        //SAVE GIFT_ID TO USE IT TO SAVE ORDERS AND SHOW ITS AMOUNT IN VIEW
         session()->put('gift_id', $code->gift_id, Carbon::now()->addMinutes(5));
         return response()->json(['success' => 'true']);
 
@@ -247,7 +250,7 @@ class checkOutController extends Controller
     /**
      * if cart is empty show error page.
      *
-     * @return \Illuminate\Support\Facades\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function checkCart()
     {

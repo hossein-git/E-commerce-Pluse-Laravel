@@ -72,6 +72,10 @@
                      <a class="btn btn-warning btn-xs" title="Edit"
                         href="{{route('product.edit',$product->product_id)}}" data-id="{{ $product->product_id }}">
                         <i class="ace-icon fa fa-pencil bigger-120"></i></a>
+                        <a class="btn btn-yellow btn-xs" title="Edit Attribute"
+                           href="{{ route('attribute.edit',$product->product_id) }}">
+                           <i class="ace-icon fa fa-at bigger-120"></i>
+                        </a>
                   @endcan
                @else
                   @can('product-delete')
@@ -106,7 +110,13 @@
                         <li><a class="btn btn-warning btn-xs" title="Edit"
                                href="{{route('product.edit',$product->product_id)}}"
                                data-id="{{ $product->product_id }}">
-                              <i class="ace-icon fa fa-pencil bigger-120"></i></a></li>
+                              <i class="ace-icon fa fa-pencil bigger-120"></i></a>
+                        </li>
+                        <li><a class="btn btn-warning btn-xs" title="Edit Attribute"
+                               href="{{ route('attribute.edit',$product->product_id) }}">
+                              <i class="ace-icon fa fa-at bigger-120"></i>
+                           </a>
+                        </li>
                      @endcan
                   @else
                      @can('product-delete')

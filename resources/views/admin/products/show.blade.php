@@ -67,7 +67,7 @@
                </div>
             @endif
 
-            <div class="clearfix">
+           {{-- <div class="clearfix">
                <div class="grid2">
                   <span class="bigger-175 blue">25</span>
                   <br>
@@ -79,7 +79,7 @@
                   <br>
                   Following
                </div>
-            </div>
+            </div>--}}
             @can('product-edit')
                <div class="hr hr16 dotted"></div>
                <div class="profile-contact-links align-left ">
@@ -136,12 +136,7 @@
                   <span class="line-height-1 smaller-90"> Categories </span>
                </span>
 
-               <span class="btn btn-app btn-sm btn-primary no-hover">
-                  <span class="line-height-1 bigger-170"> ???? </span>
 
-                  <br>
-                  <span class="line-height-1 smaller-90"> Contacts </span>
-               </span>
             </div>
 
             <div class="space-12"></div>

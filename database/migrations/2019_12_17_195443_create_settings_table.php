@@ -18,6 +18,7 @@ class CreateSettingsTable extends Migration
             $table->string('site_title');
             $table->text('site_description');
             $table->string('site_logo');
+            $table->string('site_icon');
             $table->string('site_address');
             $table->string('site_phone');
             $table->string('site_email');

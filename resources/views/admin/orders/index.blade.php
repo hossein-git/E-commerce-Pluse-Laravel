@@ -30,15 +30,14 @@
             </th>
             <th class="center">Order Status</th>
             <th class="center">Track Code</th>
+            <th class="center">Payments</th>
             <th class="center">Address</th>
             <th class="center">Customer User</th>
             <th class="center">Client Name</th>
             <th class="center">Client Phone, Email</th>
             {{--         <th class="center">Employee Name</th>--}}
-            <th class="center">Payments</th>
             <th class="center">Total Price</th>
             <th class="center">Gift Card</th>
-            <th class="center">Details</th>
             <th class="center">Date</th>
             <th class="center">Operations</th>
          </tr>

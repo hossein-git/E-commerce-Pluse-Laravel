@@ -13,6 +13,6 @@ class photoSeeder extends Seeder
     public function run()
     {
         \App\Models\Photo::truncate();
-        factory(\App\Models\Photo::class,10)->create();
+        factory(\App\Models\Photo::class,20)->create();
     }
 }

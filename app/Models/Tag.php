@@ -11,6 +11,9 @@ class Tag extends Model
     protected $guarded = ['tag_id'];
     public $timestamps  = false;
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function products()
     {
         return $this->belongsToMany(Product::class, 'product_tags', 'tag_id', 'product_id');

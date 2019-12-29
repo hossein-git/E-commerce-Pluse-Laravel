@@ -11,6 +11,10 @@
    @include('Front.listing._leftMenu')
    <!-- center col -->
       <div class="col-md-9 col-lg-10 col-xl-10">
+         <div class="pull-left hidden-lg hidden-md">
+            <a class="btn slide-column-open" href="#">FILTER</a>
+            <hr>
+         </div>
          <div class="product-listing row" id="product_data">
             @include('Front.listing._data')
          </div>
@@ -18,7 +22,6 @@
             <hr>
          </div>
       </div>
-
    </div>
    <input type="hidden" id="lastPage" value="{{ $products->lastPage() }}">
 @endsection
@@ -104,8 +107,6 @@
                    alert('error');
                })
            });
-
        });
-
    </script>
 @endsection

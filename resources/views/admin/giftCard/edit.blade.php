@@ -5,6 +5,7 @@
 @section('extra_css')
 @stop
 @section('content')
+   @include('layout.errors.notifications')
    <form id="gift_form" action="{{ route('giftCard.update',$gift->gift_id) }}" method="post">
       {{ csrf_field() }}
       @if( ! env("APP_AJAX") )
@@ -25,7 +26,12 @@
          <span class="text-danger">{{ $errors->first('status') }}</span>
       </div>
 
-      <input type="hidden" name="gift_code" value="{{($gift->gift_code)}}">
+      <div class="form-group {{ $errors->has('gift_code') ? 'has-error' : '' }}">
+         <label class="bolder bigger-110" for="gift_code">Gift Card Code</label>
+         <input type="text" name="gift_code" maxlength="21" minlength="6" id="gift_code" placeholder="gift Card Code"
+                value="{{old('gift_code',$gift->gift_code)}}" required class="form-control">
+         <span class="text-danger">{{ $errors->first('gift_code') }}</span>
+      </div>
 
       <div class="form-group {{ $errors->has('gift_amount') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="gift_amount">Gift Card Amount</label>

@@ -50,7 +50,6 @@
    </style>
 @endsection
 @section('content')
-
    <div class="row">
       <!-- IMAGE -->
       <div class="col-md-6 hidden-xs">
@@ -58,7 +57,7 @@
             <div class="thumbnails ">
                @foreach($product->photos as $photo)
                   <a href="{{ $photo->src }}" data-standard="{{ $photo->src }}">
-                     <img  src="{{ ($photo->thumbnail ) }}" alt="product photo" class="img-thumbnail"/>
+                     <img src="{{ ($photo->thumbnail ) }}" alt="product photo" class="img-thumbnail"/>
                   </a>
                @endforeach
             </div>
@@ -151,33 +150,43 @@
                <form>
                   <div class="col-sm-6">
                      <!-- COLOR -->
-                     <div class="wrapper">
-                        <div class="title-options">
-                           COLOR<span class="color-required">*</span>
-                        </div>
-                        <ul class="options-swatch-color">
-                           @foreach($product->colors()->get(['color_code','color_name']) as $color)
-                              <li class="">
-                                 <a class="p_color" href="#" data-id="{{ $color->color_name }}">
+                     @if ($product->colors->count())
+                        <div class="wrapper">
+                           <div class="title-options">
+                              COLOR<span class="color-required">*</span>
+                           </div>
+                           <ul class="options-swatch-color">
+                              @foreach($product->colors()->get(['color_code','color_name']) as $color)
+                                 <li class="">
+                                    <a class="p_color" href="#" data-id="{{ $color->color_name }}">
                                     <span class="swatch-label color-orange active"
                                           style="background: {{ $color->color_code }}">
                                     </span>
-                                 </a>
-                              </li>
-                           @endforeach
-                           <span class="tab swatch-label color-orange"></span>
-                        </ul>
-                     </div>
-                     <!-- SIZE -->
-                     <div class="wrapper">
-                        <div class="title-options">SIZE<span class="color-required">*</span></div>
-                        <ul class="tags-list _size">
-                           <li><a href="#" size="XS">XS</a></li>
-                           <li><a href="#" size="S">S</a></li>
-                           <li><a href="#" size="M">M</a></li>
-                           <li><a href="#" size="L">L</a></li>
-                        </ul>
-                     </div>
+                                    </a>
+                                 </li>
+                              @endforeach
+                              <span class="tab swatch-label color-orange"></span>
+                           </ul>
+                        </div>
+                     @else
+                        <input type="hidden" id="p_color" class="p_color" value="-">
+                  @endif
+                  <!-- SIZE -->
+                  @if ($product->has_size)
+                        <div class="wrapper">
+                           <div class="title-options">SIZE<span class="color-required">*</span></div>
+                           <ul class="tags-list _size">
+                              <li><a href="#" size="XS">XS</a></li>
+                              <li><a href="#" size="S">S</a></li>
+                              <li><a href="#" size="M">M</a></li>
+                              <li><a href="#" size="L">L</a></li>
+                           </ul>
+                        </div>
+                     @else
+                        <input type="hidden" class="p_size" id="p_size" value="-">
+                  @endif
+
+
                   </div>
 
                   <!-- ATTRIBUTES -->
@@ -275,7 +284,9 @@
             <ul>
                <li data-active="true"><span>DESCRIPTION</span></li>
                <li><span>SHOPPING METHOD</span></li>
-               <li><span>SIZING GUIDE</span></li>
+               @if ($product->has_size)
+                  <li><span>SIZING GUIDE</span></li>
+               @endif
                <li><span>TAGS</span></li>
                <li><span>REVIEWS</span></li>
             </ul>
@@ -318,50 +329,53 @@
                   back for more.
                </div>
             </div>
-            <div>
-               <span class="tt-tabs__title">SIZING GUIDE</span>
-               <div class="tt-tabs__content">
-                  <h5 class="tab-title">CLOTHING - SINGLE SIZE CONVERSION (CONTINUED)</h5>
-                  <div class="table-responsive">
-                     <table class="table table-parameters">
-                        <tbody>
-                        <tr>
-                           <td>UK</td>
-                           <td>18</td>
-                           <td>20</td>
-                           <td>22</td>
-                           <td>24</td>
-                           <td>26</td>
-                        </tr>
-                        <tr>
-                           <td>European</td>
-                           <td>46</td>
-                           <td>48</td>
-                           <td>50</td>
-                           <td>52</td>
-                           <td>54</td>
-                        </tr>
-                        <tr>
-                           <td>US</td>
-                           <td>14</td>
-                           <td>16</td>
-                           <td>18</td>
-                           <td>20</td>
-                           <td>22</td>
-                        </tr>
-                        <tr>
-                           <td>Australia</td>
-                           <td>8</td>
-                           <td>10</td>
-                           <td>12</td>
-                           <td>14</td>
-                           <td>16</td>
-                        </tr>
-                        </tbody>
-                     </table>
+            @if ($product->has_size)
+               <div>
+                  <span class="tt-tabs__title">SIZING GUIDE</span>
+                  <div class="tt-tabs__content">
+                     <h5 class="tab-title">CLOTHING - SINGLE SIZE CONVERSION (CONTINUED)</h5>
+                     <div class="table-responsive">
+                        <table class="table table-parameters">
+                           <tbody>
+                           <tr>
+                              <td>UK</td>
+                              <td>18</td>
+                              <td>20</td>
+                              <td>22</td>
+                              <td>24</td>
+                              <td>26</td>
+                           </tr>
+                           <tr>
+                              <td>European</td>
+                              <td>46</td>
+                              <td>48</td>
+                              <td>50</td>
+                              <td>52</td>
+                              <td>54</td>
+                           </tr>
+                           <tr>
+                              <td>US</td>
+                              <td>14</td>
+                              <td>16</td>
+                              <td>18</td>
+                              <td>20</td>
+                              <td>22</td>
+                           </tr>
+                           <tr>
+                              <td>Australia</td>
+                              <td>8</td>
+                              <td>10</td>
+                              <td>12</td>
+                              <td>14</td>
+                              <td>16</td>
+                           </tr>
+                           </tbody>
+                        </table>
+                     </div>
                   </div>
                </div>
-            </div>
+            @endif
+
             <div>
                <span class="tt-tabs__title">TAGS</span>
                <div class="tt-tabs__content">

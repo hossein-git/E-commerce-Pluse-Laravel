@@ -46,6 +46,20 @@ class accountController extends Controller
     }
 
     /**
+     * show invoice
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showOrder($id)
+    {
+        if (ctype_digit($id)){
+            $order = $this->order->with(['address','giftCard','users','detailsOrder'])->where('order_id',$id)->first();
+            $this->checkOrderUserId($order->user_id);
+            return view('Front.account.show_order',compact('order'));
+        }
+    }
+
+    /**
      *  show edit user Address page.
      *
      * @return view

@@ -34,11 +34,11 @@ class categorySeeder extends Seeder
 
             $node = \App\Models\Category::create([
                 'category_name' => $names[$index],
-                'category_slug' => Str::slug(random_int(1,99).($names[$index])) ,
+                'category_slug' => Str::slug(($i + 5).($names[$index])) ,
                 'children' => [
                     [
-                        'category_name' => 'ch'.$names[$index],
-                        'category_slug' => Str::slug(random_int(1,99).($names[$index])),
+                        'category_name' => $i .'ch'.$names[$index],
+                        'category_slug' => Str::slug($i.($names[$index])),
                     ],
                 ],
             ]);

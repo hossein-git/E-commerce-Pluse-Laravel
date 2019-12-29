@@ -11,12 +11,6 @@
          <div class="pull-left">
             <h2>Role Management</h2>
          </div>
-
-      </div>
-      <div class="pull-right">
-         @can('role-create')
-            <a class="btn btn-success click_me" href="{{ route('roles.create') }}"> Create New Role</a>
-         @endcan
       </div>
    </div>
 
@@ -42,7 +36,7 @@
                      <a class="btn btn-primary click_me" href="{{ route('roles.edit',$role->id) }}">Edit</a>
                   @endcan
                   @can('role-delete')
-                     <button class="btn btn-sm btn-danger delete_role" title="Delete" data-id="{{ $role->id }}">
+                     <button class="btn  btn-danger delete_role" title="Delete" data-id="{{ $role->id }}">
                         <i class="ace-icon fa fa-trash-o bigger-120"></i>
                      </button>
                   @endcan

@@ -60,12 +60,9 @@ class Handler extends ExceptionHandler
         }
         if ($exception instanceof NotFoundHttpException) {
 
-            return (Str::contains($request->url(), '/admin/'))
-                ? response()->view('admin.errors.error', [
+            return response()->view('Front.errors.404',[
                     'error' => ' Ooops, we cannot find what you are looking for. Please try again.',
-                    'code' => '404'
-                ], 404)
-                : response()->view('Front.errors.404');
+                ],404);
 
         } elseif ($exception instanceof HttpException && $exception->getStatusCode() == 403) {
             return response()->view(

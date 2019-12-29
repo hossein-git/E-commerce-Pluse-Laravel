@@ -31,7 +31,7 @@
                   <select name="brand_id" id="brand_id" class="form-control">
                      <option value="" disabled selected>Choose your brands</option>
                      @foreach($brands as $brand)
-                        <option {{ old('brand_id') == $brand->brand_id ? 'checked' : '' }} value="{{ $brand->brand_id }}">{{ $brand->brand_name }}</option>
+                        <option {{ old('brand_id') == $brand->brand_id ? 'selected' : '' }} value="{{ $brand->brand_id }}">{{ $brand->brand_name }}</option>
                      @endforeach
                   </select>
                </div>
@@ -84,17 +84,17 @@
          </div>
          <div class="form-group col-xs-6">
             <div class="col-sm-4">
-               <h4>Available ? </h4>
-               <label>
+
+               <label><h4>Available ? </h4>
                   <input type="checkbox" name="status" id="status" onclick="showMe()"
                          class="ace ace-switch ace-switch-5"
-                         {{ old('status') == 1 ? 'checked': '' }} checked>
+                         {{ old('status') == 'on' ? 'checked': '' }} checked>
                   <span class="lbl"></span>
                </label>
-               <h4>Discount ?</h4>
-               <label>
+
+               <label>  <h4>Discount ?</h4>
                   <input type="checkbox" name="is_off" id="is_off" onclick="showDiscount()"
-                         class="ace ace-switch ace-switch-5" {{ old('is_off') == 1 ? 'checked' :'' }}>
+                         class="ace ace-switch ace-switch-5" {{ old('is_off') == 'on' ? 'checked' :'' }}>
                   <span class="lbl"></span>
                </label>
             </div>
@@ -123,7 +123,15 @@
                      <input type="text" name="tags" id="form-field-tags" placeholder="Enter tags ..." />
                      <span class="help-button" title="Type your tag and press enter">?</span>
                   </div>
+
+                  <label>
+                     <h4>Has Size ? </h4>
+                     <input type="checkbox" name="has_size" id="has_size" class="ace ace-switch ace-switch-5"
+                            {{ old('has_size') == 'on' ? 'checked': '' }}>
+                     <span class="lbl"></span>
+                  </label>
                </div>
+
             </div>
          </div>
 

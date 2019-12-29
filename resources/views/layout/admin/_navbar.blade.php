@@ -11,7 +11,7 @@
       </button>
 
       <div class="navbar-header pull-left">
-         <a href="{{ route('admin.dashboard') }}" class="navbar-brand">
+         <a href="{{ route('home') }}" class="navbar-brand">
             <small>
                <i class="fa fa-leaf"></i>
                {{ env('APP_NAME') }}

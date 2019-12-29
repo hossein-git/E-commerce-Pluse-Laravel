@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\DetailsOrder;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Product;
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Filesystem\Cache;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +17,6 @@ class dashboardController extends Controller
     private $order;
     private $product;
     private $payment;
-    private $user;
 
 
     public function __construct()
@@ -26,21 +25,27 @@ class dashboardController extends Controller
         $this->middleware('permission:see-dashboard', ['only' => ['index']]);
         $this->order = new Order();
         $this->product = new Product();
+        $this->payment = new Payment();
     }
 
-    //admin dashboard
+    /**
+     * admin dashboard
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
-        $date = Carbon::today()->subDays(5);
-
+        $date = Carbon::today()->subDays(7);
 
         /*---------------orders------------------*/
-
         $order_sent = $this->order->where('order_status', 2)->count();
 //        $order_delivered = $this->order->where('order_status', 3)->count();
         $order_news = $this->order->where('order_status', '=', 1)->count();
         $order_not_complete = $this->order->where('order_status', '=', 0)->count();
         /*---------------payments------------------*/
+        $payment_week =  $this->payment->where('created_at','>',$date)->count();
+        $payment_success =  $this->payment->where('status',1)->count();
+        $payment_failed =  $this->payment->where('status',1)->count();
+
 
         /*---------------users------------------*/
         $employees = DB::table('user_has_roles')->count();
@@ -62,10 +67,16 @@ class dashboardController extends Controller
 
         return view('admin.dashboard.dashboard', compact(
             'discounted_products', 'available_products', 'product_news', 'new_users', 'employees',
-            'order_news', 'order_sent', 'order_not_complete', 'popular_products'));
+            'order_news', 'order_sent', 'order_not_complete', 'popular_products','payment_failed','payment_success','payment_week'));
     }
 
-    //search in admin
+    /**
+     * search in admin
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     * @throws \Throwable
+     */
     public function search(Request $request)
     {
         $this->validate($request, [

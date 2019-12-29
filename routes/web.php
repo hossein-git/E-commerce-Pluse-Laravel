@@ -11,36 +11,11 @@
 |
 */
 
-
-use App\Models\DetailsOrder;
-use App\Models\Product;
-
 use Illuminate\Support\Facades\Route;
 
-Route::get('/test', function () {
-
-
-
-    foreach ($colors as $color => $code) {
-        dd($color);
-
-    }
-
-
-
+//Route::get('/test', function () {
 //    return view('test');
-})->name('test');
-
-
-Route::get('/query', function () {
-    \Illuminate\Support\Facades\DB::enableQueryLog();
-
-
-
-    $query = \Illuminate\Support\Facades\DB::getQueryLog();
-    dd($query);
-})->name('query0');
-
+//})->name('test');
 
 Route::group(['middleware' => 'web'], function () {
 
@@ -59,6 +34,11 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/checkout/address', 'Front\checkOutController@saveAddress')->name('front.address.store');
     Route::post('/checkout/orderStatus', 'Front\checkOutController@saveOrderStatus')->name('front.order.saveStatus');
 
+    /*---------------PAY-PAL------------------*/
+    Route::get('/payment', 'Front\PayPalController@payment')->name('payment');
+    Route::get('/cancel', 'Front\PayPalController@cancel')->name('payment.cancel');
+    Route::get('/payment/success', 'Front\PayPalController@success')->name('payment.success');
+    Route::post('/paypal/notify', 'Front\PaypalController@notify')->name('paypal.notify');
 
     /*---------------LISTS------------------*/
     Route::match(['get', 'post'], '/products', 'Front\homeController@productsList')->name('front.productsList');
@@ -71,7 +51,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::resource('/cart', 'Front\cartController')->except(['create', 'edit', 'update']);
     Route::post('/cart/edit', 'Front\cartController@update')->name('cart.update');
     Route::get('/carts/clear', 'Front\cartController@clear')->name('cart.clear');
-    Route::view('/empty-shopping-cart','Front.check-out.empty-cart')->name('cart.empty');
+    Route::view('/empty-shopping-cart', 'Front.check-out.empty-cart')->name('cart.empty');
 
     /*---------------SEARCh------------------*/
     Route::get('/search', 'Front\homeController@search')->name('front.search');
@@ -92,7 +72,6 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('auth/google', 'Auth\GoogleController@redirectToGoogle')->name('auth.google');
     Route::get('auth/google/callback', 'Auth\GoogleController@handleGoogleCallback');
 
-
 });
 
 
@@ -102,6 +81,7 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
     /*---------------ACCOUNT------------------*/
     Route::get('/profile', 'Front\accountController@profile')->name('front.profile');
     Route::get('/my-orders', 'Front\accountController@myOrders')->name('front.myOrders');
+    Route::get('/my-order/{id}', 'Front\accountController@showOrder')->name('front.myOrders.show');
     Route::put('/my-orders', 'Front\accountController@cancelOrder')->name('front.cancel.order');
     Route::get('/edit-address', 'Front\accountController@editAddress')->name('front.address.edit');
     Route::put('/edit-address', 'Front\accountController@updateAddress')->name('front.address.update');
@@ -132,7 +112,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'checkRole'], function () {
 
     /*---------------ROLES------------------*/
     Route::resource('roles', 'Admin\roleController');
-
 
     /*---------------SEARCH------------------*/
     Route::post('/search', 'Admin\dashboardController@search')->name('admin.search');
@@ -180,6 +159,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'checkRole'], function () {
     Route::post('/comments/{id}', 'Admin\myCommentController@approve')->name('comment.approve');
     Route::delete('/comments/{id}', 'Admin\myCommentController@destroy');
 //    Route::delete('/comments/{comment}', '\Laravelista\Comments\CommentController@destroy');
+
+    /*---------------PAYMENTS------------------*/
+    Route::resource('/payment', 'Admin\PaymentController')->except(['edit', 'update', 'create', 'store']);
+    Route::get('/failed-payments', 'Admin\PaymentController@failed')->name('payment.failed');
 
     /*---------------SITE SETTINGS------------------*/
     Route::resource('/settings', 'Admin\settingController')->except([

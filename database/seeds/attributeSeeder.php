@@ -16,7 +16,10 @@ class attributeSeeder extends Seeder
         \App\Models\Attribute::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
-        $attributes = ['sort' , 'materials' , 'cpu' , 'age' , 'ram' , 'led' ];
+        factory(\App\Models\Attribute::class,10)->create();
+
+
+        /*$attributes = ['sort' , 'materials' , 'cpu' , 'age' , 'ram' , 'LED' ];
         $attr_input = [];
         foreach ($attributes as $attribute) {
             array_push($attr_input,[
@@ -26,6 +29,6 @@ class attributeSeeder extends Seeder
                 'updated_at' => \Carbon\Carbon::now()
             ]);
         }
-        DB::table('attributes')->insert($attr_input);
+        DB::table('attributes')->insert($attr_input);*/
     }
 }

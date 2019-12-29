@@ -54,8 +54,8 @@ class orderController extends Controller
     public function show($id)
     {
         if (ctype_digit($id)){
-            $detailsOrder = $this->order->findOrFail($id)->detailsOrder;
-            return view('admin.orders.show',compact('detailsOrder'));
+            $order = $this->order->with(['address','giftCard','users','detailsOrder'])->where('order_id',$id)->first();
+            return view('admin.orders.show',compact('order'));
         }
     }
 

@@ -28,6 +28,7 @@ class CreateProductsTable extends Migration
             $table->date('data_available')->nullable();
             $table->boolean('is_off')->default(0);
             $table->integer('off_price')->default(0);
+            $table->boolean('has_size')->default(0);
             $table->integer('buy_price');
             $table->integer('sale_price');
             $table->integer('quantity');

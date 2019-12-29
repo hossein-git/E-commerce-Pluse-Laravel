@@ -3,7 +3,8 @@
    check Out
 @endsection
 @section('extra_css')
-   <style> body {
+   <style>
+      body {
          margin-top: 30px;
       }
 
@@ -79,7 +80,7 @@
          <div class="stepwizard-step col-xs-3">
             <a href="#step-3" type="button" class="btn btn-default btn-circle" disabled="disabled">3</a>
             <p>
-               <small>Rewiev</small>
+               <small>Review</small>
             </p>
          </div>
          <div class="stepwizard-step col-xs-3">
@@ -95,7 +96,7 @@
       <!-- STEP1 -->
       <form id="form_step1">
          <!-- SET THIS EMPTY INPUT FORM MORE SECURITY  -->
-         <input type="hidden" name="input" value="">
+         <input type="hidden" id="input1" name="input" value="">
          <div class=" setup-content" id="step-1">
             <div class="panel-heading">
                <h2 class="panel-title">Shipper</h2>
@@ -160,124 +161,130 @@
       <!-- STEP2 -->
       <form id="form_step2">
          <!-- SET THIS EMPTY INPUT FORM MORE SECURITY  -->
-         <input type="hidden" name="input" value="">
+         <input type="hidden" id="input2" name="input" value="">
          <div class="setup-content" id="step-2">
             <div class="panel-heading">
                <h3 class="panel-title">Destination</h3>
             </div>
-            <div class="row">
-               <div class="col-sm-6">
-                  <div class="form-group required">
-                     <label for="name" class=" control-label">First Name: <span>*</span></label>
-                     <input type="text" value="{{ isset($address) ? $address->name : '' }}" name="name"
-                            class="form-control" id="name" required>
-                  </div>
-                  <div class="form-group required">
-                     <label for="number" class="control-label">Number: <span>*</span></label>
-                     <input type="number" value="{{ isset($address) ? $address->number : '' }}" name="number"
-                            class="form-control" id="number" required>
-                  </div>
-                  <div class="form-group required">
-                     <label for="area" class=" control-label">Area: </label>
-                     <input type="text" name="area" value="{{ isset($address) ? $address->area : '' }}"
-                            class="form-control" id="area" maxlength="15">
-                  </div>
-                  <div class="form-group required">
-                     <label for="city" class=" control-label">City: <span>*</span></label>
-                     <input type="text" name="city" value="{{ isset($address) ? $address->city : '' }}"
-                            class="form-control" id="city" required>
-                  </div>
-                  <div class="form-group required">
-                     <label for="postal_code" class=" control-label">Zip/Postal Code: <span>*</span></label>
-                     <input type="text" class="form-control" value="{{ isset($address) ? $address->postal_code : '' }}"
-                            name="postal_code" id="postal_code" required>
-                  </div>
-                  @if (!isset($address))
-                     @auth()
-                        <div class="checkbox-group ">
-                           <input type="checkbox" id="def_addr" name="def_addr">
-                           <label for="def_addr">
-                              <span class="check"></span>
-                              <span class="box"></span>
-                              save this address as my address
-                           </label>
-                        </div>
-                     @endauth
-                  @endif
-               </div>
-               <div class="col-sm-6">
-                  <div class="form-group required">
-                     <label for="surname" class=" control-label">Last Name: <span>*</span></label>
-                     <div class="">
-                        <input type="text" name="surname" value="{{ isset($address) ? $address->surname : '' }}"
-                               class="form-control" id="surname" required>
+            <section>
+               <div class="row">
+                  <div class="col-sm-6">
+                     <div class="form-group required">
+                        <label for="name" class=" control-label">First Name: <span>*</span></label>
+                        <input type="text" value="{{ isset($address) ? $address->name : '' }}" name="name"
+                               class="form-control" id="name" required>
                      </div>
+                     <div class="form-group required">
+                        <label for="number" class="control-label">Number: <span>*</span></label>
+                        <input type="number" value="{{ isset($address) ? $address->number : '' }}" name="number"
+                               class="form-control" id="number" required>
+                     </div>
+                     <div class="form-group required">
+                        <label for="area" class=" control-label">Area: </label>
+                        <input type="text" name="area" value="{{ isset($address) ? $address->area : '' }}"
+                               class="form-control" id="area" maxlength="15">
+                     </div>
+                     <div class="form-group required">
+                        <label for="city" class=" control-label">City: <span>*</span></label>
+                        <input type="text" name="city" value="{{ isset($address) ? $address->city : '' }}"
+                               class="form-control" id="city" required>
+                     </div>
+                     <div class="form-group required">
+                        <label for="postal_code" class=" control-label">Zip/Postal Code: <span>*</span></label>
+                        <input type="text" class="form-control" value="{{ isset($address) ? $address->postal_code : '' }}"
+                               name="postal_code" id="postal_code" required>
+                     </div>
+                     @if (!isset($address))
+                        @auth()
+                           <div class="checkbox-group ">
+                              <input type="checkbox" id="def_addr" name="def_addr">
+                              <label for="def_addr">
+                                 <span class="check"></span>
+                                 <span class="box"></span>
+                                 save this address as my address
+                              </label>
+                           </div>
+                        @endauth
+                     @endif
                   </div>
-                  <div class="form-group required">
-                     <label for="street" class=" control-label">Street: <span>*</span></label>
-                     <input type="text" name="street" value="{{ isset($address) ? $address->street : '' }}"
-                            class="form-control" id="street" maxlength="15">
-                  </div>
-                  <div class="form-group required">
-                     <label for="avenue" class=" control-label">Avenue:</label>
-                     <input type="text" name="avenue" value="{{ isset($address) ? $address->avenue : '' }}"
-                            class="form-control" id="avenue" maxlength="20">
-                  </div>
-                  <div class="form-group required">
-                     <label for="state" class=" control-label">State/Province: <span>*</span></label>
-                     <input type="text" name="state" value="{{ isset($address) ? $address->state : '' }}"
-                            class="form-control" id="state" required>
-                  </div>
-                  <div class="form-group required">
-                     <label for="phone_number" class=" control-label">Phone Number: <span>*</span>
-                        <small>Like +905534676564</small>
-                     </label>
-                     <input type="text" name="phone_number" value="{{ isset($address) ? $address->phone_number : '' }}"
-                            class="form-control" id="phone_number" required>
+                  <div class="col-sm-6">
+                     <div class="form-group required">
+                        <label for="surname" class=" control-label">Last Name: <span>*</span></label>
+                        <div class="">
+                           <input type="text" name="surname" value="{{ isset($address) ? $address->surname : '' }}"
+                                  class="form-control" id="surname" required>
+                        </div>
+                     </div>
+                     <div class="form-group required">
+                        <label for="street" class=" control-label">Street: <span>*</span></label>
+                        <input type="text" name="street" value="{{ isset($address) ? $address->street : '' }}"
+                               class="form-control" id="street" maxlength="15">
+                     </div>
+                     <div class="form-group required">
+                        <label for="avenue" class=" control-label">Avenue:</label>
+                        <input type="text" name="avenue" value="{{ isset($address) ? $address->avenue : '' }}"
+                               class="form-control" id="avenue" maxlength="20">
+                     </div>
+                     <div class="form-group required">
+                        <label for="state" class=" control-label">State/Province: <span>*</span></label>
+                        <input type="text" name="state" value="{{ isset($address) ? $address->state : '' }}"
+                               class="form-control" id="state" required>
+                     </div>
+                     <div class="form-group required">
+                        <label for="phone_number" class=" control-label">Phone Number: <span>*</span>
+                           <small>Like +905534676564</small>
+                        </label>
+                        <input type="text" name="phone_number" value="{{ isset($address) ? $address->phone_number : '' }}"
+                               class="form-control" id="phone_number" required>
+                     </div>
+
+                     <button class="btn btn-primary nextBtn pull-right" id="second_step" type="button">Next</button>
                   </div>
 
-                  <button class="btn btn-primary nextBtn pull-right" id="second_step" type="button">Next</button>
                </div>
+            </section>
 
-            </div>
          </div>
       </form>
 
       <!-- STEP 3 -->
       <div class="setup-content" id="step-3">
-         <!-- SET THIS EMPTY INPUT FORM MORE SECURITY  -->
-         <input type="hidden" name="input" value="">
-         <h3>Review</h3>
-         <table class="table table-hover table-bordered">
-            <thead>
-            <tr>
-               <td class="center">Photo</td>
-               <td class="center">Product Name</td>
-               <td class="center">Price</td>
-               <td class="center">qty</td>
-            </tr>
-            </thead>
-            <tbody>
-            @forelse (Cart::content() as $cart)
+         <div class="">
+            <input type="hidden" id="input3" name="input" value="">
+            <h3>Review</h3>
+            <table class="table table-hover table-bordered">
+               <thead>
                <tr>
-                  <td class="center">
-                     <center>
-                        <img class="thumbnail" width="150" height="180" src="{{$cart->options->src}}"
-                             alt="product photo">
-                     </center>
-                  </td>
-                  <td class="center"><a href="{{ route('front.show', $cart->options->slug) }}">{{ $cart->name }}</a>
-                  </td>
-                  <td class="center">{{ $cart->price }}</td>
-                  <td class="center">{{ $cart->qty }}</td>
+                  <td class="center">Photo</td>
+                  <td class="center">Product Name</td>
+                  <td class="center">Price</td>
+                  <td class="center">qty</td>
                </tr>
-            @empty
-               <h4>your cart is empty</h4>
-            @endforelse
+               </thead>
+               <tbody>
+               @forelse (Cart::content() as $cart)
+                  <tr>
+                     <td class="center">
+                        <center>
+                           <img class="thumbnail" width="150" height="180" src="{{$cart->options->src}}"
+                                alt="product photo">
+                        </center>
+                     </td>
+                     <td class="center"><a href="{{ route('front.show', $cart->options->slug) }}">{{ $cart->name }}</a>
+                     </td>
+                     <td class="center">{{ $cart->price }}</td>
+                     <td class="center">{{ $cart->qty }}</td>
+                  </tr>
+               @empty
+                  <h4>your cart is empty</h4>
+               @endforelse
 
-            </tbody>
+               </tbody>
 
-         </table>
+            </table>
+
+         </div>
+         <!-- SET THIS EMPTY INPUT FORM MORE SECURITY  -->
 
          <div class="container-fluid">
             <div class="pull-left">
@@ -301,8 +308,17 @@
                @endif
 
             </div>
+
          </div>
 
+         <div class="container-fluid">
+            <div class="checkout-box">
+               <h3>SHIP TO:</h3>
+               <div class="checkout-box-content">
+                  <p id="ship_addr"></p>
+               </div>
+            </div>
+         </div>
 
          <button class="btn btn-primary nextBtn pull-right" id="third_step" type="button">Payment</button>
       </div>
@@ -310,23 +326,20 @@
       <!-- STEP 4  -->
       <div id="step_4">
          <!-- SET THIS EMPTY INPUT FORM MORE SECURITY  -->
-         <input type="hidden" name="input" value="">
+{{--         <input type="hidden" name="input" value="">--}}
          <div class="panel panel-primary setup-content" id="step-4">
             <div class="panel-heading">
                <h3 class="panel-title">Payment</h3>
             </div>
             <div class="panel-body">
                <div class="form-group">
-                  <label class="control-label">Company Name</label>
-                  <input maxlength="200" type="text" required="required" class="form-control"
-                         placeholder="Enter Company Name"/>
+                  <h4>With PayPal<i class="fa fa-paypal"></i></h4>
                </div>
                <div class="form-group">
-                  <label class="control-label">Company Address</label>
-                  <input maxlength="200" type="text" required="required" class="form-control"
-                         placeholder="Enter Company Address"/>
+                  <h6 class="control-label">Redirect to Payment Page</h6>
+                  <a href="{{ route('payment') }}" class="btn pull-left" id="payment">Payment</a>
                </div>
-               <button class="btn btn-success pull-right" type="submit">Finish!</button>
+
             </div>
          </div>
       </div>
@@ -370,13 +383,14 @@
                        client_name: $("#client_name").val(),
                        client_phone: $("#clientPhoneNumber").val(),
                        client_email: $("#clientEmail").val(),
-                       details: $("#details").val()
+                       details: $("#details").val(),
+                       input : $('#input1').val()
                    },
                    rules = {
                        client_name: {
                            required: true,
                            lettersonly: true,
-                           maxlength: 15
+                           maxlength: 25
 
                        },
                        client_phone: {
@@ -412,8 +426,10 @@
                        state: $("#state").val(),
                        phone_number: $("#phone_number").val(),
                        def_addr: $("#def_addr").prop('checked'),
+                       input : $('#input2').val()
 
                    },
+
                    rules = {
                        name: {
                            required: true,
@@ -446,7 +462,16 @@
                            required: true,
                            phone: true
                        },
-                   };
+                   },
+                   blkstr = [];
+               // put array into str to show in next page
+               $.each(data, function (idx2, val2) {
+                   // var str = idx2 + ':' + val2;
+                   var str = val2;
+                   blkstr.push(str);
+
+               });
+               $('#ship_addr').text(blkstr.join(", "));
                var dataDone = upload_ajax("{{ route('front.address.store')}}", data, "form_step2", rules);
                if (dataDone) {
                    var curStep = $(this).closest(".setup-content"),
@@ -460,9 +485,8 @@
            $("#third_step").click(function () {
                //save address
 
-               var dataDone = upload_ajax("{{ route('front.order.saveStatus')}}");
+               var dataDone = upload_ajax("{{ route('front.order.saveStatus')}}",);
                if (dataDone) {
-                   alert('ok');
                    var curStep = $(this).closest(".setup-content"),
                        curStepBtn = curStep.attr("id"),
                        nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
@@ -480,10 +504,8 @@
    <!-- CHECK DISCOUNT CODE -->
    <script type="text/javascript">
        $(document).ready(function () {
-
            $("#apply_gift").click(function (e) {
                e.preventDefault();
-
                $.ajaxSetup({
                    headers: {
                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')

@@ -1,6 +1,6 @@
 @extends('layout.admin.index')
 @section('title')
-    Brands
+   Brands
 @stop
 @section('content')
    @include('layout.errors.notifications')
@@ -32,12 +32,13 @@
          <span class="text-danger">{{ $errors->first('brand_description') }}</span>
       </div>
 
+      @if (isset($brand) && $brand->brand_image != null)
+         <input type="hidden" name="brand_image" value="{{ $brand->brand_image }}">
+      @endif
+      <img id="show_image" src="{{ isset($brand) ? $brand->src : '' }}" alt="" width="200" height="100" class="img-responsive img-thumbnail">
       <div class="form-group {{ $errors->has('brand_image') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="brand_image">Brand Image</label>
-
-            <input type="file" name="brand_image" id="brand_image" required>
-{{--            <span class="ace-file-container" data-title="Choose"><span class="ace-file-name" data-title="select photo"><i class=" ace-icon fa fa-upload"></i></span></span>--}}
-
+         <input type="file" name="brand_image" id="brand_image">
          <span class="text-danger">{{ $errors->first('brand_image') }}</span>
       </div>
 
@@ -55,53 +56,70 @@
 
 @endsection
 @section('extra_js')
-   @if(env('APP_AJAX'))
-      <script>
-          $(document).ready(function () {
-              $("#brand_form").submit(function (e) {
-                  e.preventDefault();
-                  //var form = $(this);
-                  var form_data = new FormData(this);
-                  $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                      }
-                  });
-                  $.ajax({
-                      url: "{{ isset($brand) ? route('brand.update',$brand->brand_id) : route('brand.store') }}",
-                      method: "post",
-                      data: form_data,
-                      enctype: 'multipart/form-data',
-                      contentType: false,
-                      cache: false,
-                      processData: false,
-                      beforeSend: function () {
-                          $(".preview").toggle();
-                      },
-                      success: function ($results) {
-                          //show loading image ,reset forms ,clear gallery
-                          $(".preview").toggle();
-                         {{ isset($brand) ? "" : '$("#brand_form")[0].reset()' }}
-                         alert('{{ !isset($brand) ? 'new brand has created successfully' : "brand has updated successfully" }}');
-                      },
-                      error: function (request, status, error) {
-                          $(".preview").toggle();
-                          $("#error_result").empty();
-                          json = $.parseJSON(request.responseText);
-                          $.each(json.errors, function (key, value) {
-                              $('.alert-danger').show();
-                              $('.alert-danger').append('<p>' + value + '</p>');
-                          });
-                          $('html, body').animate(
-                              {
-                                  scrollTop: $("#error_result").offset().top,
-                              },
-                              500,
-                          )
-                      }
-                  });
+   <script>
+       $(document).ready(function () {
+
+           function readURL(input) {
+               if (input.files && input.files[0]) {
+                   var reader = new FileReader();
+
+                   reader.onload = function (e) {
+                       $('#show_image').attr('src', e.target.result);
+                   }
+
+                   reader.readAsDataURL(input.files[0]);
+               }
+           }
+
+           $("#brand_image").change(function () {
+               readURL(this);
+           });
+          @if(env('APP_AJAX'))
+          $("#brand_form").submit(function (e) {
+              e.preventDefault();
+              //var form = $(this);
+              var form_data = new FormData(this);
+              $.ajaxSetup({
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                  }
+              });
+              $.ajax({
+                  url: "{{ isset($brand) ? route('brand.update',$brand->brand_id) : route('brand.store') }}",
+                  method: "post",
+                  data: form_data,
+                  enctype: 'multipart/form-data',
+                  contentType: false,
+                  cache: false,
+                  processData: false,
+                  beforeSend: function () {
+                      $(".preview").toggle();
+                  },
+                  success: function ($results) {
+                      //show loading image ,reset forms ,clear gallery
+                      $(".preview").toggle();
+                     {{ isset($brand) ? "" : '$("#brand_form")[0].reset()' }}
+                     alert('{{ !isset($brand) ? 'new brand has created successfully' : "brand has updated successfully" }}');
+                  },
+                  error: function (request, status, error) {
+                      $(".preview").toggle();
+                      $("#error_result").empty();
+                      json = $.parseJSON(request.responseText);
+                      $.each(json.errors, function (key, value) {
+                          $('.alert-danger').show();
+                          $('.alert-danger').append('<p>' + value + '</p>');
+                      });
+                      $('html, body').animate(
+                          {
+                              scrollTop: $("#error_result").offset().top,
+                          },
+                          500,
+                      )
+                  }
               });
           });
-      </script>
-   @endif
+          @endif
+       });
+   </script>
+
 @stop

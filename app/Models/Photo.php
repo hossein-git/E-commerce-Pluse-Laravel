@@ -12,6 +12,9 @@ class Photo extends Model
     ];
     protected $guarded = ['photo_id'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
     public function products()
     {
         return $this->morphTo(Product::class, 'photoable_type', 'photoable_id');

@@ -15,13 +15,14 @@ class Category extends Model
 //    protected $guarded = ['category_id'];
 
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function products()
     {
         return $this->belongsToMany(Product::class,'category_product','category_id','product_id');
     }
 
-//    public function children() {
-//        return $this->hasMany(Category::class,'parent_id','category_id') ;
-//    }
+
 
 }

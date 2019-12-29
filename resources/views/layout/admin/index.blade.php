@@ -2,7 +2,6 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('layout.admin._header')
 <body class="no-skin">
-@include('layout.admin.components')
 <!-- navBar -->
 @include('layout.admin._navbar')
 <!-- /navbar -->
@@ -113,7 +112,7 @@
                   <i class="ace-icon fa fa-instagram light-blue bigger-150"></i>
                </a>
 
-               <a href="#">
+               <a href="https://github.com/hossein-git">
                   <i class="ace-icon fa fa-github-square text-primary bigger-150"></i>
                </a>
 
@@ -136,12 +135,11 @@
 <!-- LOAD MY JS CODES  -->
 <script src="{{ asset('admin-assets/js/myCodes.js')}}"></script>
 
-<!-- LOAD PJAX -->
-<script src="{{ asset('js/pjax/pjax.min.js') }}"></script>
-
 
 <!-- ace scripts -->
 @if (env('APP_AJAX'))
+   <!-- LOAD PJAX -->
+<script src="{{ asset('js/pjax/pjax.min.js') }}"></script>
    <!-- script for load page on AJAX-->
    <script>
        jQuery(document).ready(function () {

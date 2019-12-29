@@ -36,7 +36,6 @@ class productRequest extends FormRequest
             'quantity' => 'required|numeric',
             'made_in' => 'required|string',
             'description' => 'required|string',
-            'colors' => 'required',
             'tags' => 'required',
             'categories' => 'required',
             'photos.*' => 'image|mimes:jpeg,png,jpg',

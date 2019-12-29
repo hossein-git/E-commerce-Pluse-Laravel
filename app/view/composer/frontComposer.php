@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Cache;
 
 class frontComposer
 {
+    /**
+     * put into the cache for front
+     * @param View $view
+     */
     public function compose(View $view)
     {
         //if cache has those keys continue if not put em in cache
@@ -26,7 +30,6 @@ class frontComposer
         $setting = Cache::rememberForever('setting', function () {
             return Setting::first();
         });
-
 
         $special_offers = Cache::rememberForever('special_offers', function () {
             return Product::where('is_off', 1)->orderBy('off_price','desc')->take(5)

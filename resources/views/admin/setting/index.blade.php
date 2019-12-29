@@ -59,19 +59,41 @@ Site Settings
                    class="form-control">{{isset($setting) ? $setting->site_description :old('site_description')}}</textarea>
          <span class="text-danger">{{ $errors->first('site_description') }}</span>
       </div>
+      <div class="row">
+         <div class="col-sm-5 col-xs-12">
+            <div class="form-group" id="_logo">
+               @if ($setting->site_logo)
+                  <img src="{{ $setting->src  }}" alt="logo" class="img-thumbnail" width="100" height="200">
+               @endif
+            </div>
+            <div class="form-group {{ $errors->has('site_logo') ? 'has-error' : '' }}">
+               <label class="bolder bigger-110" for="site_logo">Site Logo</label>
 
-      <div class="form-group" id="_logo">
-         @if ($setting->site_logo)
-            <img src="{{ $setting->src  }}" alt="logo" class="img-thumbnail" width="100" height="200">
-         @endif
+               <input type="file" name="site_logo" id="site_logo" class="form-control">
+               <span class="text-danger">{{ $errors->first('site_logo') }}</span>
+            </div>
+         </div>
+         <div class="col-sm-2"></div>
+         <div class="col-sm-5 col-xs-12">
+            <div class="form-group" id="_icon">
+               @if ($setting->site_icon)
+                  <img src="{{ $setting->icon  }}" alt="icon" class="img-thumbnail" width="100" height="200">
+               @endif
+            </div>
+            <div class="form-group {{ $errors->has('site_icon') ? 'has-error' : '' }}">
+               <label class="bolder bigger-110" for="site_icon">Site icon</label>
+
+               <input type="file" name="site_icon" id="site_icon" class="form-control">
+               <span class="text-danger">{{ $errors->first('site_icon') }}</span>
+            </div>
+         </div>
       </div>
+     
 
-      <div class="form-group {{ $errors->has('site_logo') ? 'has-error' : '' }}">
-         <label class="bolder bigger-110" for="site_logo">Site Logo</label>
-
-         <input type="file" name="site_logo" id="site_logo" class="form-control">
-         <span class="text-danger">{{ $errors->first('site_logo') }}</span>
-      </div>
+      
+      
+      
+      
 
       <div class="form-group">
          <div class="btn-group btn-group-justified">

@@ -137,28 +137,19 @@ class productController extends Controller
         if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
         }
-        $input = $request->except('_token');
+        $input = $this->getCheckBox($request);
 //        dd($input);
 //        return response()->json(['success' => $input ] );
-
-        if ($request->input('status')) {
-            $input['status'] = 1;
-        }else{
-            $input['status'] = 0;
-        }
-        if ($request->input('is_off')) {
-            $input['is_off'] = 1;
-        }else{
-            $input['is_off'] = 0;
-        }
 
         //generate 12 digit code
         $input['sku'] = date('ymdHms');
         $product = $this->product->create($input);
         //save tags
         $this->saveTags($input,$product);
-        //save colors
-        $product->colors()->attach($input['colors']);
+        if ($request->input('colors')){
+            //save colors
+            $product->colors()->attach($input['colors']);
+        }
         //save categories
         $product->categories()->attach($input['categories']);
         //SAVE PHOTOS
@@ -202,10 +193,10 @@ class productController extends Controller
             return response()->json(['error' => 'id is not valid']);
         }
         $product = $this->product->findOrFail($id);
-        $p_categories = $product->categories->pluck('category_id')->toArray();
         $colors = Color::select('color_id', 'color_name')->get();
         $p_colors = $product->colors->pluck('color_id')->toArray();
         $categories = $this->category->select('category_id', 'category_name')->get();
+        $p_categories = $product->categories->pluck('category_id')->toArray();
         $brands = brand::select('brand_id', 'brand_name')->get();
         return view('admin.products.edit',
             compact('product', 'colors', 'categories', 'brands', 'p_categories', 'p_colors'));
@@ -229,23 +220,16 @@ class productController extends Controller
         if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
         }
-        $input = $request->except('_token');
-
+        $input = $this->getCheckBox($request);
 //        return response()->json(['success' => $input] );
-        if ($request->input('status')) {
-            $input['status'] = 1;
-        }else{
-            $input['status'] = 0;
-        }
-        if ($request->input('is_off')) {
-            $input['is_off'] = 1;
-        }else{
-            $input['is_off'] = 0;
-        }
         $product = $this->product->findOrFail($id);
         $product->fill($input);
         //Update colors
-        $product->colors()->sync($input['colors']);
+        if ($request->input('colors')){
+            $product->colors()->sync($input['colors']);
+        }else{
+            $product->colors()->detach();
+        }
         //Update categories
         $product->categories()->sync($input['categories']);
         //update tags
@@ -282,7 +266,9 @@ class productController extends Controller
             $product->delete();
         } else {
             $product->categories()->detach();
-            $product->colors()->detach();
+            if ($product->colors){
+                $product->colors()->detach();
+            }
             $product->tags()->detach();
             // if product has photo then delete em
             if (count($product->photos) > 0) {
@@ -373,5 +359,31 @@ class productController extends Controller
             }
         }
         $product->tags()->sync($tag_obj);
+    }
+
+    /**
+     * check checkboxes
+     * @param $request
+     * @return array
+     */
+    private function getCheckBox($request)
+    {
+        $input = $request->except(['_token']);
+        if ($request->input('status')) {
+            $input['status'] = 1;
+        }else{
+            $input['status'] = 0;
+        }
+        if ($request->input('is_off')) {
+            $input['is_off'] = 1;
+        }else{
+            $input['is_off'] = 0;
+        }
+        if ($request->input('has_size')) {
+            $input['has_size'] = 1;
+        }else{
+            $input['has_size'] = 0;
+        }
+        return $input;
     }
 }

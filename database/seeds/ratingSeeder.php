@@ -16,6 +16,6 @@ class ratingSeeder extends Seeder
         \willvincent\Rateable\Rating::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        factory(\willvincent\Rateable\Rating::class,10)->create();
+        factory(\willvincent\Rateable\Rating::class,30)->create();
     }
 }

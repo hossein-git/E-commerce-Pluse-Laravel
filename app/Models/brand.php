@@ -11,6 +11,9 @@ class brand extends Model
     protected $fillable = ['brand_name', 'brand_slug', 'brand_image', 'brand_description'];
     protected $guarded = ['brand_id'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function products()
     {
         return $this->hasMany(Product::class, 'brand_id');

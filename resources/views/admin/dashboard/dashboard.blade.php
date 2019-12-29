@@ -13,44 +13,6 @@
                   <i class="ace-icon fa fa-signal"></i>
                   <b>Orders</b>
                </h5>
-               {{--<div class="widget-toolbar no-border">
-                  <div class="inline dropdown-hover">
-                     <button class="btn btn-minier btn-primary">
-                        Today
-                        <i class="ace-icon fa fa-angle-down icon-on-right bigger-110"></i>
-                     </button>
-
-                     <ul class="dropdown-menu dropdown-menu-right dropdown-125 dropdown-lighter dropdown-close dropdown-caret">
-                        <li class="active">
-                           <a href="#" class="blue">
-                              <i class="ace-icon fa fa-caret-right bigger-110">&nbsp;</i>
-                              This Week
-                           </a>
-                        </li>
-
-                        <li>
-                           <a href="#">
-                              <i class="ace-icon fa fa-caret-right bigger-110 invisible">&nbsp;</i>
-                              Last Week
-                           </a>
-                        </li>
-
-                        <li>
-                           <a href="#">
-                              <i class="ace-icon fa fa-caret-right bigger-110 invisible">&nbsp;</i>
-                              This Month
-                           </a>
-                        </li>
-
-                        <li>
-                           <a href="#">
-                              <i class="ace-icon fa fa-caret-right bigger-110 invisible">&nbsp;</i>
-                              All Time
-                           </a>
-                        </li>
-                     </ul>
-                  </div>
-               </div>--}}
             </div>
             <div class="widget-body">
                <div class="space-10"></div>
@@ -137,100 +99,60 @@
             <div class="widget-body" style="display: block;">
                <div class="widget-main no-padding">
                   <div class="infobox-container">
+
+                     <div class="infobox infobox-blue">
+                        <div class="infobox-icon">
+                           <i class="ace-icon fa fa-money"></i>
+                        </div>
+                        <div class="infobox-data">
+                           <span class="infobox-data-number">{{ $menu_count['payments'] }}</span>
+                           <div class="infobox-content">All</div>
+                        </div>
+                        {{--  <div class="badge badge-success">
+                             <i class="ace-icon fa fa-arrow-up"></i>
+                        </div>--}}
+                     </div>
                      <div class="infobox infobox-orange">
                         <div class="infobox-icon">
                            <i class="ace-icon fa fa-credit-card"></i>
                         </div>
 
                         <div class="infobox-data">
-                           <span class="infobox-data-number">32</span>
-                           <div class="infobox-content">Payments of Today</div>
+                           <span class="infobox-data-number">{{$payment_week}}</span>
+                           <div class="infobox-content">This Week</div>
                         </div>
 
                         {{--                        <div class="stat stat-success"></div>--}}
                      </div>
 
-                     <div class="infobox infobox-orange">
-                        <div class="infobox-icon">
-                           <i class="ace-icon fa fa-money"></i>
-                        </div>
-                        <div class="infobox-data">
-                           <span class="infobox-data-number">11</span>
-                           <div class="infobox-content">This Month</div>
-                        </div>
-                        {{--                        <div class="badge badge-success">--}}
-
-                        {{--                           <i class="ace-icon fa fa-arrow-up"></i>--}}
-                        {{--                        </div>--}}
-                     </div>
-
-                     <div class="infobox infobox-orange">
+                     <div class="infobox infobox-green">
                         <div class="infobox-icon">
                            <i class="ace-icon fa fa-paypal"></i>
                         </div>
 
                         <div class="infobox-data">
-                           <span class="infobox-data-number">8</span>
-                           <div class="infobox-content">All Payments</div>
+                           <span class="infobox-data-number">{{ $payment_success }}</span>
+                           <div class="infobox-content">Successful Payments</div>
                         </div>
-                        {{--                        <div class="stat stat-important">4%</div>--}}
+{{--                                                <div class="stat stat-important">4%</div>--}}
                      </div>
 
-                     <div class="infobox infobox-orange">
+                     <div class="infobox infobox-red">
                         <div class="infobox-icon">
                            <i class="ace-icon fa fa-newspaper-o"></i>
                         </div>
 
                         <div class="infobox-data">
-                           <span class="infobox-data-number">7</span>
-                           <div class="infobox-content">New Payments</div>
+                           <span class="infobox-data-number">{{ $payment_failed }}</span>
+                           <div class="infobox-content">Invalid Payments</div>
                         </div>
                      </div>
 
                      <div class="space-6"></div>
-
-                     <div class="infobox infobox-green infobox-small infobox-dark">
-                        <div class="infobox-progress">
-                           <div class="easy-pie-chart percentage" data-percent="61" data-size="39"
-                                style="height: 39px; width: 39px; line-height: 38px;">
-                              <span class="percent">61</span>%
-                              <canvas height="48" width="48" style="height: 39px; width: 39px;"></canvas>
-                           </div>
-                        </div>
-
-                        <div class="infobox-data">
-                           <div class="infobox-content">Task</div>
-                           <div class="infobox-content">Completion</div>
-                        </div>
-                     </div>
-
-                     <div class="infobox infobox-blue infobox-small infobox-dark">
-                        <div class="infobox-chart">
-                           <span class="sparkline" data-values="3,4,2,3,4,4,2,2"><canvas width="39" height="19"
-                                                                                         style="display: inline-block; width: 39px; height: 19px; vertical-align: top;"></canvas></span>
-                        </div>
-
-                        <div class="infobox-data">
-                           <div class="infobox-content">Earnings</div>
-                           <div class="infobox-content">$32,000</div>
-                        </div>
-                     </div>
-
-                     <div class="infobox infobox-grey infobox-small infobox-dark">
-                        <div class="infobox-icon">
-                           <i class="ace-icon fa fa-download"></i>
-                        </div>
-
-                        <div class="infobox-data">
-                           <div class="infobox-content">Downloads</div>
-                           <div class="infobox-content">1,205</div>
-                        </div>
-                     </div>
                   </div>
                </div><!-- /.widget-main -->
             </div><!-- /.widget-body -->
          </div><!-- /.widget-box -->
-
       </div>
 
       <!-- USERS -->
@@ -431,7 +353,5 @@
 
       </div>
    </div>
-
-
 
 @endsection

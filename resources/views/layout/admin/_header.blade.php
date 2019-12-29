@@ -6,6 +6,7 @@
     <meta name="description" content="e-commerce"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <meta name="_token" content="{{ csrf_token()}}"/>
+    <link rel="shortcut icon" href="">
 
     <link rel="stylesheet" href="{{asset('admin-assets/css/admin-style.css')}}"/>
     <link rel="stylesheet" href="{{asset('admin-assets/font-awesome/4.5.0/css/font-awesome.min.css')}}"/>

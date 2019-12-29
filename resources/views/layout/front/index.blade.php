@@ -7,7 +7,7 @@
    <meta name="description" content="@yield('description')">
    <meta name="author" content="Hossein Haghparast">
    <meta name="_token" content="{{ csrf_token() }}">
-{{--   <link rel="shortcut icon" href="favicon.ico">--}}
+   <link rel="shortcut icon" href="{{ $setting->icon }}">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <!-- MIXED STYLES -->
    <link rel="stylesheet" href="{{ asset('front-assets/css/front-style.css')}}">
@@ -35,7 +35,7 @@
           if (document.getElementById("nav_info" + id).innerText != null){
             var info = document.getElementById("nav_info" + id).innerHTML ;
               var a =document.getElementById('category-chiled').innerHTML = info ;
-              console.log(a);
+              // console.log(a);
           }
       }
    </script>
@@ -106,7 +106,7 @@
 @include('layout.front.partials._footer')
 
  <!-- LOAD PJAX -->
-<script src="{{ asset('js/pjax/pjax.min.js') }}"></script>
+{{--<script src="{{ asset('js/pjax/pjax.min.js') }}"></script>--}}
 <!-- MIXED JS -->
 <script src="{{asset('front-assets/js/front-js.js')}}"></script>
 
@@ -129,13 +129,13 @@
 <<!-- script for load page on AJAX-->
 <script>
     jQuery(document).ready(function () {
-        jQuery(".load_page").one('click', function (e) {
+       /* jQuery(".load_page").one('click', function (e) {
             var route = $(this).attr('href');
             var pjax = new Pjax({
                 selectors: ["title","meta[name=keywords]", "#extra_css", "#content-load", "#extra_js"]
             });
             pjax.loadUrl(route);
-        });
+        });*/
         //SEND DATA FOR auto complete SEARCH
         var path = "{{ route('front.search.autoComplete') }}";
         $('input.typeahead').typeahead({

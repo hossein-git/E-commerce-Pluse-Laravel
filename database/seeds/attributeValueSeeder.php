@@ -12,16 +12,17 @@ class attributeValueSeeder extends Seeder
         \App\Models\Attribute_Value::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
-        $attributes_values = [1 , 2 , 100 , 52 , 1024 , 'yes' ];
+        factory(\App\Models\Attribute_Value::class,20)->create();
+        /*$attributes_values = [1 , 2 , 100 , 52 , 1024 , 'yes' ];
         $attr_input = [];
         foreach ($attributes_values as $value) {
             array_push($attr_input,[
                 'value' => $value,
-                'attr_id' => random_int(1,6),
+                'attr_id' => \App\Models\Attribute::pluck('attr_id','attr_id'),
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
             ]);
         }
-        DB::table('attribute_values')->insert($attr_input);
+        DB::table('attribute_values')->insert($attr_input);*/
     }
 }

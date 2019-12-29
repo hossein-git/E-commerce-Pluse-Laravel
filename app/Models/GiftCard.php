@@ -10,11 +10,17 @@ class GiftCard extends Model
     protected $fillable = ['gift_name','gift_code','status','gift_amount'];
     protected $guarded = ['gift_id'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function order()
     {
         return $this->hasMany(Order::class,'gift_id','gift_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function checkGift()
     {
         return $this->hasMany(CheckGift::class,'gift_id');

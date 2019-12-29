@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\GiftCard;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class GiftCardController extends Controller
 {
@@ -13,13 +14,14 @@ class GiftCardController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission:gift-list|gift-create|gift-edit|gift-delete', ['only' => ['index','show']]);
-        $this->middleware('permission:gift-create', ['only' => ['create','store']]);
-        $this->middleware('permission:gift-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:gift-list|gift-create|gift-edit|gift-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:gift-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:gift-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:gift-delete', ['only' => ['destroy']]);
-        
+
         $this->gift = new GiftCard();
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -49,20 +51,20 @@ class GiftCardController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'gift_name' => 'required',
-            'gift_code' => ['required','unique:gift_cards'],
+        $this->validate($request, [
+            'gift_name' => 'required|unique:gift_cards',
+            'gift_code' => ['required', 'unique:gift_cards', 'min:6'],
             'gift_amount' => 'required',
         ]);
         $input = $request->except('token');
-        if ( !$input['status'] == null ){
+        if (!$request->input('status')) {
             $input['status'] = 1;
         }
         $input['gift_code'] = strtolower($input['gift_code']);
         $gift = $this->gift->create($input);
         return env('APP_AJAX')
             ? response()->json(['success' => $gift])
-            : view('admin.giftCard.create')->with(['success' => 'New Gift Card has created successfully']);
+            : redirect()->route('giftCard.index')->with(['success' => 'New Gift Card has created successfully']);
 
     }
 
@@ -75,9 +77,9 @@ class GiftCardController extends Controller
      */
     public function edit($id)
     {
-        if (ctype_digit($id)){
+        if (ctype_digit($id)) {
             $gift = $this->gift->findOrFail($id);
-            return view('admin.giftCard.edit',compact('gift'));
+            return view('admin.giftCard.edit', compact('gift'));
         }
     }
 
@@ -90,15 +92,27 @@ class GiftCardController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (ctype_digit($id)){
-            $this->validate($request,[
+        if (ctype_digit($id)) {
+            $this->validate($request, [
+                'gift_name' => ['required',
+                    Rule::unique('gift_cards', 'gift_name')->whereNot('gift_id', $id)
+                ],
+                'gift_code' => ['required', 'min:6',
+                    Rule::unique('gift_cards', 'gift_code')->whereNot('gift_id', $id)
+                ],
+                'gift_amount' => 'required',
+            ]);
+
+            $this->validate($request, [
                 'gift_name' => 'required',
 //            'gift_code' => ['required','unique:gift_cards'],
                 'gift_amount' => 'required',
             ]);
             $input = $request->except('token');
-            if ( isset($input['status'])){
+            if ($request->input('status')) {
                 $input['status'] = 1;
+            } else {
+                $input['status'] = 0;
             }
             $input['gift_code'] = strtolower($input['gift_code']);
             $gift = $this->gift->findOrFail($id);
@@ -118,7 +132,7 @@ class GiftCardController extends Controller
      */
     public function destroy($id)
     {
-        if (ctype_digit($id)){
+        if (ctype_digit($id)) {
             $gift = $this->gift->findOrFail($id)->delete();
             return $gift
                 ? response()->json(['success' => $gift])

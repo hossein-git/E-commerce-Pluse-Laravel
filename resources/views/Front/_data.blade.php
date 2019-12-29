@@ -108,5 +108,4 @@
       </div>
    </div>
 @empty
-
 @endforelse

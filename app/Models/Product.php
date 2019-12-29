@@ -23,7 +23,7 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'brand_id', 'product_name', 'product_slug', 'status', 'data_available',
+        'brand_id', 'product_name', 'product_slug', 'status', 'data_available','has_size',
         'sku', 'is_off', 'off_price', 'buy_price', 'sale_price', 'made_in', 'description',
         'quantity', 'weight', 'cover'
     ];
@@ -38,6 +38,7 @@ class Product extends Model
     {
         return $this->belongsTo(brand::class, 'brand_id');
     }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
@@ -45,6 +46,7 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class, 'category_product', 'product_id', 'category_id');
     }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
@@ -87,31 +89,46 @@ class Product extends Model
     }
     
 
-    //get created at in diffForHumans format
-    public function getCreatedAtAttribute($date)
+    /**
+     * get created at in diffForHumans forma
+     * @return string
+     * @throws \Exception
+     */
+    public function getCreatedAtAttribute()
     {
-        $time = new Carbon;
-        return $time->diffForHumans($this->attributes['created_at']);
+        return Carbon::createFromTimeStamp(strtotime($this->attributes['created_at']))->diffForHumans();
     }
 
+    /**
+     * save slug in true form
+     * @param $value
+     * @return string
+     */
     public function setProductSlugAttribute($value)
     {
         return $this->attributes['product_slug'] = Str::slug($value);
     }
 
-    //get cover path
+    /**get cover path
+     * @return string
+     */
     public function getCoverAttribute()
     {
         return asset(env('IMAGE_PATH') . $this->attributes['cover']);
     }
 
-    //get THUMBNAIL path
+    /**get THUMBNAIL path
+     * @return string
+     */
     public function getThumbnailAttribute()
     {
         return asset(env('THUMBNAIL_PATH') . "T" . $this->attributes['cover']);
     }
 
-    //GET PRICE AFTER DISCOUNT
+    /**
+     * GET PRICE AFTER DISCOUNT
+     * @return string
+     */
     public function getPriceAttribute()
     {
         if ($this->attributes['off_price'] == null) {
@@ -120,7 +137,10 @@ class Product extends Model
         return number_format($this->attributes['sale_price'] - $this->attributes['off_price']);
     }
 
-    //GET PERCENTAGE OF OFF PRICE
+    /**
+     * GET PERCENTAGE OF OFF PRICE
+     * @return bool|string
+     */
     public function getOffAttribute()
     {
         $off = ($this->attributes['sale_price'] - ($this->attributes['sale_price'] - $this->attributes['off_price'])) / $this->attributes['sale_price'] * 100;

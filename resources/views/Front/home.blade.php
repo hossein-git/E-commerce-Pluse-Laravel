@@ -114,7 +114,7 @@
             </div>
             <center><img alt="" src="{{ asset('admin-assets/5.gif') }}" class="center preview ajax-load"></center>
             <hr>
-            <center id="load" style="display: none">MORE PRODUCTA COMING SOON....</center>
+{{--            <center id="load" style="display: none">MORE PRODUCTA COMING SOON....</center>--}}
             <div class="divider"></div>
          </div>
       </div>
@@ -169,14 +169,15 @@
                    $('#load').show();
                    return;
                }
+               //avoid to show more than 3 page
+               if (page === 3){
+                   return;
+               }
                // console.log(page);
                loadMoreData(page);
            }
            function loadMoreData(page) {
-               //avoid to show more than 4 page
-               if (page === 4){
-                   return;
-               }
+
                $.ajax(
                    {
                        url: '/?page=' + page,

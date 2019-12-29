@@ -12,7 +12,6 @@ $factory->define(\App\Models\Order::class, function (Faker $faker) {
         'user_id' => array_rand(\App\User::pluck('user_id','user_id')->toArray()),
 //        'employee_id',
 //        'payment_id' => array_rand([1, 2, 3, 4, 5, 6, 7, 8, 9]),
-//        'gift_id' => (\App\Models\GiftCard::findOrFail($id)->gift_id),
         'gift_id' => (random_int(1,10)),
         'order_status' => array_rand([0, 1, 2]),
         'track_code' => $faker->numberBetween(10000000, 99999999),

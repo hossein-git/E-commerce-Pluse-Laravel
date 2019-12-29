@@ -17,17 +17,21 @@ use Laravelista\Comments\Comment;
 class adminComposer
 {
 
+    /**
+     * @param View $view
+     */
     public function compose(View $view)
     {
         $view->with([
             'categories' => Category::whereIsRoot()->with('children')->get(['category_name', 'category_id']),
         ]);
 
-
     }
 
-
-    /*---------------uses on sub menu ------------------*/
+    /**
+     * uses on sub menu in admin panel
+     * @param View $view
+     */
     public function menuCount(View $view)
     {
         $menu_count = Cache::remember('menu_count',1440, function () {

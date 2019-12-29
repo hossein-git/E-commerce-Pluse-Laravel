@@ -15,7 +15,7 @@ class CreateGiftCardsTable extends Migration
     {
         Schema::create('gift_cards', function (Blueprint $table) {
             $table->bigIncrements('gift_id');
-            $table->string('gift_name');
+            $table->string('gift_name')->unique();
             $table->integer('gift_amount');
             $table->string('gift_code')->unique();
             $table->boolean('status')->default(0);

@@ -108,9 +108,9 @@ class brandController extends Controller
             return response()->json(['success' => $brand]);
         }
         if ($result) {
-            return redirect()->route('brand.create')->with(['success' => 'brand has updated successfully']);
+            return redirect()->route('brand.index')->with(['success' => 'brand has updated successfully']);
         } else {
-            return redirect()->route('brand.create')->with(['error' => 'brand update error']);
+            return redirect()->route('brand.index')->with(['error' => 'brand update error']);
         }
 
     }
