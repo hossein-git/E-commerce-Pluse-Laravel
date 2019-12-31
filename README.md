@@ -56,6 +56,10 @@ guest checkout system also supported!
 #### Authentication
 - Laravel authentication with customized view
 - Google Log-in is ready to use
+- Users with roles will direct to admin panel
+- a super-admin with : email: admin@eplus.com 
+                and password: 12345678
+                is available
 
 #### Categories
 - Parent-child categories for 
