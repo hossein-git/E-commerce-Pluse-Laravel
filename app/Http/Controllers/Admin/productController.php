@@ -341,7 +341,7 @@ class productController extends Controller
         //take all tags input and convert them to array and add slug for each one
         $tags_input = (explode(','  , $input['tags']));
         $tags = [];
-        foreach ($tags_input as $tag){
+        foreach (array_filter($tags_input) as $tag){
             array_push($tags, [
                 'tag_name' => Str::lower($tag),
                 'tag_slug' => Str::slug($tag)

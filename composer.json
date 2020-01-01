@@ -21,8 +21,8 @@
         "laravelista/comments": "^3.0",
         "spatie/laravel-permission": "^3.3",
         "srmklive/paypal": "^1.6",
-        "willvincent/laravel-rateable": "^2.0",
-        "symfony/http-foundation": "4.4.2"
+        "symfony/http-foundation": "4.4.2",
+        "willvincent/laravel-rateable": "^2.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -52,7 +52,8 @@
             "database/factories"
         ],
         "files": [
-            "app/Helpers/Helpers.php"
+            "app/Helpers/Helpers.php",
+            "app/Helpers/shoppingCartHelper.php"
         ]
     },
     "autoload-dev": {

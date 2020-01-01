@@ -60,6 +60,9 @@ class homeController extends Controller
     {
         $this->validate($request, ['slug' => 'string']);
         $product = $this->product->where('product_slug', "$slug")->first();
+        if (!$product){
+            abort(404);
+        }
         //GET RELATED TAGS
         $tag_slugs = $product->tags()->get(['tag_slug']);
         //PUSH TAGS INTO ONE ARRAY
