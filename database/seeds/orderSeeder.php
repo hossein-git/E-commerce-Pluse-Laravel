@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class orderSeeder extends Seeder
@@ -13,22 +16,27 @@ class orderSeeder extends Seeder
     public function run()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        \App\Models\Order::truncate();
+        Order::truncate();
+        \App\Models\DetailsOrder::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        $size = ['s', 'M', 'L', 'XL'];
 
-        factory(\App\Models\Order::class,10)->create()->each(function (\App\Models\Order $order){
-            $p_id = (\App\Models\Product::all()->pluck('product_id')->toArray())[rand(1,9)];
-            $product = \App\Models\Product::findOrFail($p_id);
-            \App\Models\DetailsOrder::create([
-                'order_id' => $order->order_id ,
-                'product_id' => $product->product_id,
-                'product_slug' => $product->product_slug,
-//                'product_attr_id',
-                'product_price'=> ($product->sale_price),
-                'quantity' => rand(1,10),
-                'size' => array_rand(['s','M','L','XL']),
-//                'color'
-            ]);
-        });
+        factory(Order::class, 20)->create()->each(
+            function (Order $order) use ($size) {
+                $p_id = (Product::pluck('product_id', 'product_id')->toArray());
+                $product = Product::findOrFail(array_rand($p_id));
+                $attr = $product->attributes->first();
+                $color = $product->colors->first();
+                \App\Models\DetailsOrder::create([
+                    'order_id' => $order->order_id,
+                    'product_id' => $product->product_id,
+                    'product_slug' => $product->product_slug,
+                    'attributes' => $attr ? $attr->attr_name  : null,
+                    'product_price' => ($product->sale_price),
+                    'quantity' => rand(1, 10),
+                    'size' => $product->has_size == 1 ? Arr::random($size) : null,
+                    'color' => $color ? $color->color_name : null,
+                ]);
+            });
     }
 }
