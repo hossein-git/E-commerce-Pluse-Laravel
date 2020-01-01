@@ -93,7 +93,7 @@ class homeController extends Controller
         $this->inputs($request);
         $products = $this->product->orderBy("$request->sort", "$request->dcs")
             ->whereBetween('sale_price', [$request->priceMin, $request->priceMax])
-            ->select(['product_slug', 'product_name', 'description', 'status',
+            ->select(['product_id','product_slug', 'product_name', 'description', 'status',
                     'data_available', 'is_off', 'off_price', 'cover', 'sale_price', 'created_at']
             )->paginate($request->paginate);
 
