@@ -5,7 +5,11 @@
 @section('extra_css')
    <!-- the script in this page wont work with pjax so i hava to reload it  -->
    @if (env('APP_AJAX'))
-      @php(redirect()->route('product.edit',$product->product_id))
+      <script type="text/javascript">
+          $(document).on('pjax:complete', function() {
+              pjax.reload();
+          })
+      </script>
    @endif
 @stop
 @section('content')

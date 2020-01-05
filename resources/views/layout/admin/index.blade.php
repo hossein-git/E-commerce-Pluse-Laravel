@@ -142,21 +142,17 @@
 <script src="{{ asset('js/pjax/pjax.min.js') }}"></script>
    <!-- script for load page on AJAX-->
    <script>
-       jQuery(document).ready(function () {
-           jQuery(".click_me").on('click', function (e) {
-               e.preventDefault();
-               var route = $(this).attr('href');
-               var pjax = new Pjax({
-                   selectors: ["title", "#extra_css", "#content-load", "#extra_js"]
-               });
-               pjax.loadUrl(route);
-           });
+       var pjax = new Pjax({
+           elements: ".click_me",
+           selectors: ["title", "#extra_css", "#content-load", "#extra_js",],
+           cacheBust : false,
+           timeout: false ,
        });
    </script>
 @endif
 <!-- END script for load page on ajax-->
-<!-- SEARCH SCRIPT -->
 
+<!-- SEARCH SCRIPT -->
 <script type="text/javascript">
     jQuery(document).on('submit', '#form-search', function (e) {
         e.preventDefault();

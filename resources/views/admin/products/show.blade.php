@@ -2,7 +2,11 @@
 @section('extra_css')
    <!-- the script in this page wont work with pjax so i hava to reload it  -->
    @if (env('APP_AJAX'))
-       @php(redirect()->route('product.show',$product->product_id))
+      <script type="text/javascript">
+          $(document).on('pjax:complete', function() {
+              pjax.reload();
+          })
+      </script>
    @endif
    <link rel="stylesheet" href="{{ asset('admin-assets/css/w3.css') }}">
 @endsection

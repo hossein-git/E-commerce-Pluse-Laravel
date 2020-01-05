@@ -1,12 +1,16 @@
-@if (env('APP_AJAX'))
-   @php(redirect()->route('category.index'))
-@endif
 @extends('layout.admin.index' )
 @section('title')
    Category List
 @stop
 @section('extra_css')
    <link rel="stylesheet" href="{{ asset('admin-assets/css/treeview/style.min.css') }}"/>
+   @if (env('APP_AJAX'))
+      <script type="text/javascript">
+          $(document).on('pjax:complete', function() {
+              pjax.reload();
+          })
+      </script>
+   @endif
 @stop
 @section('content')
 
