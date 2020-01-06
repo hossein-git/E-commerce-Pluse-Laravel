@@ -23,7 +23,7 @@ E-Plus is a Free E-Commerce Application with Laravel that come with:
 - Fully Ajax checkout and shopping Cart system ,
 guest checkout system also supported!
 
-- Paypal, ready for payment processing
+- PayPal, ready for payment processing
 
 - Role and permission management system
 
@@ -76,9 +76,9 @@ guest checkout system also supported!
 -  Can write Comment
 
 #### Orders
-- See overview of your orders in admin and user profile
+- See an overview of your orders in admin and user profile
 - Detailed view of the order comes with: list of items purchased, delivery address, order status , payment status.
-- Users can track order with track code
+- Users can track order with tracking code
 
 #### Role management system
 
@@ -91,7 +91,7 @@ guest checkout system also supported!
 
 #### Brands
 
-- create or edit your brands with cover photo
+- create or edit your brands with the cover photo
 - Take products related brands 
 
 #### Gift card
@@ -106,8 +106,8 @@ guest checkout system also supported!
 -  get all comments and non approved comments in admin panel 
 
 #### Home Page
-- Load products with ajax and windows scroll at Front Home page
-- Auto complete search with ajax 
+- Load products with Ajax and windows scroll in Front Home page
+- Auto complete search with Ajax 
 
 #### Mobile
 
