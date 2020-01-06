@@ -116,15 +116,14 @@ guest checkout system also supported!
 
 
 
+# Documentation
+###  [See screenshots and documentation](http://findhossein.ir/index.php/e-plus/overview "See screenshots and documention")
+
+
+# Licence
+The MIT License (MIT). Please see [License File](https://github.com/beyondcode/laravel-er-diagram-generator/blob/master/LICENSE.md "License File")
+ for more information.
 
 
 
 
-
-# Documantion
-coming soon!
-
-
-
-
-`__`
