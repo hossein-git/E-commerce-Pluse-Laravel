@@ -98,7 +98,7 @@
                   success: function ($results) {
                       //show loading image ,reset forms ,clear gallery
                       $(".preview").toggle();
-                     {{ isset($brand) ? "" : '$("#brand_form")[0].reset()' }}
+                     @if(!isset($brand)) $("#brand_form")[0].reset(); @endif
                      alert('{{ !isset($brand) ? 'new brand has created successfully' : "brand has updated successfully" }}');
                   },
                   error: function (request, status, error) {
