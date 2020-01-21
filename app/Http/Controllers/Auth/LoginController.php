@@ -53,6 +53,9 @@ class LoginController extends Controller
         if (auth()->user()->getRoleNames()->count()) {
             return redirect()->route('user.index');
         }
+        if ($request->has('before_checkout_form')){
+           return redirect()->route('front.checkout');
+        }
     }
 
     /**
