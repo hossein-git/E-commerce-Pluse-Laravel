@@ -11,17 +11,17 @@ class PaymentMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $payment_email;
+    public $data;
 
     /**
      * Create a new message instance.
      *
-     * @param $payment_email array : ['track' => TRACK_CODE, 'payment_status' => '']
+     * @param $data array : ['track' => TRACK_CODE, 'name' => '' , 'payment_status' => '']
      * @return void
      */
-    public function __construct(array $payment_email)
+    public function __construct(array $data)
     {
-        $this->payment_email = $payment_email;
+        $this->data = $data;
     }
 
     /**

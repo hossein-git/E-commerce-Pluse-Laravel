@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Jobs\SendWelcomeEmailsJob;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -86,10 +87,6 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
-
-        Mail::send(['html' => 'emails.welcome'] ,
-            ['name' => $user->name] ,function (Message $message) use ($user){
-            $message->to("$user->email","$user->name")->subject('welcome');
-        });
+        SendWelcomeEmailsJob::dispatch($user)->delay(now()->addMinute(1));
     }
 }

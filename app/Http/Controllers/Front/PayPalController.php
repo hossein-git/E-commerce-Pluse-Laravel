@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Exceptions\SessionExpiredException;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendOrderEmailsJob;
 use App\Mail\PaymentMail;
 use App\Models\Order;
 use App\Models\Payment;
@@ -193,7 +194,8 @@ class PayPalController extends Controller
         //change order status
         $order->update(['status' => 1]);
         $data = ['track' => $order->track_code, 'name' => $order->client_name, 'status' => $status];
-        $this->sendMail($data, $order);
+        SendOrderEmailsJob::dispatch($order->client_email,$data);
+//        $this->sendMail($data, $order);
 
         session()->forget('order_id');
         session()->forget('gift_id');

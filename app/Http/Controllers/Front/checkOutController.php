@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Exceptions\SessionExpiredException;
 use App\Http\Requests\addressRequest;
+use App\Jobs\SendOrderEmailsJob;
 use App\Mail\PaymentMail;
 use App\Models\Address;
 use App\Models\CheckGift;
@@ -178,6 +179,7 @@ class checkOutController extends Controller
     }
 
     /**
+     *  this method does not work because the process with be continue in payPalController
      * Store  address of order.
      *
      * @param Request $request
@@ -198,8 +200,8 @@ class checkOutController extends Controller
         $order = $this->order->findOrFail(session()->pull('order_id'));
 
         //send email
-        $payment_email = ['track' => $order->track_code, 'payment_status' => '???'];
-        Mail::to($order->client_email)->send(new PaymentMail($payment_email));
+        $data = ['track' => $order->track_code,'name' => $order->client_name  ,'status' => '1'];
+        SendOrderEmailsJob::dispatch($order->client_email,$data);
 
 
         //change order status
