@@ -5,7 +5,6 @@
 @section('extra_css')
 @endsection
 @section('content')
-   @include('layout.errors.notifications')
    <!-- if user has roles background color will change -->
    <div @if ($user->getRoleNames()->count()) style="background-color: lightgoldenrodyellow" @endif >
       <div id="user-profile-2" class="user-profile">

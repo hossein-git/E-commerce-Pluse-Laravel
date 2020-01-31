@@ -2,39 +2,48 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Controllers\Controller;
+use App\Repositories\CommentRepository;
 use Illuminate\Http\Request;
 use Laravelista\Comments\Comment;
 use willvincent\Rateable\Rating;
 
-class myCommentController extends Controller
+class myCommentController extends AppBaseController
 {
     private $comment;
+    /**
+     * @var CommentRepository
+     */
+    private $commentRepo;
 
-    public function __construct()
+    public function __construct(CommentRepository $repository)
     {
         $this->middleware(['checkRole']);
+        $this->commentRepo = $repository;
         $this->comment = new Comment();
     }
 
     public function index()
     {
-        $comments  = $this->comment->orderBy('id','desc')->with('commenter','commentable')->paginate(20);
-        return view('admin.comments.index',compact('comments'));
+        $comments = $this->comment->orderBy('id', 'desc')->with('commenter', 'commentable')->paginate(20);
+        return view('admin.comments.index', compact('comments'));
     }
 
     public function newComments()
     {
-        $comments  = $this->comment->where('approved' , 0 )->with('commenter','commentable')->paginate(20);
-        return view('admin.comments.index',compact('comments'));
+        $comments = $this->comment->where('approved', 0)->with('commenter', 'commentable')->paginate(20);
+        return view('admin.comments.index', compact('comments'));
     }
 
     public function approve($id)
     {
-        if (ctype_digit($id)){
-            $comment = $this->comment->findOrFail($id)->update(['approved' => 1]);
-            return response()->json(['success' => $comment]);
+        $comment = $this->commentRepo->update(['approved' => 1], $id);
+        if ($comment) {
+            return $this->sendSuccess(__('models/comments.singular') . ' ' . __('messages.restored'));
         }
+        return $this->sendError(__('models/comments.singular') . ' ' . __('messages.restoredFailed'));
+
     }
 
     public function store(Request $request)
@@ -57,7 +66,7 @@ class myCommentController extends Controller
             'commentable_type' => 'required|string',
             'commentable_id' => 'required|string|min:1',
             'message' => 'required|string',
-            'rating'  => 'nullable|numeric'
+            'rating' => 'nullable|numeric'
         ]));
 
         $model = $request->commentable_type::findOrFail($request->commentable_id);
@@ -71,7 +80,7 @@ class myCommentController extends Controller
         } else {
             $comment->commenter()->associate(auth()->user());
             //save rating
-            if ($request->input('rating')){
+            if ($request->input('rating')) {
                 $rating = new Rating();
                 $rating->rating = $request->input('rating');
                 $rating->user_id = auth()->id();
@@ -83,15 +92,17 @@ class myCommentController extends Controller
         $comment->commentable()->associate($model);
         $comment->comment = $request->message;
         $comment->approved = !config('comments.approval_required');
-        $comment->save();
+        if ($comment->save()) {
+            return $this->sendSuccess(__('models/comments.singular') . ' ' . __('messages.saved'));
+        }
+        return $this->sendError(__('models/comments.singular') . ' ' . __('messages.savedFailed'));
 
-        return response()->json(['success' => 'ok'],200);
     }
 
     public function destroy($id)
     {
-        $this->comment->findOrFail($id)->delete();
-        return response()->json(['success' => 'ok']);
+        $comment = $this->commentRepo->delete($id);
+        return $this->commentRepo->passViewAfterDeleted($comment, 'comments');
     }
 
 

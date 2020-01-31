@@ -5,7 +5,6 @@
 @section('extra_css')
 @endsection
 @section('content')
-   @include('layout.errors.notifications')
    <form id="user_form" action="{{ route('user.store') }}" method="post" enctype="multipart/form-data" >
       {{ csrf_field() }}
 
@@ -54,8 +53,8 @@
       </div>
 
       <div class="form-group ">
-         <label for="password-confirm" class="bolder bigger-110">{{ __('Confirm Password') }}</label>
-         <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+         <label for="password_confirm" class="bolder bigger-110">{{ __('Confirm Password') }}</label>
+         <input id="password_confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
       </div>
 
       <div class="form-group">
@@ -69,6 +68,30 @@
          </div>
       </div>
    </form>
+
 @endsection
 @section('extra_js')
+   @if (env('APP_AJAX'))
+      <script type="text/javascript">
+         $(document).ready(function ()
+         {
+             $("#user_form").submit(function (e) {
+               e.preventDefault();
+                 var data ={
+                     name : $('#name').val(),
+                     email : $('#email').val(),
+                     password : $('#password').val(),
+                     password_confirmation : $('#password_confirm').val(),
+                     roles : $('#role').val()
+
+                 };
+                 if (upload_ajax("{{ route('user.store') }}",data))
+                 {
+                     $('#user_form')[0].reset();
+                 }
+             });
+         });
+      </script>
+
+   @endif
 @endsection

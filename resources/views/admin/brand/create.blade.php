@@ -3,7 +3,7 @@
    Brands
 @stop
 @section('content')
-   @include('layout.errors.notifications')
+
    <form id="brand_form"
          action="{{ isset($brand) ? route('brand.update',$brand->brand_id) : route('brand.store') }}"
          method="post" enctype="multipart/form-data"

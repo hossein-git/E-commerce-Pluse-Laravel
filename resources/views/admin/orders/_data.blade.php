@@ -1,6 +1,6 @@
 @forelse($orders as $key=> $order)
    @php($address = $order->address)
-   @php($gift =  $order->giftCard ? $order->giftCard->first() : false)
+   @php($gift = $order->giftCard)
    <tr>
       <td class="center">{{$order->order_id}}</td>
       <td class="center order_status" >

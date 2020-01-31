@@ -5,7 +5,6 @@ Edit User
 @section('extra_css')
 @endsection
 @section('content')
-   @include('layout.errors.notifications')
    <form id="user_edit_form" action="{{ route('user.update',$user->user_id) }}" method="post" >
       {{ csrf_field() }}
       {{ method_field('put') }}
@@ -58,4 +57,27 @@ Edit User
 
 @endsection
 @section('extra_js')
+   @if (env('APP_AJAX'))
+      <script type="text/javascript">
+          $(document).ready(function ()
+          {
+              $("#user_edit_form").submit(function (e) {
+                  e.preventDefault();
+                  var data ={
+                      name : $('#name').val(),
+                      email : $('#email').val(),
+                      roles : $('#role').val(),
+                      _method : "PUT"
+
+                  };
+                  if (upload_ajax("{{ route('user.update',$user->user_id) }}",data))
+                  {
+                      return window.location.replace("{{ route('user.index') }}");
+                  }
+              });
+          });
+      </script>
+
+   @endif
+
 @endsection

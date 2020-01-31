@@ -5,7 +5,6 @@
 @section('extra_css')
 @stop
 @section('content')
-   @include('layout.errors.notifications')
    <form id="gift_form" action="{{ route('giftCard.store') }}" method="post">
       {{ csrf_field() }}
       <div class="form-group {{ $errors->has('gift_name') ? 'has-error' : '' }}">
@@ -52,51 +51,31 @@
 
 @endsection
 @section('extra_js')
-   @if(env('APP_AJAX'))
-      <script>
+
+   @if (env('APP_AJAX'))
+      <script type="text/javascript">
           $(document).ready(function () {
-              $("#gift_form").submit(function (e) {
+              $('#gift_form').submit(function (e) {
                   e.preventDefault();
-                  var form_data = new FormData(this);
-                  $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                      }
-                  });
-                  $.ajax({
-                      url: "{{ route('giftCard.store') }}",
-                      method: "post",
-                      data: form_data,
-                      contentType: false,
-                      cache: false,
-                      processData: false,
-                      beforeSend: function () {
-                          $(".preview").toggle();
-                      },
-                      success: function ($results) {
-                          //show loading image ,reset forms ,clear gallery
-                          $(".preview").toggle();
-                          $("#gift_form")[0].reset();
-                          alert('new Gift card has created successfully');
-                      },
-                      error: function (request, status, error) {
-                          $(".preview").toggle();
-                          $("#error_result").empty();
-                          json = $.parseJSON(request.responseText);
-                          $.each(json.errors, function (key, value) {
-                              $('.alert-danger').show();
-                              $('.alert-danger').append('<p>' + value + '</p>');
-                          });
-                          $('html, body').animate(
-                              {
-                                  scrollTop: $("#error_result").offset().top,
-                              },
-                              500,
-                          )
-                      }
-                  });
+                  var obj = $(this);
+                  if ($('#status').prop("checked")) {
+                      var status = 1;
+                  }else {
+                      var status = 0
+                  }
+                  var data = {
+                      gift_name: $('#gift_name').val(),
+                      status: status,
+                      gift_code: $('#gift_code').val(),
+                      gift_amount: $('#gift_amount').val(),
+                  };
+                  if (upload_ajax("{{ route('giftCard.store')  }}", data, null, null, true)) {
+                      obj[0].reset();
+                  }
               });
           });
       </script>
    @endif
+
+
 @stop

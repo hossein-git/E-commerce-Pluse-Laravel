@@ -98,12 +98,12 @@
                    url: route,
                    method: "post",
                    success: function ($results) {
-                       alert('Comment has been successfully Approved');
+                       alert($results.message);
                        $(obj).closest("button").remove(); //delete button
                        console.log($results);
                    },
                    error: function (xhr,error) {
-                       alert('error, not approved ');
+                       alert(error.responseText.message);
                        console.log(error.responseText);
                    }
                });

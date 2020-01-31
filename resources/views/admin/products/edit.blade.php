@@ -6,14 +6,15 @@
    <!-- the script in this page wont work with pjax so i hava to reload it  -->
    @if (env('APP_AJAX'))
       <script type="text/javascript">
-          $(document).on('pjax:complete', function() {
+          document.on('pjax:complete', function () {
               pjax.reload();
           })
       </script>
    @endif
 @stop
+
 @section('content')
-   @include('layout.errors.notifications')
+
    <div class="row" style="">
       <form method="post" action="{{ route('product.update',$product->product_id) }}" enctype="multipart/form-data"
             id="Uproduct_form">
@@ -78,13 +79,13 @@
          <div class="form-group col-xs-6">
             <div class="col-sm-4">
 
-               <label> <h4>Available ? </h4>
+               <label><h4>Available ? </h4>
                   <input type="checkbox" name="status" id="status" onclick=''
                          class="ace ace-switch ace-switch-5" {{ $product->status == 1 ? 'checked': '' }} >
                   <span class="lbl"></span>
                </label>
 
-               <label>   <h4>Discount ?</h4>
+               <label><h4>Discount ?</h4>
                   <input type="checkbox" name="is_off" id="is_off" onclick=""
                          class="ace ace-switch ace-switch-5" {{ $product->is_off == 1 ? 'checked' :'' }}>
                   <span class="lbl"></span>
@@ -109,7 +110,9 @@
                <div class="col-sm-9">
                   <div class="inline">
                      <input type="text" name="tags" id="form-field-tags" placeholder="Enter tags ..."
-                     value="<?php foreach($product->tags as $tag){ echo $tag->tag_name.','; } ?>"/>
+                            value="<?php foreach ($product->tags as $tag) {
+                                echo $tag->tag_name . ',';
+                            } ?>"/>
                      <span class="help-button" title="Type your tag and press enter">?</span>
                   </div>
                   <label>
@@ -357,7 +360,7 @@
                   e.preventDefault();
                   var form = $(this);
                   var data_form = new FormData(this);
-                  data_form.append('_method', 'PATCH');
+                  data_form.append('_method', 'PUT');
                   /*var data = {
                       product_name: $("#product_name").val(),
                       made_in: $("#made_in").val(),
@@ -394,27 +397,27 @@
                       beforeSend: function () {
                           $(".preview").toggle();
                       },
-                      success: function ($results) {
-                          console.log($results);
-                          if ((JSON.stringify($results)) == 1) {
+                      success: function (data) {
+                          console.log(data.message);
+                          if (data.success === true) {
+                              alert(data.message);
                               $("#error_result").empty();
-                              //show loading image ,reset forms ,clear gallery
-                              $(".preview").toggle();
-                              // $("#product_form")[0].reset();
-                              // $(".gallery").empty();
-                              alert("Product has updated successfully");
-                          } else {
-                              alert('ERROR');
-                              console.log($results);
                           }
+                          //show loading image ,
+                          $(".preview").hide();
                       },
                       error: function (request, status, error) {
+                          console.log(request.responseText);
+                          var json = $.parseJSON(request.responseText);
+                          if (json.success === false) {
+                              alert(json.message);
+                              $(".preview").hide();
+                              return
+                          }
                           $("#error_result").empty();
-                          $(".preview").toggle();
-                          json = $.parseJSON(request.responseText);
+                          $(".preview").hide();
                           $.each(json.errors, function (key, value) {
-                              $('.alert-danger').show();
-                              $('.alert-danger').append('<p>' + value + '</p>');
+                              $('.alert-danger').show().append('<p>' + value + '</p>');
                           });
                           $('html, body').animate(
                               {
@@ -493,17 +496,20 @@
                method: "DELETE",
                datatype: "json",
                data: {id: photo_id},
-               success: function ($results) {
-                   if ((JSON.stringify($results)) == 1) {
-                       alert("Photo has been deleted successfully");
+               success: function (data) {
+                   if ( data.success === true) {
+
+                       alert(data.message);
                        obj.parents(":eq(5)").remove();
-                   } else {
-                       console.log($results);
                    }
                },
-               error: function (xhr) {
-                   alert('error, product not deleted');
-                   console.log(xhr.responseText);
+               error: function (request, status, error) {
+                   console.log(request);
+                   var json = $.parseJSON(request.responseText);
+                   if (json.success === false) {
+                       alert(json.message);
+                   }
+                   console.log(json,error);
                }
            });
        });

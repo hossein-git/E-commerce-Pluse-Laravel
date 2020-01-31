@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-   <meta charset="utf-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+   <meta charset="utf-8"/>
    <title>Login Page</title>
 
-   <meta name="description" content="User login page" />
-   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+   <meta name="description" content="User login page"/>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
    <!-- bootstrap & fontawesome -->
-   <link rel="stylesheet" href="{{asset('admin-assets/css/bootstrap.min.css')}}" />
-   <link rel="stylesheet" href="{{asset('admin-assets/font-awesome/4.5.0/css/font-awesome.min.css')}}" />
+   <link rel="stylesheet" href="{{asset('admin-assets/css/bootstrap.min.css')}}"/>
+   <link rel="stylesheet" href="{{asset('admin-assets/font-awesome/4.5.0/css/font-awesome.min.css')}}"/>
    <!-- ace styles -->
-   <link rel="stylesheet" href="{{asset('admin-assets/css/ace.min.css')}}" />
+   <link rel="stylesheet" href="{{asset('admin-assets/css/ace.min.css')}}"/>
 
 </head>
 
@@ -43,26 +43,45 @@
 
                            <div class="space-6"></div>
 
-                           <form>
-                              <fieldset>
-                                 <label class="block clearfix">
-                                    <span class="block input-icon input-icon-right">
-                                       <input type="text" class="form-control" placeholder="Username" />
-                                       <i class="ace-icon fa fa-user"></i>
-                                    </span>
-                                 </label>
 
-                                 <label class="block clearfix">
+                           <form action="{{ route('login') }}" method="post">
+                              @csrf
+                              <fieldset class="" >
+                                 <div class="@error('email') has-error @enderror">
+                                    <label class="block clearfix ">
                                     <span class="block input-icon input-icon-right">
-                                       <input type="password" class="form-control" placeholder="Password" />
+                                       <input type="email" class="form-control" placeholder="Email" name="email" required/>
+                                       <i class="ace-icon fa fa-user"></i>
+                                        @error('email')
+                                          <span class="form-control-hint" role="alert">
+                                          <strong class="text-danger">{{ $message }}</strong></span>
+                                        @enderror
+                                    </span>
+                                    </label>
+                                 </div>
+
+                                 <div class="@error('password') has-error @enderror">
+                                    <label class="block clearfix">
+                                    <span class="block input-icon input-icon-right">
+                                       <input type="password" class="form-control" placeholder="Password"
+                                              name="password" required/>
                                        <i class="ace-icon fa fa-lock"></i>
                                     </span>
-                                 </label>
+                                       @error('password')
+                                       <span class="form-control-hint" role="alert">
+                                        <strong class="text-danger">{{ $message }}</strong>
+                                    </span>
+                                       @enderror
+                                    </label>
+
+                                 </div>
+
+
 
                                  <div class="space"></div>
 
                                  <div class="clearfix center">
-                                    <button type="button" class=" btn btn-lg btn-primary">
+                                    <button type="submit" class=" btn btn-lg btn-primary">
                                        <i class="ace-icon fa fa-key"></i>
                                        <span class="bigger-110">Login</span>
                                     </button>
@@ -73,7 +92,7 @@
                            </form>
 
                            <div class="social-or-login center">
-{{--                              <span class="bigger-110">Or Login Using</span>--}}
+                              {{--                              <span class="bigger-110">Or Login Using</span>--}}
                            </div>
 
                            <div class="space-6"></div>

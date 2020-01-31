@@ -5,7 +5,7 @@
 @section('extra_css')
 @endsection
 @section('content')
-   @include('layout.errors.notifications')
+
    <div class="row">
       <div class="col-lg-12 margin-tb">
          <div class="pull-left">
@@ -65,7 +65,6 @@
 @endsection
 @section('extra_js')
    @if (env('APP_AJAX'))
-      <script src="{{ asset('front-assets/js/checkOut.js') }}"></script>
       <script type="text/javascript">
           $(document).ready(function () {
               $('#role_create').submit(function (e) {

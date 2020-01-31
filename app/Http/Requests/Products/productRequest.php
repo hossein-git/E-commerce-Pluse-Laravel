@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Products;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -24,7 +24,7 @@ class productRequest extends FormRequest
      */
     public function rules()
     {
-//        dd($this->product);
+
         return [
             'brand_id' => 'required|numeric',
             'product_name' => 'required|string',
@@ -36,10 +36,7 @@ class productRequest extends FormRequest
             'quantity' => 'required|numeric',
             'made_in' => 'required|string',
             'description' => 'required|string',
-            'tags' => 'required',
-            'categories' => 'required',
-            'photos.*' => 'image|mimes:jpeg,png,jpg',
-            'cover' => 'required|string'
+            'cover' => 'mimes:jpeg,png,jpg|max:20000'
         ];
     }
 }

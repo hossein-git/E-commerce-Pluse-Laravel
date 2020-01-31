@@ -5,18 +5,19 @@
 @section('extra_css')
 @stop
 @section('content')
-   @include('layout.errors.notifications')
    <form id="category_form" action="{{ route('category.store') }}" method="post">
       {{ csrf_field() }}
       <div class="form-group {{ $errors->has('category_name') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="title">Category Name</label>
-         <input type="text" name="category_name" maxlength="21" id="title" placeholder="Category Name" value="{{old('category_name')}}" required
+         <input type="text" name="category_name" maxlength="21" id="title" placeholder="Category Name"
+                value="{{old('category_name')}}" required
                 class="form-control">
          <span class="text-danger">{{ $errors->first('category_name') }}</span>
       </div>
       <div class="form-group {{ $errors->has('category_slug') ? 'has-error' : '' }}">
-         <label class="bolder bigger-110" for="title">Category Slug</label>
-         <input type="text" name="category_slug" maxlength="21" id="title" placeholder="Category Slug" value="{{old('category_slug')}}" required
+         <label class="bolder bigger-110" for="category_slug">Category Slug</label>
+         <input type="text" name="category_slug" maxlength="21" id="category_slug" placeholder="Category Slug"
+                value="{{old('category_slug')}}" required
                 class="form-control">
          <span class="text-danger">{{ $errors->first('category_slug') }}</span>
       </div>
@@ -56,46 +57,15 @@
           $(document).ready(function () {
               $("#category_form").submit(function (e) {
                   e.preventDefault();
-                  var form = $(this);
-                  var form_data = new FormData(this);
-                  $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                      }
-                  });
-                  $.ajax({
-                      url: "{{ route('category.store') }}",
-                      method: "post",
-                      data:  form_data,
-                      contentType: false,
-                      cache: false,
-                      processData:false,
-                      beforeSend: function () {
-                          $(".preview").toggle();
-                      },
-                      success: function ($results) {
-                          //show loading image ,reset forms ,clear gallery
-                          $(".preview").toggle();
-                          $("#category_form")[0].reset();
-                          alert("new category has created successfully");
-                          //console.log($results);
-                      },
-                      error: function (request, status, error) {
-                          $(".preview").toggle();
-                          $("#error_result").empty();
-                          json = $.parseJSON(request.responseText);
-                          $.each(json.errors, function (key, value) {
-                              $('.alert-danger').show();
-                              $('.alert-danger').append('<p>' + value + '</p>');
-                          });
-                          $('html, body').animate(
-                              {
-                                  scrollTop: $("#error_result").offset().top,
-                              },
-                              500,
-                          )
-                      }
-                  });
+                  data = {
+                      category_name: $("#title").val(),
+                      category_slug: $("#category_slug").val(),
+                      parent_id: $("#Category").val(),
+                  };
+                  var result = upload_ajax("{{ route('category.store') }}", data)
+                  if (result) {
+                      return window.location.reload();
+                  }
               });
           });
       </script>

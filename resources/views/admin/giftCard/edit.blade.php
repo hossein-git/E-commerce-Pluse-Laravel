@@ -5,12 +5,10 @@
 @section('extra_css')
 @stop
 @section('content')
-   @include('layout.errors.notifications')
    <form id="gift_form" action="{{ route('giftCard.update',$gift->gift_id) }}" method="post">
       {{ csrf_field() }}
-      @if( ! env("APP_AJAX") )
-         @method("PUT")
-      @endif
+      @method("PUT")
+
       <div class="form-group {{ $errors->has('gift_name') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="gift_name">Gift Card Name</label>
          <input type="text" name="gift_name" maxlength="21" id="gift_name" placeholder="gift Card Name"
@@ -54,51 +52,32 @@
 
 @endsection
 @section('extra_js')
-   @if(env('APP_AJAX') == true)
-      <script>
+   @if (env('APP_AJAX'))
+      <script type="text/javascript">
           $(document).ready(function () {
-              $("#gift_form").submit(function (e) {
+              $('#gift_form').submit(function (e) {
                   e.preventDefault();
-                  var form_data = new FormData(this);
-                  form_data.append('_method', 'PATCH');
-                  $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                      }
-                  });
-                  $.ajax({
-                      url: "{{ route('giftCard.update',$gift->gift_id) }}",
-                      method: "post",
-                      data: form_data,
-                      contentType: false,
-                      cache: false,
-                      processData: false,
-                      beforeSend: function () {
-                          $(".preview").toggle();
-                      },
-                      success: function ($results) {
-                          //show loading image ,reset forms ,clear gallery
-                          $(".preview").toggle();
-                          alert('Gift has updated successfully');
-                      },
-                      error: function (request, status, error) {
-                          $(".preview").toggle();
-                          $("#error_result").empty();
-                          json = $.parseJSON(request.responseText);
-                          $.each(json.errors, function (key, value) {
-                              $('.alert-danger').show();
-                              $('.alert-danger').append('<p>' + value + '</p>');
-                          });
-                          $('html, body').animate(
-                              {
-                                  scrollTop: $("#error_result").offset().top,
-                              },
-                              500,
-                          )
-                      }
-                  });
+                  if ($('#status').prop("checked")) {
+                      var status = 1;
+                  }else {
+                      var status = 0
+                  }
+                  var data = {
+                      gift_name: $('#gift_name').val(),
+                      status: status,
+                      gift_code: $('#gift_code').val(),
+                      gift_amount: $('#gift_amount').val(),
+                      _method: "PUT"
+
+                  };
+
+
+                  if (upload_ajax("{{ route('giftCard.update',$gift->gift_id)  }}", data, null, null, true)) {
+                      window.location.replace("{{ route('giftCard.index') }}");
+                  }
               });
           });
       </script>
    @endif
+
 @stop

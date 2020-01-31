@@ -5,7 +5,7 @@
 @section('extra_css')
 @stop
 @section('content')
-   @include('layout.errors.notifications')
+
    <table id="simple-table" class="table  table-bordered table-hover">
       <thead>
       <tr>
@@ -68,7 +68,7 @@
        $(document).ready(function () {
           @can('product-delete')
            //DELETE ROW
-           deleteAjax("/admin/brand/", "delete_me", "brand");
+           deleteAjax("/admin/brand/", "delete_me");
           @endcan
        });
    </script>

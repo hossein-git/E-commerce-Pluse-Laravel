@@ -12,7 +12,7 @@
       <td>{{ $product->sku }}</td>
       <td>{{ $product->buy_price }}</td>
       <td>{{ $product->is_off == 1 ? number_format($product->sale_price - $product->off_price ) : number_format($product->sale_price) }}</td>
-      <td class="center">
+      <td class="center" style="background-color: @if($product->status) #00be67 @else #fff556 @endif">
          @if($product->status == 1)
             <a href="#" class="green bigger-140 show-details-btn" title="Active" disabled="">
                <i class="ace-icon fa fa-angle-double-up"></i>
@@ -56,7 +56,7 @@
       {{--            <td class="smaller-80">{{ $product->made_in }}</td>--}}
       <td>{{ Str::limit($product->description,50,'...')  }}</td>
       <td>
-         <img src="{{ asset($product->thumbnail) }}" alt="cover photo" width="80" height="100">
+         <img src="{{ asset($product->cover) }}" alt="cover photo" width="80" height="100">
       </td>
       <td class="smaller-80">{{ $product->created_at }}</td>
       <td>

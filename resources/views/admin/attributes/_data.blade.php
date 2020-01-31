@@ -4,16 +4,17 @@
          <h4 class="widget-title">Value:</h4>
          <span class="widget-toolbar">
             <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
-            <a href="#" onclick="deleteValue(this)" class="close_value red" data-id="{{ $value->attr_value_id }}"><i
-                       class="ace-icon fa fa-times"></i></a>
+            <a href="#" onclick="deleteValue(this)" class="close_value red" data-id="{{ $value->attr_value_id }}">
+               <i class="ace-icon fa fa-times"></i></a>
          </span>
       </div>
       <div class="widget-body">
          <div class="widget-main center">
             <div class="form-group">
                <label for="value"></label>
-               <input type="text" value="{{ $value->value }}" id="value" name="value[]"
-                      class="input form-control" placeholder="Value">
+               <input type="text" value="{{ $value->value }}" id="value" data-id="{{$value->attr_value_id}}" name="value[][{{ $value->attr_value_id }}]"
+                      class="input form-control values" placeholder="Value">
+
             </div>
          </div>
       </div>

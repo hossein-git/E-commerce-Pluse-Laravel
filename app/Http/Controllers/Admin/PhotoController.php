@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\AppBaseController;
 use App\Models\Photo;
+use App\Repositories\PhotoRepository;
+use Exception;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 
-class PhotoController extends Controller
+class PhotoController extends AppBaseController
 {
-    public function __construct()
+    /**
+     * @var PhotoRepository
+     */
+    private $photoRepo;
+
+    public function __construct(PhotoRepository $repository)
     {
         $this->middleware('permission:product-delete', ['only' => 'destroy' ]);
+        $this->photoRepo = $repository;
     }
     /**
      * Display a listing of the resource.
@@ -26,7 +35,7 @@ class PhotoController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -36,7 +45,7 @@ class PhotoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -69,7 +78,7 @@ class PhotoController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param int $id
      * @return \Illuminate\Http\Response
      */
@@ -82,23 +91,14 @@ class PhotoController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
+     * @throws Exception
      */
     public function destroy($id)
     {
-        $photo = Photo::findOrFail($id);
-        $photo_path = public_path(env("IMAGE_PATH") . $photo->addr);
-        //THUMBNAIL PATH of photo
-        $T_path = public_path(env("THUMBNAIL_PATH") . "T" . $photo->addr);
-        if (File::exists($T_path)) {
-            unlink($T_path);
-        }
-        if (File::exists($photo_path)) {
-            unlink($photo_path);
-        }
-        $photo->delete();
-        if ($photo){
-            return response()->json(1);
-        }
+        $result = $this->photoRepo->destroy($id);
+
+        return $this->photoRepo->passViewAfterDeleted($result,'photos');
+
     }
 }

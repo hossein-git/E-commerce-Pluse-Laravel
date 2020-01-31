@@ -5,7 +5,7 @@
 @section('extra_css')
 @stop
 @section('content')
-   @include('layout.errors.notifications')
+
 
    <form method="post" action="{{ route('admin.search') }}" id="form-search"
    onsubmit="event.preventDefault()">
@@ -78,14 +78,14 @@
                    url: href,
                    method: "get",
                    success: function ($results) {
-                       alert('Order Status Has Been successfully changed');
+                       alert($results.message);
                        $(obj).closest("a").remove(); //delete icon
                        // var x = $(obj).parents('tr').load(location.href + obj); //delete icon
 
                        console.log($results);
                    },
                    error: function (xhr) {
-                       alert('error,');
+                       alert(xhr.responseText.message);
                        console.log(xhr.responseText);
                    }
                });

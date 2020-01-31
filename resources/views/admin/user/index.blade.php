@@ -5,7 +5,6 @@ Users List
 @section('extra_css')
 @endsection
 @section('content')
-   @include('layout.errors.notifications')
    <table class="table table-bordered table-hover">
       <thead>
       <tr class="info">

@@ -5,7 +5,7 @@
 @section('extra_css')
 @endsection
 @section('content')
-   @include('layout.errors.notifications')
+
    <div class="row">
       <div class="col-lg-12 margin-tb">
          <div class="pull-left">

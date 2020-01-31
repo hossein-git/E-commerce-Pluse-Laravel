@@ -1,18 +1,18 @@
 @extends('layout.admin.index')
 @section('title')
-Site Settings
+   Site Settings
 @endsection
 @section('extra_css')
 @endsection
 @section('content')
-   @include('layout.errors.notifications')
+
    <form id="setting_form"
          action="{{ isset($setting) ? route('settings.update',$setting->setting_id) : route('settings.store') }}"
          method="post" enctype="multipart/form-data"
    >
       {{ isset($setting) ? method_field('PUT') : '' }}
       {{ csrf_field() }}
-      
+
       <div class="form-group {{ $errors->has('site_title') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="site_title">Site Title</label>
          <input type="text" name="site_title" maxlength="21" id="site_title" placeholder="Site Title"
@@ -20,15 +20,15 @@ Site Settings
                 class="form-control">
          <span class="text-danger">{{ $errors->first('site_title') }}</span>
       </div>
-      
+
       <div class="form-group {{ $errors->has('site_phone') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="site_phone">Site Phone</label>
          <input type="text" name="site_phone" id="site_phone" placeholder="Site Phone"
                 value="{{ isset($setting) ? $setting->site_phone : old('site_phone')}}" required
                 class="form-control">
          <span class="text-danger">{{ $errors->first('site_phone') }}</span>
-      </div> 
-      
+      </div>
+
       <div class="form-group {{ $errors->has('site_fax') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="site_fax">Site fax</label>
          <input type="text" name="site_fax" id="site_fax" placeholder="Site fax"
@@ -36,15 +36,15 @@ Site Settings
                 class="form-control">
          <span class="text-danger">{{ $errors->first('site_fax') }}</span>
       </div>
-      
+
       <div class="form-group {{ $errors->has('site_email') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="site_email">Site Email</label>
-         <input type="email" name="site_email"  id="site_email" placeholder="Site Email"
+         <input type="email" name="site_email" id="site_email" placeholder="Site Email"
                 value="{{ isset($setting) ? $setting->site_email : old('site_email')}}" required
                 class="form-control">
          <span class="text-danger">{{ $errors->first('site_email') }}</span>
       </div>
-      
+
       <div class="form-group {{ $errors->has('site_address') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="site_address">Site address</label>
          <input type="text" name="site_address" id="site_address" placeholder="Site address"
@@ -52,7 +52,7 @@ Site Settings
                 class="form-control">
          <span class="text-danger">{{ $errors->first('site_address') }}</span>
       </div>
-      
+
       <div class="form-group {{ $errors->has('site_description') ? 'has-error' : '' }}">
          <label class="bolder bigger-110" for="site_description">Site Description</label>
          <textarea type="text" name="site_description" id="site_description" placeholder="site Description" required
@@ -88,12 +88,7 @@ Site Settings
             </div>
          </div>
       </div>
-     
 
-      
-      
-      
-      
 
       <div class="form-group">
          <div class="btn-group btn-group-justified">
@@ -136,15 +131,23 @@ Site Settings
                           $(".preview").show();
                       },
                       success: function ($results) {
-                          //show loading image ,reset forms ,clear gallery
-                          $(".preview").hide();
-                          location.reload();
-                          alert($results.success);
+                          if ($results.success === true) {
+                              //show loading image ,reset forms ,clear gallery
+                              $(".preview").hide();
+                              location.reload();
+                              alert($results.message);
+
+                          }
                       },
                       error: function (request, status, error) {
-                          $(".preview").toggle();
+                          var json = $.parseJSON(request.responseText);
+                          if (json.success === false) {
+                              alert(json.message);
+                              $(".preview").hide();
+                              return
+                          }
+                          $(".preview").hide();
                           $("#error_result").empty();
-                          json = $.parseJSON(request.responseText);
                           $.each(json.errors, function (key, value) {
                               $('.alert-danger').show();
                               $('.alert-danger').append('<p>' + value + '</p>');

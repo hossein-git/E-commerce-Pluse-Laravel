@@ -3,32 +3,42 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\addressRequest;
-use App\Http\Requests\userRequest;
+use App\Http\Requests\Addresses\addressRequest;
+use App\Http\Requests\Users\userRequest;
 use App\Models\Role;
+use App\Repositories\UserRepository;
 use App\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class userController extends Controller
 {
 
     private $user;
     private $paginate;
+    /**
+     * @var UserRepository
+     */
+    private $userRepo;
 
-    public function __construct()
+    public function __construct(UserRepository $repository)
     {
         $this->middleware('checkRole');
         $this->user = new User();
         $this->paginate = 15;
+        $this->userRepo = $repository;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -39,7 +49,7 @@ class userController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -50,48 +60,41 @@ class userController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Http\requests\userRequest $request
-     * @return \Illuminate\Http\Response
+     * @param userRequest $request
+     * @return JsonResponse|RedirectResponse
      */
     public function store(userRequest $request)
     {
-        $input = $request->except('_token');
-        $input['password'] = Hash::make($input['password']);
-        $user = $this->user->create($input);
-        $user->assignRole($request->input('roles'));
-        return redirect()->route('user.index')->with(['success' => 'user has been created successfully']);
+        $user = $this->userRepo->createUser($request);
+        return $this->userRepo->passViewAfterCreated($user, 'users', 'user.index');
     }
 
     /**
      * Display the user profile.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
-        if (ctype_digit($id)) {
-
-            $user = $this->user->findOrFail($id);
-            $orders = $user->orders;
-            return view('admin.user.profile', compact('user', 'orders'));
-        }
+        $user = $this->userRepo->find($id)->load('orders');
+        $orders = $user->orders;
+        return view('admin.user.profile', compact('user', 'orders'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
-        if (ctype_digit($id)) {
-            $user = $this->user->findOrFail($id, ['user_id', 'name', 'email']);
-            $roles = Role::select('id', 'name')->get();
-            $userRole = $user->roles->pluck('id')->toArray();
-            return view('admin.user.edit', compact('user', 'roles', 'userRole'));
-        }
+        $user = $this->userRepo->find($id, ['user_id', 'name', 'email']);
+        $roles = Role::all(['id', 'name']);
+        $userRole = $user->roles->pluck('id')->toArray();
+        return view('admin.user.edit', compact('user', 'roles', 'userRole'));
+
     }
 
     /**
@@ -99,7 +102,8 @@ class userController extends Controller
      *
      * @param  $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
+     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
@@ -109,31 +113,30 @@ class userController extends Controller
                 Rule::unique('users', 'email')->whereNot('user_id', $id)
             ],
         ]);
-        if (ctype_digit($id)) {
-            $user = $this->user->findOrFail($id)->fill($request->except('_token'));
-            $user->save();
-            $tableName = config('permission.table_names')['model_has_roles'];
-            $columnName = config('permission.column_names')['model_morph_key'];
-            DB::table("$tableName")->where("$columnName", $id)->delete();
-            $user->assignRole($request->input('roles'));
+        $user = $this->userRepo->update($request->except('_token'), $id);
+        $tableName = config('permission.table_names')['model_has_roles'];
+        $columnName = config('permission.column_names')['model_morph_key'];
+        DB::table("$tableName")->where("$columnName", $id)->delete();
+        $user = $user->assignRole($request->input('roles'));
 
-            return redirect()->route('user.index')->with(['success' => 'user has been updated successfully']);
-        }
+
+        return $this->userRepo->passViewAfterUpdated($user, 'users', 'user.index');
+
     }
 
     /**
      * Show the form for editing user Address.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function editAddress($id)
     {
-        if (ctype_digit($id)) {
-            $user = $this->user->findOrFail($id, ['user_id']);
-            $address = $user->address;
-            return view('admin.user.editAddress', compact('user', 'address'));
-        }
+
+        $user = $this->userRepo->find($id, ['user_id'])->load('address');
+        $address = $user->address;
+        return view('admin.user.editAddress', compact('user', 'address'));
+
     }
 
     /**
@@ -141,15 +144,13 @@ class userController extends Controller
      *
      * @param int $id
      * @param  $request
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function updateAddress(addressRequest $request, $id)
     {
-        if (ctype_digit($id)) {
-            $user = $this->user->findOrFail($id)->address->fill($request->except('_token'));
-            $user->save();
-            return  redirect()->route('user.show', $id)->with(['success' => 'address has updated successfully']);
-        }
+        $user = $this->userRepo->find($id)->address->fill($request->except('_token'));
+        $result = $user->save();
+        return $this->userRepo->passViewAfterUpdated($result,'addresses','user.index');
     }
 
 
@@ -157,16 +158,13 @@ class userController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Facade\FlareClient\Http\Response
+     * @throws \Exception
      */
     public function destroy($id)
     {
-        if (ctype_digit($id)) {
-            $user = $this->user->findOrFail($id)->delete();
+        $user = $this->userRepo->delete($id);
+        return $this->userRepo->passViewAfterDeleted($user,'users');
 
-            return $user
-                ? response()->json(['success' => $user])
-                : response()->json(['error' => 'error']);
-        }
     }
 }

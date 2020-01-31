@@ -121,6 +121,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'checkRole'], function () {
 
     /*---------------Products Routes------------------*/
     Route::resource('product', 'Admin\productController');
+
+    Route::get('/product/create/second-step','Admin\productController@createSecondStep')->name('product.create2');
+    Route::post('/product/create/second-step','Admin\productController@storeSecondStep')->name('product.store2');
+
     Route::post('product/sort', 'Admin\productController@sort')->name('product.index.sort');
     Route::get('product/index/trash', 'Admin\productController@withTrash')->name('product.index.trash');
     Route::get('product/index/restore/{id}', 'Admin\productController@restore')->name('product.restore');

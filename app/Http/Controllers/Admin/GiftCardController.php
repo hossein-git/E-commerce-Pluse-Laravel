@@ -2,17 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\AppBaseController;
+use App\Http\Requests\Brands\GiftCardUpdateRequest;
 use App\Models\GiftCard;
+use App\Repositories\GiftCardRepository;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
-class GiftCardController extends Controller
+class GiftCardController extends AppBaseController
 {
 
     private $gift;
+    /**
+     * @var GiftCardRepository
+     */
+    private $giftCardRepo;
 
-    public function __construct()
+    public function __construct(GiftCardRepository $repository)
     {
         $this->middleware('permission:gift-list|gift-create|gift-edit|gift-delete', ['only' => ['index', 'show']]);
         $this->middleware('permission:gift-create', ['only' => ['create', 'store']]);
@@ -20,12 +30,13 @@ class GiftCardController extends Controller
         $this->middleware('permission:gift-delete', ['only' => ['destroy']]);
 
         $this->gift = new GiftCard();
+        $this->giftCardRepo = $repository;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -36,7 +47,7 @@ class GiftCardController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -46,26 +57,15 @@ class GiftCardController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'gift_name' => 'required|unique:gift_cards',
-            'gift_code' => ['required', 'unique:gift_cards', 'min:6'],
-            'gift_amount' => 'required',
-        ]);
-        $input = $request->except('token');
-        if (!$request->input('status')) {
-            $input['status'] = 1;
-        }
-        $input['gift_code'] = strtolower($input['gift_code']);
-        $gift = $this->gift->create($input);
-        return env('APP_AJAX')
-            ? response()->json(['success' => $gift])
-            : redirect()->route('giftCard.index')->with(['success' => 'New Gift Card has created successfully']);
-
+        $this->validate($request, GiftCard::$rules);
+        $gift = $this->giftCardRepo->createGiftCard($request);
+        return $this->giftCardRepo->passViewAfterCreated($gift, 'giftCards', 'giftCard.index');
     }
 
 
@@ -73,70 +73,39 @@ class GiftCardController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
-        if (ctype_digit($id)) {
-            $gift = $this->gift->findOrFail($id);
-            return view('admin.giftCard.edit', compact('gift'));
-        }
+        $gift = $this->giftCardRepo->find($id);
+        return view('admin.giftCard.edit', compact('gift'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param GiftCardUpdateRequest $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(GiftCardUpdateRequest $request, $id)
     {
-        if (ctype_digit($id)) {
-            $this->validate($request, [
-                'gift_name' => ['required',
-                    Rule::unique('gift_cards', 'gift_name')->whereNot('gift_id', $id)
-                ],
-                'gift_code' => ['required', 'min:6',
-                    Rule::unique('gift_cards', 'gift_code')->whereNot('gift_id', $id)
-                ],
-                'gift_amount' => 'required',
-            ]);
+        $gift = $this->giftCardRepo->updateGiftCard($request, $id);
 
-            $this->validate($request, [
-                'gift_name' => 'required',
-//            'gift_code' => ['required','unique:gift_cards'],
-                'gift_amount' => 'required',
-            ]);
-            $input = $request->except('token');
-            if ($request->input('status')) {
-                $input['status'] = 1;
-            } else {
-                $input['status'] = 0;
-            }
-            $input['gift_code'] = strtolower($input['gift_code']);
-            $gift = $this->gift->findOrFail($id);
-            $gift->fill($input);
-            $gift->update();
-            return env('APP_AJAX')
-                ? response()->json(['success' => $gift])
-                : redirect()->route('giftCard.index')->with(['success' => ' Gift Card has updated successfully']);
-        }
+        return $this->giftCardRepo->passViewAfterUpdated($gift, 'giftCards', 'giftCard.index');
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Facade\FlareClient\Http\Response
+     * @throws \Exception
      */
     public function destroy($id)
     {
-        if (ctype_digit($id)) {
-            $gift = $this->gift->findOrFail($id)->delete();
-            return $gift
-                ? response()->json(['success' => $gift])
-                : response()->json(['error' => 'error']);
-        }
+        $gift = $this->giftCardRepo->delete($id);
+        return $this->giftCardRepo->passViewAfterDeleted($gift, 'giftCards');
     }
 }

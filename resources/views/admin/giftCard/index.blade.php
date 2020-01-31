@@ -5,7 +5,7 @@
 @section('extra_css')
 @stop
 @section('content')
-   @include('layout.errors.notifications')
+
    <table id="simple-table" class="table  table-bordered table-hover">
       <thead>
       <tr>

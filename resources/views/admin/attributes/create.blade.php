@@ -6,21 +6,21 @@
    <link rel="stylesheet" href="{{ asset('admin-assets/css/chosen.min.css') }}"/>
 @endsection
 @section('content')
-   @include('layout.errors.notifications')
-   <form id="attr_form" method="post" action="{{ route('attribute.store') }}">
+   <form id="attr_form_create" method="post" action="{{ route('attribute.store') }}">
    @csrf
    <!-- if isset $product it means it coming from route(attribute.createNew)  -->
 
       <div class="row">
          <div class="col-sm-6">
             @if (isset($product))
-               <span class="h3">product Name:</span><span class="h2 bolder"><a href="{{ route('product.show',$product->product_id) }}">{{ $product->product_name }}</a></span>
-               <input type="hidden" value="{{$product->product_id}}" name="product_id">
+               <span class="h3">product Name:</span><span class="h2 bolder"><a
+                          href="{{ route('product.show',$product->product_id) }}">{{ $product->product_name }}</a></span>
+               <input class="product_id" type="hidden" value="{{$product->product_id}}" name="product_id">
             @else
                <div class="form-group">
                   <label for="form-field-select-3">Choose a Product:</label>
                   <br/>
-                  <select class="chosen-select form-control" name="product_id" id="form-field-select-3"
+                  <select class="chosen-select form-control product_id" name="product_id" id="form-field-select-3"
                           data-placeholder="Choose a Product">
                      <option value=""></option>
                      @forelse($products as $product)
@@ -64,7 +64,8 @@
                   <div class="widget-main center">
                      <div class="form-group">
                         <label for="value"></label>
-                        <input type="text" id="value" name="value[]" class="input form-control" placeholder="Value">
+                        <input type="text" id="value" name="value[]" class="input form-control valuesCreate"
+                               placeholder="Value">
                      </div>
                   </div>
                </div>
@@ -79,9 +80,11 @@
    <script src="{{ asset('admin-assets/js/chosen.jquery.min.js') }}"></script>
    <script type="text/javascript">
        jQuery(document).ready(function () {
+           var cunter =0;
            $('#add_val').click(function (e) {
+               cunter += 1;
                e.preventDefault();
-               var widget = '<div id="widget_value" class="widget-box"><div class="widget-header"><h5 class="widget-title">Value:</h5><span class="widget-toolbar"><a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a><a href="#" data-action="close"><i class="ace-icon fa fa-times"></i></a></span></div><div class="widget-body"><div class="widget-main center"><div class="form-group"><input type="text" id="value" name="value[]" class="input form-control" placeholder="Value"></div></div></div></div>';
+               var widget = '<div id="widget_value" class="widget-box"><div class="widget-header"><h5 class="widget-title">Value:</h5><span class="widget-toolbar"><a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a><a href="#" data-action="close"><i class="ace-icon fa fa-times"></i></a></span></div><div class="widget-body"><div class="widget-main center"><div class="form-group"><input type="text" id="value" name="value[]" class="input form-control valuesCreate" placeholder="Value"></div></div></div></div>';
                $('#div_value').append(widget)
            });
            $('.chosen-select').chosen({allow_single_deselect: true});
@@ -106,4 +109,30 @@
        });
 
    </script>
+   <!-- upload with ajax -->
+   @if(env('APP_AJAX'))
+      <script type="text/javascript">
+          jQuery(document).ready(function () {
+              $('#attr_form_create').on('submit', (function (e) {
+                  e.preventDefault();
+                  var valuesArray = [];
+                  $('.valuesCreate').map(function () {
+                      valuesArray.push($(this).val());
+                  });
+
+                  var data = {
+                      product_id: $('.product_id').val(),
+                      attr_name: $('#attr_name').val(),
+                      value: valuesArray
+                  };
+
+
+                  if (upload_ajax("{{ route('attribute.store') }}", data)) {
+                      window.location.reload();
+                  }
+              }));
+          });
+      </script>
+   @endif
+
 @endsection

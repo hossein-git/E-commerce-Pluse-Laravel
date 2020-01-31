@@ -1,11 +1,11 @@
 @extends('layout.admin.index' )
 @section('title')
-   Products List
+   @lang('models/products.plural') @lang('ext.list')
 @stop
 @section('extra_css')
 @stop
 @section('content')
-   @include('layout.errors.notifications')
+
    <!-- IF $index_categories IS SET, MEANS THIS IS WITHOUT TRASH ROUTE THEN WE SHOW SORTING -->
    @if(isset($index_categories))
       <div class="pull-left">
@@ -13,8 +13,8 @@
             @csrf
             <div class="btn-group">
                <select name="sort_category" id="sort_category" class="form-control">
-                  <option value="" disabled="" selected="">ORDER BY CATEGORY:</option>
-                  <option value="{{ null }}">ALL CATEGORIES:</option>
+                  <option value="" disabled="" selected="">ORDER BY @lang('models/categories.singular'):</option>
+                  <option value="{{ null }}">ALL @lang('models/categories.plural'):</option>
                   @foreach($index_categories as $category)
                      <option value="{{ $category->category_slug }}">{{ $category->category_name }}</option>
                   @endforeach
@@ -57,7 +57,7 @@
          <form method="post" action="{{ route('admin.search') }}" id="form-search"
                onsubmit="event.preventDefault()">
             @csrf
-            <span><i>search by <b>name</b> and exact <b>SKU</b></i></span>
+            <span><i>@lang('ext.search') : <b>@lang('models/products.fields.product_name')</b> @lang('ext.and') <b>@lang('models/products.fields.sku')</b></i></span>
             <input type="hidden" value="products" name="search_kind">
             <span class="input-icon">
                <input type="text" placeholder="Search ..." class="nav-search-input"
@@ -75,21 +75,21 @@
          <thead>
          <tr>
             <th>#</th>
-            <th>Product Name</th>
-            <th class="center">SKU</th>
-            <th>Buy Price</th>
-            <th>Sell Price (after OFF)</th>
-            <th>Status</th>
+            <th>@lang('models/products.fields.product_name')</th>
+            <th class="center">@lang('models/products.fields.sku')</th>
+            <th>@lang('models/products.fields.buy_price')</th>
+            <th>@lang('models/products.fields.sale_price')</th>
+            <th>@lang('models/products.fields.status')</th>
             {{--         <th>Available Date</th>--}}
-            <th class="center">Discount?</th>
+            <th class="center">@lang('models/products.fields.is_off')?</th>
             {{--         <th class="smaller-80">Price Of Off</th>--}}
-            <th class="smaller-80">Category</th>
-            <th class="smaller-80">Colors</th>
+            <th class="smaller-80">@lang('models/categories.plural')</th>
+            <th class="smaller-80">@lang('models/colors.plural')</th>
             {{--         <th class="smaller-80">Made In</th>--}}
-            <th class="smaller-80">Description</th>
-            <th>Cover Photo</th>
-            <th class="smaller-80">Created Date</th>
-            <th>Operations</th>
+            <th class="smaller-80">@lang('models/products.fields.description')</th>
+            <th>@lang('models/products.fields.cover')</th>
+            <th class="smaller-80">@lang('models/products.fields.created_at')</th>
+            <th>@lang('crud.action')</th>
          </tr>
          </thead>
          <tbody id="table_body" class="table_data">
@@ -122,12 +122,13 @@
                       dataType: "Json",
                       // data: {"id": id},
                       success: function ($results) {
-                          alert('product has been successfully restored');
-                          $(obj).closest("tr").remove(); //delete row
-                          console.log($results);
+                          if ($results.success === true){
+                              alert($results.message);
+                              $(obj).closest("tr").remove(); //delete row
+                          }
                       },
                       error: function (xhr) {
-                          alert('error, product not restored');
+                          alert(xhr.responseText.message);
                           console.log(xhr.responseText);
                       }
                   });

@@ -2,39 +2,47 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\AppBaseController;
 use App\Models\Payment;
-use Illuminate\Http\Request;
+use App\Repositories\PaymentRepository;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
-class PaymentController extends Controller
+class PaymentController extends AppBaseController
 {
     private $payment;
+    /**
+     * @var PaymentRepository
+     */
+    private $paymentRepo;
 
-    public function __construct()
+
+    public function __construct(PaymentRepository $repository)
     {
         $this->middleware('permission:order-edit');
 
         $this->payment = new Payment();
+        $this->paymentRepo = $repository;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
-        $payments = Payment::paginate(10);
+        $payments = $this->payment->paginate(10)->load('users','order');
         return view('admin.payments.index', compact('payments'));
     }
 
     /**
      * take failed payments
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
     public function failed()
     {
-        $payments = Payment::where('status', 0)->paginate(10);
+        $payments = $this->payment->with('users','order')->where('status', 0)->paginate(10);
         return view('admin.payments.index', compact('payments'));
     }
 
@@ -43,7 +51,7 @@ class PaymentController extends Controller
      * Display the specified resource.
      *
      * @param \App\Payment $payment
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Payment $payment)
     {
@@ -55,7 +63,7 @@ class PaymentController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Payment $payment
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Payment $payment)
     {

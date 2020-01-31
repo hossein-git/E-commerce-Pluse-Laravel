@@ -5,7 +5,6 @@
 @section('extra_css')
 @endsection
 @section('content')
-   @include('layout.errors.notifications')
    <form id="user_address" method="post" action="{{ route('admin.address.update',$user->user_id) }}">
       @csrf
       @method('put')

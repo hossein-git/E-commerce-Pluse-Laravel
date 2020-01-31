@@ -5,7 +5,7 @@
 @section('extra_css')
 @stop
 @section('content')
-   @include('layout.errors.notifications')
+
    <div class="col-sm-10 col-sm-offset-1 col-xs-12">
       <div class="widget-box transparent">
          <div class="widget-header widget-header-large">

@@ -2,13 +2,52 @@
 
 namespace App\Models;
 
+
+
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Attribute
+ * @package App\Models
+ * @version January 24, 2020, 3:18 pm +0330
+ *
+ * @property \App\Models\Product product
+ * @property \Illuminate\Database\Eloquent\Collection attributeValues
+ * @property string attr_name
+ * @property integer product_id
+ */
 class Attribute extends Model
 {
+
     public $primaryKey = 'attr_id';
-    public $fillable = ['attr_name','product_id'];
-    protected $guarded = ['attr_id'];
+    public $table = 'attributes';
+
+
+    public $fillable = [
+        'attr_name',
+        'product_id'
+    ];
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'attr_id' => 'integer',
+        'attr_name' => 'string',
+        'product_id' => 'integer'
+    ];
+
+    /**
+     * Validation rules
+     *
+     * @var array
+     */
+    public static $rules = [
+        'attr_name' => 'required',
+        'product_id' => 'required'
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -25,5 +64,4 @@ class Attribute extends Model
     {
         return $this->belongsTo(Product::class,'product_id','product_id');
     }
-
 }

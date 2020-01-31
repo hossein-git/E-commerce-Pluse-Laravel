@@ -20,7 +20,7 @@
                   <a href="{{ ($product->cover) }}" target="_blank">
                      <img id="avatar"
                           class="editable img-responsive editable-click editable-empty"
-                          alt="Alex's Avatar" src="{{ ($product->thumbnail) }}"></a>
+                          alt="Alex's Avatar" src="{{ ($product->cover) }}"></a>
                </span>
                <div class="space-4"></div>
                <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
@@ -39,13 +39,13 @@
             <div class="profile-contact-info">
 
                <!-- DISPLAY RATING -->
-               @for( $i = 0 ; $i < round($product->averageRating) ; $i++)
+               @for( $i = 0 ; $i < round($averageRating) ; $i++)
                   <span class="fa fa-stack" style="color: gold">
                      <i class="fa fa-star fa-stack-2x "></i>
                      <i class="fa fa-star-o fa-stack-2x "></i>
                   </span>
                @endfor
-               @for( $i = 5 ; $i > round($product->averageRating) ; $i--)
+               @for( $i = 5 ; $i > round($averageRating) ; $i--)
                   <span class="fa fa-stack yellow">
                      <i class="fa fa-star-o fa-stack-2x"></i>
                   </span>
@@ -128,13 +128,13 @@
                </span>
 
                <span class="btn btn-app btn-sm btn-grey no-hover">
-                  <span class="line-height-1 bigger-170"> {{ $product->comments->count() }} </span>
+                  <span class="line-height-1 bigger-170"> {{ $comments->count() }} </span>
 
                   <br>
                   <span class="line-height-1 smaller-90"> Reviews </span>
                </span>
                <span class="btn btn-app btn-sm btn-success no-hover">
-                  <span class="line-height-1 bigger-170"> {{ $product->categories->count() }} </span>
+                  <span class="line-height-1 bigger-170"> {{ $categories->count() }} </span>
 
                   <br>
                   <span class="line-height-1 smaller-90"> Categories </span>
@@ -203,7 +203,7 @@
                   <div class="profile-info-name">Colors</div>
                   <div class="profile-info-value">
                      <span class="editable editable-click" id="about">
-                         @foreach($product->colors as $color)
+                         @foreach($colors as $color)
                            <span class="badge"
                                  style="background: {{ $color->color_code }}">{{ $color->color_name }}</span>
                         @endforeach
@@ -215,7 +215,7 @@
                   <div class="profile-info-name">Categories</div>
                   <div class="profile-info-value">
                      <span class="editable editable-click" id="about">
-                        @foreach($product->categories as $category)
+                        @foreach($categories as $category)
                            <span class='label label-default'>{{ $category->category_name }}</span>
                         @endforeach
                      </span>
