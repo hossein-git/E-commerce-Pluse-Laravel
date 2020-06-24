@@ -1,6 +1,6 @@
 # LARAVEL FREE E-COMMERCE APPLICATION 
 Fully featured e-commerce platform with Laravel 
-###  [See screenshots and documentation](http://findhossein.ir/index.php/e-plus/overview "See screenshots and documention")
+###  [See screenshots and documentation](http://findhossein.com/e-plus/overview "See screenshots and documention")
 
 
 
@@ -10,7 +10,7 @@ Fully featured e-commerce platform with Laravel
 3. - `php artisan db:seed`
 
 # Contributor
-[Author: hossein haghparast](http://findhossein.ir "author: hossein haghparast")
+[Author: hossein haghparast](http://findhossein.com "author: hossein haghparast")
 
 
 # OverView
@@ -117,7 +117,7 @@ guest checkout system also supported!
 
 
 # Documentation
-###  [See screenshots and documentation](http://findhossein.ir/index.php/e-plus/overview "See screenshots and documention")
+###  [See screenshots and documentation](http://findhossein.com/e-plus/overview "See screenshots and documention")
 
 
 # Licence
